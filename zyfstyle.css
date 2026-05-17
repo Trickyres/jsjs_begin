@@ -1,0 +1,55 @@
+/* 给整个页面加个背景色 
+body 代表的是整个网页所有能看见的范围
+margin 为 0 是把底色彻底铺满整个屏幕的意思
+height vh 是 viewport height的意思；100vh 意味着无论用多大的手机还是电脑屏幕，都是屏幕高度
+flex 意味着开启弹性布局 可以根据屏幕大小自动变化
+*/
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+    height: 100vh;           /* 占满屏幕高度 */
+    margin: 0;
+}
+
+/* 设计卡片样式 
+如何理解 padding？
+padding的意思是距离 card 的距离为多少 视觉呼吸感
+*/
+.card {
+    background-color: white;
+    width: 300px;
+    padding: 30px;
+    border-radius: 15px;      /* 圆角 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* 阴影 */
+    text-align: center;
+}
+
+/* 标题颜色 */
+h1 {
+    color: #333;
+}
+
+/* 按钮样式 
+cursor：光标
+*/
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s; /* 动画过渡  是一个颜色的渐变 0.3s 是网页设计的黄金时间*/
+}
+
+/* 鼠标悬停在按钮上的效果 
+高频监听坐标 网页移动鼠标，操作系统和浏览器会以极高的频率捕捉屏幕坐标
+css 中带冒号的被称为伪类 pseudo-class 用来捕捉元素在特定交互状态下的临时模样
+：active 鼠标按住不放的一瞬间的模样 ：focus 输入框被点中
+*/
+button:hover {
+    background-color: #0056b3;
+}

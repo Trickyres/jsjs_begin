@@ -1,0 +1,1536 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>稼享指南｜多稼十分钟生活圈</title>
+  <style>
+    /*
+      ==============================
+      一、CSS 样式区
+      ==============================
+      CSS 负责“长什么样”：颜色、字体、卡片、地图、按钮、底部导航等。
+
+      你可以先重点看：
+      1. :root              统一管理颜色、圆角、阴影等全局变量
+      2. .view              控制不同页面的显示/隐藏
+      3. .hero              首页顶部大标题区域
+      4. .map-shell         地图区域
+      5. .bottom-nav        底部导航栏
+
+      如果只是改点位、电话、简介，一般不用动 CSS，主要改下方 JS 里的 POINTS / CONTACTS。
+    */
+
+    :root {
+      --bg: #fff8ef;
+      --paper: #fffdf8;
+      --card: rgba(255,255,255,.92);
+      --text: #37281e;
+      --muted: #8d7c70;
+      --line: rgba(139, 95, 66, .14);
+      --brand: #c7431f;
+      --brand-2: #f2672a;
+      --orange: #f59d32;
+      --green: #78aa63;
+      --blue: #5b91ca;
+      --brown: #a85e48;
+      --purple: #8764d9;
+      --shadow: 0 16px 40px rgba(110, 76, 49, .14);
+      --shadow-soft: 0 8px 22px rgba(110, 76, 49, .10);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    /*
+      box-sizing: border-box 的作用：
+      让元素的 width 包含 padding 和 border，布局时更直观。
+      对初学者来说，可以理解为“宽度更好算”。
+    */
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 15% 4%, rgba(255, 218, 169, .38), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(167, 204, 156, .22), transparent 24%),
+        linear-gradient(180deg, #fff7e9 0%, #fffaf2 45%, #fdf6ec 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font-family: inherit; }
+
+    /*
+      .app 是整个手机 H5 的外壳。
+      max-width: 430px 表示即使在电脑上打开，也会保持接近手机屏幕的宽度。
+    */
+    .app {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(122, 88, 61, .08);
+    }
+
+    /*
+      .view 表示一个“页面”：首页、地图页、列表页、电话页。
+      默认 display: none 隐藏；当有 active 类时才显示。
+      JS 里的 setView() 函数就是通过切换 active 来切换页面。
+    */
+    .view {
+      display: none;
+      min-height: 100vh;
+      padding: 18px 16px calc(96px + var(--safe-bottom));
+      animation: fadeIn .18s ease;
+    }
+
+    .view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+      margin-bottom: 10px;
+    }
+
+    .back-btn,
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 14px;
+      background: rgba(255,255,255,.68);
+      color: var(--text);
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(130, 91, 52, .08);
+      cursor: pointer;
+    }
+
+    .topbar-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    /*
+      首页头图区域。
+      包括“稼享指南”标题、副标题、导语，以及用 CSS 画出来的街区插画。
+    */
+    .hero {
+      position: relative;
+      min-height: 340px;
+      border-radius: 0 0 34px 34px;
+      margin: -18px -16px 18px;
+      padding: 58px 22px 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 248, 234, .95), rgba(255, 242, 220, .88)),
+        radial-gradient(circle at 85% 20%, rgba(127, 166, 104, .18), transparent 25%);
+      border-bottom: 1px solid rgba(170, 113, 65, .12);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: .03em;
+      font-weight: 900;
+    }
+
+    .hero h2 {
+      margin: 0 0 12px;
+      color: #4a3427;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 230px;
+      color: #70594a;
+      font-size: 14px;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-badge {
+      position: absolute;
+      right: 12px;
+      top: 72px;
+      padding: 6px 5px;
+      writing-mode: vertical-rl;
+      letter-spacing: .1em;
+      color: var(--brand);
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(199, 67, 31, .14);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .street-illustration {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 185px;
+      pointer-events: none;
+    }
+
+    .tree {
+      position: absolute;
+      right: 28px;
+      bottom: 64px;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 35%, #bfd39d 0 18%, transparent 19%),
+        radial-gradient(circle at 64% 32%, #adc988 0 18%, transparent 19%),
+        radial-gradient(circle at 48% 58%, #9fbd77 0 24%, transparent 25%);
+      filter: drop-shadow(0 10px 12px rgba(76,91,45,.12));
+    }
+    .tree::after {
+      content: "";
+      position: absolute;
+      left: 45px;
+      bottom: -36px;
+      width: 9px;
+      height: 54px;
+      border-radius: 6px;
+      background: #8e6240;
+    }
+
+    .building {
+      position: absolute;
+      bottom: 32px;
+      border-radius: 8px 8px 0 0;
+      border: 2px solid rgba(139, 82, 47, .28);
+      background: linear-gradient(180deg, #e8a66c, #c7794d);
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.15);
+    }
+    .building.b1 { left: 24px; width: 94px; height: 78px; background: linear-gradient(180deg, #cb6a40, #ad5136); }
+    .building.b2 { left: 138px; width: 118px; height: 98px; background: linear-gradient(180deg, #dfb276, #b97b51); }
+    .building.b3 { right: 88px; width: 70px; height: 70px; background: linear-gradient(180deg, #d59463, #a8644a); }
+    .building::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      width: 14px;
+      height: 20px;
+      border-radius: 3px;
+      background: rgba(255,245,220,.8);
+      box-shadow: 26px 0 rgba(255,245,220,.8), 52px 0 rgba(255,245,220,.75), 0 32px rgba(255,245,220,.7), 26px 32px rgba(255,245,220,.65);
+    }
+
+    .gate {
+      position: absolute;
+      left: -8px;
+      bottom: 34px;
+      width: 120px;
+      height: 86px;
+      opacity: .92;
+    }
+    .gate::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 110px;
+      height: 18px;
+      border-radius: 18px 18px 4px 4px;
+      background: #7b4635;
+      box-shadow: 0 8px 0 #bd6a3e;
+      transform: skewX(-12deg);
+    }
+    .gate::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      bottom: 0;
+      width: 16px;
+      height: 72px;
+      border-radius: 3px;
+      background: #8c4c36;
+      box-shadow: 64px 0 #8c4c36;
+    }
+
+    .road {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 44px;
+      background: linear-gradient(180deg, rgba(229, 196, 156, .42), rgba(212, 176, 135, .36));
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .bird {
+      position: absolute;
+      width: 22px;
+      height: 8px;
+      border-top: 2px solid rgba(124, 92, 70, .28);
+      border-radius: 50%;
+      transform: rotate(-10deg);
+    }
+    .bird::after {
+      content: "";
+      position: absolute;
+      right: -12px;
+      top: -2px;
+      width: 20px;
+      height: 8px;
+      border-top: 2px solid rgba(124, 92, 70, .28);
+      border-radius: 50%;
+      transform: rotate(20deg);
+    }
+    .bird.one { right: 92px; top: 74px; }
+    .bird.two { right: 62px; top: 102px; transform: scale(.75) rotate(-8deg); }
+
+    /*
+      首页四个快捷入口：便民服务、生活购物、休闲游玩、多稼记忆。
+      这些按钮不是写死在 HTML 里，而是由 JS 根据 CATEGORIES 自动生成。
+    */
+    .quick-card {
+      position: relative;
+      margin-top: -64px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 28px;
+      padding: 18px 12px 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      z-index: 3;
+    }
+
+    .quick-item {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .quick-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 8px;
+      color: #fff;
+      font-size: 25px;
+      box-shadow: 0 10px 18px rgba(113, 68, 31, .12);
+    }
+    .quick-label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 22px 2px 12px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .section-title::before {
+      content: "";
+      width: 5px;
+      height: 18px;
+      border-radius: 99px;
+      background: linear-gradient(180deg, var(--brand-2), #f7a642);
+    }
+    .more-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .recommend-card,
+    .route-card,
+    .place-card,
+    .contact-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .recommend-card {
+      display: grid;
+      grid-template-columns: 148px 1fr;
+      gap: 12px;
+      padding: 12px;
+      align-items: center;
+    }
+
+    .thumb-river, .thumb-street {
+      min-height: 108px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg, #cce7ef 0 42%, #84b4ce 43% 55%, #e9cf93 56% 100%);
+    }
+    .thumb-river::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 90px;
+      height: 52px;
+      background: #acd083;
+      border-radius: 0 70px 0 0;
+      box-shadow: 45px -6px 0 rgba(142, 190, 109, .72);
+    }
+    .thumb-river::after {
+      content: "";
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      width: 10px;
+      height: 48px;
+      background: rgba(255,255,255,.55);
+      box-shadow: -18px 14px 0 rgba(255,255,255,.45), 18px 9px 0 rgba(255,255,255,.5), -35px 24px 0 rgba(255,255,255,.4);
+    }
+
+    .recommend-content h3,
+    .route-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+    .recommend-content p,
+    .route-card p {
+      margin: 0 0 10px;
+      color: #6d5b4e;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag.service { color: #d44c22; background: #fff0e8; }
+    .tag.shopping { color: #d48219; background: #fff4df; }
+    .tag.leisure { color: #5a984e; background: #edf8e9; }
+    .tag.memory { color: #9b4c3a; background: #fff0ec; }
+
+    .route-card {
+      margin-top: 14px;
+      padding: 18px;
+      background:
+        linear-gradient(100deg, rgba(255, 238, 205, .96), rgba(255, 248, 230, .92)),
+        radial-gradient(circle at 80% 55%, rgba(193, 122, 69, .18), transparent 26%);
+      min-height: 112px;
+      position: relative;
+    }
+    .route-card::after {
+      content: "";
+      position: absolute;
+      right: 18px;
+      bottom: 8px;
+      width: 150px;
+      height: 64px;
+      background:
+        linear-gradient(90deg, transparent 0 10%, rgba(166, 95, 61, .24) 10% 12%, transparent 12% 24%, rgba(166, 95, 61, .24) 24% 26%, transparent 26%),
+        linear-gradient(180deg, transparent 0 48%, rgba(166, 95, 61, .32) 49% 53%, transparent 54%);
+      opacity: .75;
+      border-radius: 12px;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 12px;
+      scrollbar-width: none;
+    }
+    .pill-row::-webkit-scrollbar { display: none; }
+    .pill {
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 82, 48, .12);
+      background: rgba(255,255,255,.7);
+      color: #5a4637;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(115, 79, 52, .05);
+    }
+    .pill.active {
+      border-color: transparent;
+      background: linear-gradient(180deg, #ff7a36, #ed4e20);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(237, 78, 32, .24);
+    }
+
+    /*
+      地图外层容器。
+      目前是“示意地图”，不是调用真实高德地图。
+      地图上的点位由 JS 根据 POINTS 里的 x / y 坐标自动生成。
+    */
+    .map-shell {
+      position: relative;
+      height: min(64vh, 560px);
+      min-height: 520px;
+      margin: 0 -16px;
+      overflow: hidden;
+      border-top: 1px solid rgba(138, 96, 62, .1);
+      border-bottom: 1px solid rgba(138, 96, 62, .1);
+      background: #f5ead9;
+    }
+
+    .map-canvas {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(147, 203, 122, .45), transparent 18%),
+        radial-gradient(circle at 88% 28%, rgba(125, 185, 207, .45), transparent 22%),
+        linear-gradient(135deg, #f6ead7 0%, #f2e5d2 100%);
+    }
+    .map-canvas::before {
+      content: "";
+      position: absolute;
+      inset: -20px;
+      background:
+        linear-gradient(28deg, transparent 0 41%, rgba(255,255,255,.95) 42% 45%, transparent 46% 100%),
+        linear-gradient(92deg, transparent 0 46%, rgba(255,255,255,.8) 47% 49%, transparent 50% 100%),
+        linear-gradient(150deg, transparent 0 35%, rgba(255,255,255,.82) 36% 38%, transparent 39% 100%),
+        linear-gradient(62deg, transparent 0 56%, rgba(255,255,255,.72) 57% 59%, transparent 60% 100%),
+        linear-gradient(0deg, transparent 0 27%, rgba(255,255,255,.82) 28% 30%, transparent 31% 100%),
+        linear-gradient(0deg, transparent 0 68%, rgba(255,255,255,.78) 69% 71%, transparent 72% 100%);
+      opacity: .95;
+    }
+    .river {
+      position: absolute;
+      right: -60px;
+      top: -20px;
+      width: 180px;
+      height: 620px;
+      background: linear-gradient(90deg, rgba(126, 191, 207, .32), rgba(87, 170, 205, .55));
+      transform: rotate(14deg);
+      border-left: 10px solid rgba(255,255,255,.55);
+    }
+    .park {
+      position: absolute;
+      left: -36px;
+      top: 30px;
+      width: 165px;
+      height: 116px;
+      border-radius: 34px;
+      background: rgba(159, 204, 134, .52);
+      transform: rotate(-15deg);
+    }
+    .park.two {
+      left: auto;
+      right: 42px;
+      top: 248px;
+      width: 126px;
+      height: 96px;
+      transform: rotate(18deg);
+      background: rgba(154, 196, 122, .42);
+    }
+    .map-label {
+      position: absolute;
+      color: rgba(83, 69, 56, .65);
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 0 1px 0 rgba(255,255,255,.85);
+      z-index: 2;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /*
+      地图上的点位图标。
+      每一个 marker 都由 JS 根据 POINTS 数据动态创建。
+      marker 的 left/top 对应点位数据里的 x/y。
+    */
+    .marker {
+      position: absolute;
+      z-index: 6;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      padding: 0;
+      border-radius: 50% 50% 50% 8px;
+      transform: translate(-50%, -100%) rotate(-45deg);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow: 0 12px 22px rgba(96, 61, 35, .24), inset 0 0 0 3px rgba(255,255,255,.45);
+      cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .marker span {
+      transform: rotate(45deg);
+      font-size: 18px;
+    }
+    .marker.active {
+      transform: translate(-50%, -100%) rotate(-45deg) scale(1.18);
+      filter: saturate(1.08);
+    }
+    .marker.active::before {
+      content: "";
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      background: rgba(238, 87, 35, .18);
+      z-index: -1;
+      animation: pulse 1.3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(.88); opacity: .8; }
+      50% { transform: scale(1.18); opacity: .35; }
+    }
+
+    .locate-btn {
+      position: absolute;
+      left: 16px;
+      bottom: 204px;
+      z-index: 8;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 18px;
+      background: #fff;
+      font-size: 22px;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+    }
+
+    /*
+      地图底部弹出的点位信息卡片。
+      点击不同地图点位时，JS 会重新渲染这里的名称、简介、地址、电话和导航按钮。
+    */
+    .sheet {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 10;
+      padding: 12px 14px 14px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 28px;
+      box-shadow: 0 18px 44px rgba(82, 56, 37, .22);
+      backdrop-filter: blur(16px);
+    }
+    .sheet-handle {
+      width: 42px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(119, 92, 72, .18);
+      margin: 0 auto 12px;
+    }
+    .sheet-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .sheet-title-row h3 {
+      flex: 1;
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+    .fav {
+      border: 0;
+      background: transparent;
+      color: #9b8c82;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .sheet p {
+      margin: 0 0 12px;
+      color: #655247;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .sheet-meta {
+      display: grid;
+      gap: 8px;
+      color: #6b5c51;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .sheet-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      border: 0;
+      min-height: 42px;
+      border-radius: 16px;
+      padding: 0 14px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(180deg, #ff7a36, #ed4e20);
+      box-shadow: 0 10px 22px rgba(237, 78, 32, .28);
+    }
+    .btn-ghost {
+      color: #5e7a48;
+      background: #fff;
+      border: 1px solid rgba(94, 122, 72, .26);
+    }
+    .btn-mini {
+      min-height: 34px;
+      border-radius: 13px;
+      font-size: 13px;
+      padding: 0 12px;
+    }
+
+    .search {
+      position: relative;
+      margin: 4px 0 14px;
+    }
+    .search input {
+      width: 100%;
+      height: 46px;
+      border-radius: 18px;
+      border: 1px solid rgba(140, 102, 75, .12);
+      background: rgba(255,255,255,.82);
+      padding: 0 16px 0 42px;
+      outline: 0;
+      font-size: 15px;
+      color: var(--text);
+      box-shadow: 0 6px 20px rgba(115, 79, 52, .06);
+    }
+    .search::before {
+      content: "⌕";
+      position: absolute;
+      left: 16px;
+      top: 10px;
+      color: #a1948a;
+      font-size: 22px;
+      z-index: 2;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+    .place-card {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .place-icon,
+    .contact-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      color: #fff;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,.35);
+    }
+    .place-main h3 {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 0 0 5px;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+    .place-main p {
+      margin: 0 0 8px;
+      color: #66564c;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .place-lines {
+      display: grid;
+      gap: 4px;
+      color: #77685d;
+      font-size: 12.5px;
+      margin-bottom: 10px;
+    }
+    .place-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .contact-card {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      align-items: center;
+    }
+    .contact-card h3 { margin: 0 0 3px; font-size: 16px; }
+    .contact-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .contact-card a { margin-left: auto; color: #fff; text-decoration: none; }
+
+    .empty {
+      padding: 42px 18px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,.62);
+      border-radius: var(--radius-lg);
+      border: 1px dashed rgba(138, 96, 62, .22);
+    }
+
+    /*
+      底部导航栏。
+      通过 data-go="home/map/phone" 告诉 JS 点击后要切换到哪个页面。
+    */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: calc(72px + var(--safe-bottom));
+      padding: 8px 10px calc(8px + var(--safe-bottom));
+      background: rgba(255,253,248,.9);
+      border-top: 1px solid rgba(132, 91, 61, .12);
+      box-shadow: 0 -14px 34px rgba(91, 58, 33, .08);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      z-index: 30;
+      backdrop-filter: blur(18px);
+    }
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #8c7c72;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .nav-item .nav-icon { font-size: 21px; line-height: 1; }
+    .nav-item.active { color: var(--brand-2); background: #fff0e7; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(88px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(14px);
+      max-width: 360px;
+      width: calc(100% - 48px);
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(54, 38, 27, .92);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+      z-index: 99;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (min-width: 760px) {
+      body { padding: 28px 0; }
+      .app {
+        border-radius: 34px;
+        min-height: calc(100vh - 56px);
+        box-shadow: 0 20px 70px rgba(67, 42, 24, .2), 0 0 0 1px rgba(122, 88, 61, .08);
+      }
+      .bottom-nav { border-radius: 0 0 34px 34px; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    ==============================
+    二、HTML 页面结构区
+    ==============================
+    HTML 负责“页面有哪些东西”。
+
+    本页面是一个单页 H5：
+    1. data-view="home"  首页
+    2. data-view="map"   地图页
+    3. data-view="list"  点位列表页
+    4. data-view="phone" 便民电话页
+
+    这些 section 同时存在，但一次只显示一个。
+    JS 会给当前页面加 active 类，其余页面隐藏。
+  -->
+  <main class="app" id="app">
+    <!-- 首页：标题、导语、快捷入口、本周推荐 -->
+    <section class="view active" data-view="home">
+      <div class="hero">
+        <h1>稼享指南</h1>
+        <h2>多稼十分钟生活圈服务地图</h2>
+        <p>从家门口出发，发现身边的服务、生活与社区记忆。</p>
+        <div class="hero-badge">小东门街区</div>
+        <div class="bird one"></div>
+        <div class="bird two"></div>
+        <div class="street-illustration" aria-hidden="true">
+          <div class="gate"></div>
+          <div class="building b1"></div>
+          <div class="building b2"></div>
+          <div class="building b3"></div>
+          <div class="tree"></div>
+          <div class="road"></div>
+        </div>
+      </div>
+
+      <div class="quick-card" id="quickEntries"></div>
+
+      <div class="section-head">
+        <div class="section-title">本周推荐</div>
+        <button class="more-btn" data-go="list">更多路线 ›</button>
+      </div>
+
+      <article class="recommend-card" data-select-point="binjiang-walk">
+        <div class="thumb-river"></div>
+        <div class="recommend-content">
+          <h3>滨江散步路线 <span class="tag leisure">休闲游玩</span></h3>
+          <p>沿江步道，风景宜人，适合散步与亲子时光。</p>
+          <div class="meta"><span>◷ 约40分钟</span><span>⌖ 1.8公里</span></div>
+        </div>
+      </article>
+
+      <article class="route-card" data-go="list">
+        <h3>新居民熟悉路线</h3>
+        <p>社区服务一站式指南，快速熟悉居委、卫生、药房与生活配套。</p>
+        <button class="btn btn-mini btn-primary">去看看</button>
+      </article>
+    </section>
+
+    <!-- 地图页：分类筛选、示意地图、底部点位卡片 -->
+    <section class="view" data-view="map">
+      <div class="topbar">
+        <button class="back-btn" data-go="home" aria-label="返回">‹</button>
+        <div class="topbar-title">生活地图</div>
+        <button class="icon-btn" id="mapTipBtn" aria-label="说明">•••</button>
+      </div>
+
+      <div class="pill-row" id="mapFilters"></div>
+
+      <div class="map-shell">
+        <div class="map-canvas" id="mapCanvas">
+          <div class="river"></div>
+          <div class="park"></div>
+          <div class="park two"></div>
+          <span class="map-label" style="left:54%;top:10%;transform:rotate(-8deg);">小东门街区</span>
+          <span class="map-label" style="left:40%;top:22%;">东门小学</span>
+          <span class="map-label" style="left:66%;top:26%;transform:rotate(-20deg);">滨江步道</span>
+          <span class="map-label" style="left:63%;top:46%;">社区广场</span>
+          <span class="map-label" style="left:18%;top:56%;transform:rotate(76deg);">中山南路</span>
+          <span class="map-label" style="left:52%;top:62%;transform:rotate(64deg);">东新路</span>
+        </div>
+        <button class="locate-btn" id="locateBtn" aria-label="回到中心">⌖</button>
+        <div class="sheet" id="mapSheet"></div>
+      </div>
+    </section>
+
+    <!-- 点位列表页：搜索框、分类筛选、点位卡片列表 -->
+    <section class="view" data-view="list">
+      <div class="topbar">
+        <button class="back-btn" data-go="home" aria-label="返回">‹</button>
+        <div class="topbar-title" id="listTitle">便民服务</div>
+        <button class="icon-btn" id="listTipBtn" aria-label="说明">•••</button>
+      </div>
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="搜索药房、菜场、居委会…" autocomplete="off" />
+      </div>
+      <div class="pill-row" id="listFilters"></div>
+      <div class="list" id="placeList"></div>
+    </section>
+
+    <!-- 便民电话页：常用联系人和一键拨号 -->
+    <section class="view" data-view="phone">
+      <div class="topbar">
+        <button class="back-btn" data-go="home" aria-label="返回">‹</button>
+        <div class="topbar-title">便民电话</div>
+        <button class="icon-btn" aria-label="说明">•••</button>
+      </div>
+      <div class="section-head" style="margin-top:6px;">
+        <div class="section-title">常用联系</div>
+      </div>
+      <div class="list" id="contactList"></div>
+    </section>
+
+    <!-- 底部导航：点击按钮后，JS 根据 data-go 切换页面 -->
+    <nav class="bottom-nav" aria-label="底部导航">
+      <button class="nav-item active" data-go="home"><span class="nav-icon">⌂</span><span>首页</span></button>
+      <button class="nav-item" data-go="map"><span class="nav-icon">⌖</span><span>地图</span></button>
+      <button class="nav-item" data-go="phone"><span class="nav-icon">☎</span><span>电话</span></button>
+      <button class="nav-item" id="aboutBtn"><span class="nav-icon">♡</span><span>我的</span></button>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+  </main>
+
+  <script>
+    /**
+     * ==============================
+     * 三、JavaScript 交互逻辑区
+     * ==============================
+     * JavaScript 负责“能不能点、点了以后发生什么”。
+     *
+     * 本文件的运行逻辑可以简单理解为：
+     * 1. 先准备数据：分类 CATEGORIES、点位 POINTS、电话 CONTACTS。
+     * 2. 页面打开时执行 init()。
+     * 3. init() 根据数据自动生成快捷入口、筛选按钮、地图点位、列表卡片和电话卡片。
+     * 4. 用户点击按钮时，调用 setView() 切换页面，或调用 renderMap()/renderList() 刷新内容。
+     *
+     * 使用说明：
+     * 1. 直接把本文件保存为 index.html，双击即可打开。
+     * 2. 下方 POINTS 为点位数据，可按实际点位修改名称、地址、电话、经纬度等。
+     * 3. x/y 用来控制示意地图上的点位位置，范围 0-100；lng/lat 用于跳转高德导航。
+     * 4. 如果后续接入真实高德 JS API，可保留页面结构，只替换 map-shell 内部地图实现。
+     */
+
+    /*
+      CATEGORIES：点位分类配置。
+
+      key   ：程序内部使用的分类代码，不建议随便改。
+      label ：筛选按钮上显示的短名称，例如“便民”。
+      full  ：卡片上显示的完整名称，例如“便民服务”。
+      icon  ：首页快捷入口和分类图标。
+      color ：这一类点位的主题颜色。
+    */
+    const CATEGORIES = [
+      { key: 'all', label: '全部', icon: '◎', color: '#f2672a' },
+      { key: 'service', label: '便民', full: '便民服务', icon: '👥', color: '#f2672a' },
+      { key: 'shopping', label: '购物', full: '生活购物', icon: '🛒', color: '#f59d32' },
+      { key: 'leisure', label: '休闲', full: '休闲游玩', icon: '🌳', color: '#78aa63' },
+      { key: 'memory', label: '记忆', full: '多稼记忆', icon: '🏛️', color: '#a85e48' }
+    ];
+
+    /*
+      POINTS：最重要的点位数据。
+
+      后续你真正做“稼享指南”时，主要就是改这里。
+      每一个 { ... } 代表一个点位。
+
+      字段说明：
+      id       ：点位唯一编号，英文即可，不能重复。
+      name     ：点位名称。
+      category ：点位分类，要对应 CATEGORIES 里的 key，例如 service / shopping / leisure / memory。
+      icon     ：点位图标，可以用 emoji，也可以后续换成图片图标。
+      intro    ：一句话简介。
+      address  ：地址。
+      phone    ：电话，没有电话可以写“无”。
+      hours    ：开放时间或服务时间。
+      lng/lat  ：真实经纬度，用于点击“一键导航”后跳转高德地图。
+      x/y      ：示意地图上的位置，范围 0-100；x 越大越靠右，y 越大越靠下。
+    */
+    const POINTS = [
+      {
+        id: 'duojia-jwh',
+        name: '多稼居民委员会',
+        category: 'service',
+        icon: '👥',
+        intro: '居民咨询、社区活动报名、便民联系的重要窗口。',
+        address: '多稼路88号（邻里中心2楼）',
+        phone: '021-1234 5678',
+        hours: '周一至周五 8:30-17:00',
+        lng: 121.49912,
+        lat: 31.22488,
+        x: 52,
+        y: 44
+      },
+      {
+        id: 'health-station',
+        name: '社区卫生服务站',
+        category: 'service',
+        icon: '✚',
+        intro: '基本医疗、健康咨询、慢病随访，提供居民身边的健康服务。',
+        address: '多稼路102号',
+        phone: '021-2233 7788',
+        hours: '周一至周日 8:00-16:30',
+        lng: 121.50136,
+        lat: 31.22291,
+        x: 38,
+        y: 69
+      },
+      {
+        id: 'pharmacy',
+        name: '便民药房',
+        category: 'service',
+        icon: '💊',
+        intro: '常用药品、医保刷卡、健康指导，满足居民日常用药需求。',
+        address: '多稼路56号',
+        phone: '021-6677 8899',
+        hours: '周一至周日 8:30-20:00',
+        lng: 121.49791,
+        lat: 31.22531,
+        x: 22,
+        y: 40
+      },
+      {
+        id: 'market',
+        name: '邻里生活超市',
+        category: 'shopping',
+        icon: '🛒',
+        intro: '日用百货、新鲜果蔬、烟酒副食，满足家门口日常采购。',
+        address: '东门新村12幢底商',
+        phone: '021-8899 0011',
+        hours: '周一至周日 7:30-21:30',
+        lng: 121.49768,
+        lat: 31.22376,
+        x: 24,
+        y: 57
+      },
+      {
+        id: 'vegetable-market',
+        name: '多稼菜场',
+        category: 'shopping',
+        icon: '🥬',
+        intro: '蔬菜、水果、肉禽、水产一站式采购，是居民熟悉的烟火气去处。',
+        address: '小东门街区多稼弄口',
+        phone: '021-5566 3322',
+        hours: '周一至周日 6:30-19:00',
+        lng: 121.50026,
+        lat: 31.22610,
+        x: 62,
+        y: 22
+      },
+      {
+        id: 'binjiang-walk',
+        name: '滨江散步路线',
+        category: 'leisure',
+        icon: '🌳',
+        intro: '沿江步道开阔舒适，适合散步、亲子活动和黄昏休闲。',
+        address: '黄浦滨江步道小东门段',
+        phone: '无',
+        hours: '全天开放',
+        lng: 121.50342,
+        lat: 31.22546,
+        x: 68,
+        y: 28
+      },
+      {
+        id: 'community-square',
+        name: '社区广场',
+        category: 'leisure',
+        icon: '🪁',
+        intro: '邻里休憩、活动集合、儿童游戏的小型公共空间。',
+        address: '多稼路与东新路交叉口',
+        phone: '无',
+        hours: '全天开放',
+        lng: 121.50091,
+        lat: 31.22422,
+        x: 70,
+        y: 50
+      },
+      {
+        id: 'memory-hall',
+        name: '多稼文化记忆馆',
+        category: 'memory',
+        icon: '🏛️',
+        intro: '以街巷记忆、老城厢故事和社区影像展陈，呈现多稼片区变迁。',
+        address: '多稼路120号',
+        phone: '021-7788 9900',
+        hours: '周二至周日 9:00-17:00',
+        lng: 121.50218,
+        lat: 31.22498,
+        x: 86,
+        y: 37
+      },
+      {
+        id: 'dongjiadu',
+        name: '董家渡历史地标',
+        category: 'memory',
+        icon: '⛪',
+        intro: '小东门地区重要历史文化节点之一，见证老城厢与滨江地区的城市发展。',
+        address: '董家渡片区',
+        phone: '无',
+        hours: '外部空间全天开放',
+        lng: 121.50102,
+        lat: 31.22191,
+        x: 76,
+        y: 72
+      }
+    ];
+
+    /*
+      CONTACTS：便民电话页的数据。
+      如果只想增加、删除或修改电话号码，改这里即可。
+    */
+    const CONTACTS = [
+      { name: '多稼居民委员会', desc: '社区咨询、活动报名、便民联系', phone: '021-1234 5678', icon: '👥', color: '#f2672a' },
+      { name: '社区卫生服务站', desc: '基础医疗、健康咨询、慢病随访', phone: '021-2233 7788', icon: '✚', color: '#5fae78' },
+      { name: '物业服务电话', desc: '报修、门禁、公共区域维护', phone: '021-8899 2200', icon: '🛠️', color: '#5b91ca' },
+      { name: '街道服务热线', desc: '综合咨询与为民服务联系', phone: '021-962000', icon: '☎', color: '#a85e48' }
+    ];
+
+    /*
+      state：页面当前状态。
+
+      view       ：当前显示哪个页面，home/map/list/phone。
+      category   ：当前筛选的分类，all 表示全部。
+      selectedId ：地图页当前选中的点位 id。
+      search     ：列表页搜索框里的关键词。
+
+      你可以把 state 理解为“网页当前记住的状态”。
+    */
+    const state = {
+      view: 'home',
+      category: 'all',
+      selectedId: 'duojia-jwh',
+      search: ''
+    };
+
+    /*
+      下面两个是简写工具函数：
+      $('选择器')  ：找到第一个匹配的元素。
+      $$('选择器') ：找到所有匹配的元素，并转成数组。
+
+      例如：
+      $('#toast') 相当于 document.querySelector('#toast')。
+    */
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+    // 根据分类 key 找到对应分类信息，例如 service -> 便民服务。
+    function getCategory(key) {
+      return CATEGORIES.find(c => c.key === key) || CATEGORIES[0];
+    }
+
+    // 根据点位 id 找到对应点位信息，例如 duojia-jwh -> 多稼居民委员会。
+    function getPoint(id) {
+      return POINTS.find(p => p.id === id) || POINTS[0];
+    }
+
+    /*
+      一键导航函数。
+      点击“导航前往”后，拼接一个高德地图 URI，然后让浏览器跳转。
+      手机里如果装了高德地图，通常会尝试打开 App；否则会打开网页地图。
+    */
+    function navigateToPoint(point) {
+      const name = encodeURIComponent(point.name);
+      const url = `https://uri.amap.com/navigation?to=${point.lng},${point.lat},${name}&mode=walk&policy=1&src=jiaxiang-guide&coordinate=gaode`;
+      window.location.href = url;
+    }
+
+    // 页面底部黑色提示条，例如点击“我的”时弹出的说明。
+    function showToast(text) {
+      const toast = $('#toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    /*
+      切换页面函数。
+      例如 setView('map') 就会显示地图页，隐藏其他页面。
+      核心原理：给目标 section 添加 active 类，其他 section 去掉 active 类。
+    */
+    function setView(view) {
+      state.view = view;
+      $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
+      $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === view));
+      if (view === 'map') renderMap();
+      if (view === 'list') renderList();
+      if (view === 'phone') renderContacts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /*
+      切换分类筛选。
+      category 可以是 all/service/shopping/leisure/memory。
+      地图页和列表页都会用到这个函数。
+    */
+    function setCategory(category, targetView = state.view) {
+      state.category = category;
+      if (targetView === 'map') renderMap();
+      if (targetView === 'list') renderList();
+    }
+
+    /*
+      渲染首页四个快捷入口。
+      这些入口根据 CATEGORIES 自动生成，所以你改 CATEGORIES 后，这里会自动跟着变。
+    */
+    function renderQuickEntries() {
+      const quicks = CATEGORIES.filter(c => c.key !== 'all');
+      $('#quickEntries').innerHTML = quicks.map(c => `
+        <button class="quick-item" data-quick="${c.key}">
+          <span class="quick-icon" style="background:${c.color}">${c.icon}</span>
+          <span class="quick-label">${c.full}</span>
+        </button>
+      `).join('');
+
+      $$('#quickEntries .quick-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.category = btn.dataset.quick;
+          setView('list');
+        });
+      });
+    }
+
+    /*
+      渲染分类筛选按钮。
+      地图页和列表页各有一组筛选按钮，这个函数会同时更新两处。
+    */
+    function renderFilterRows() {
+      const html = CATEGORIES.map(c => `<button class="pill ${state.category === c.key ? 'active' : ''}" data-category="${c.key}">${c.label}</button>`).join('');
+      $('#mapFilters').innerHTML = html;
+      $('#listFilters').innerHTML = html;
+
+      $$('#mapFilters .pill').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.category, 'map')));
+      $$('#listFilters .pill').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.category, 'list')));
+    }
+
+    /*
+      根据“当前分类”和“搜索关键词”过滤点位。
+      列表页搜索时主要靠这个函数返回符合条件的点位。
+    */
+    function filteredPoints() {
+      const keyword = state.search.trim().toLowerCase();
+      return POINTS.filter(p => {
+        const categoryOk = state.category === 'all' || p.category === state.category;
+        const text = `${p.name} ${p.intro} ${p.address} ${getCategory(p.category).full}`.toLowerCase();
+        const keywordOk = !keyword || text.includes(keyword);
+        return categoryOk && keywordOk;
+      });
+    }
+
+    /*
+      渲染地图页。
+      做三件事：
+      1. 刷新分类按钮。
+      2. 根据 POINTS 数据在示意地图上生成 marker 点位。
+      3. 渲染底部点位信息卡片。
+    */
+    function renderMap() {
+      renderFilterRows();
+      const canvas = $('#mapCanvas');
+      $$('.marker', canvas).forEach(m => m.remove());
+
+      const points = POINTS.filter(p => state.category === 'all' || p.category === state.category);
+      if (!points.some(p => p.id === state.selectedId)) {
+        state.selectedId = points[0]?.id || POINTS[0].id;
+      }
+
+      points.forEach(point => {
+        const category = getCategory(point.category);
+        const marker = document.createElement('button');
+        marker.className = `marker ${point.id === state.selectedId ? 'active' : ''}`;
+        marker.style.left = `${point.x}%`;
+        marker.style.top = `${point.y}%`;
+        marker.style.background = category.color;
+        marker.dataset.id = point.id;
+        marker.setAttribute('aria-label', point.name);
+        marker.innerHTML = `<span>${point.icon}</span>`;
+        marker.addEventListener('click', () => {
+          state.selectedId = point.id;
+          renderMap();
+        });
+        canvas.appendChild(marker);
+      });
+
+      renderSheet(getPoint(state.selectedId));
+    }
+
+    /*
+      渲染地图底部的点位详情卡片。
+      参数 point 就是当前选中的点位对象。
+    */
+    function renderSheet(point) {
+      const category = getCategory(point.category);
+      $('#mapSheet').innerHTML = `
+        <div class="sheet-handle"></div>
+        <div class="sheet-title-row">
+          <h3>${point.name}</h3>
+          <span class="tag ${point.category}">${category.full || category.label}</span>
+          <button class="fav" aria-label="收藏">☆</button>
+        </div>
+        <p>${point.intro}</p>
+        <div class="sheet-meta">
+          <span>⌖ ${point.address}</span>
+          <span>☎ ${point.phone}</span>
+        </div>
+        <div class="sheet-actions">
+          <button class="btn btn-ghost" data-open-list="${point.id}">查看详情</button>
+          <button class="btn btn-primary" data-nav="${point.id}">➤ 一键导航</button>
+        </div>
+      `;
+      $('[data-nav]', $('#mapSheet')).addEventListener('click', () => navigateToPoint(point));
+      $('[data-open-list]', $('#mapSheet')).addEventListener('click', () => {
+        state.search = point.name;
+        $('#searchInput').value = point.name;
+        setView('list');
+      });
+      $('.fav', $('#mapSheet')).addEventListener('click', () => showToast('已加入常用点位示例。实际项目可接入本地存储或后台。'));
+    }
+
+    /*
+      渲染点位列表页。
+      根据当前分类和搜索关键词，生成一张张点位卡片。
+    */
+    function renderList() {
+      renderFilterRows();
+      const titleMap = {
+        all: '全部点位',
+        service: '便民服务',
+        shopping: '生活购物',
+        leisure: '休闲游玩',
+        memory: '多稼记忆'
+      };
+      $('#listTitle').textContent = titleMap[state.category] || '点位列表';
+
+      const list = $('#placeList');
+      const points = filteredPoints();
+      if (!points.length) {
+        list.innerHTML = `<div class="empty">没有找到相关点位。可以换个关键词，或点击上方分类重新筛选。</div>`;
+        return;
+      }
+      list.innerHTML = points.map(point => {
+        const category = getCategory(point.category);
+        return `
+          <article class="place-card">
+            <div class="place-icon" style="background:${category.color}">${point.icon}</div>
+            <div class="place-main">
+              <h3>${point.name}<span class="tag ${point.category}">${category.full || category.label}</span></h3>
+              <p>${point.intro}</p>
+              <div class="place-lines">
+                <span>⌖ ${point.address}</span>
+                <span>◷ ${point.hours}</span>
+              </div>
+              <div class="place-actions">
+                <button class="btn btn-mini btn-ghost" data-view-map="${point.id}">⌖ 查看地图</button>
+                <button class="btn btn-mini btn-primary" data-nav="${point.id}">➤ 导航前往</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      $$('[data-nav]', list).forEach(btn => btn.addEventListener('click', () => navigateToPoint(getPoint(btn.dataset.nav))));
+      $$('[data-view-map]', list).forEach(btn => btn.addEventListener('click', () => {
+        state.selectedId = btn.dataset.viewMap;
+        setView('map');
+      }));
+    }
+
+    /*
+      渲染便民电话页。
+      根据 CONTACTS 数据生成电话卡片。
+    */
+    function renderContacts() {
+      $('#contactList').innerHTML = CONTACTS.map(c => `
+        <article class="contact-card">
+          <div class="contact-icon" style="background:${c.color}">${c.icon}</div>
+          <div>
+            <h3>${c.name}</h3>
+            <p>${c.desc}</p>
+          </div>
+          <a class="btn btn-primary btn-mini" href="tel:${c.phone.replace(/\s/g, '')}">拨打</a>
+        </article>
+      `).join('');
+    }
+
+    /*
+      绑定点击事件。
+      简单说，就是告诉网页：用户点击某个按钮后，应该执行什么动作。
+
+      例如：
+      - 点击底部“地图” -> setView('map')
+      - 点击搜索框输入 -> renderList()
+      - 点击说明按钮 -> showToast()
+    */
+    function bindEvents() {
+      $$('[data-go]').forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.go)));
+      $$('[data-select-point]').forEach(card => card.addEventListener('click', () => {
+        state.selectedId = card.dataset.selectPoint;
+        setView('map');
+      }));
+      $('#searchInput').addEventListener('input', e => {
+        state.search = e.target.value;
+        renderList();
+      });
+      $('#mapTipBtn').addEventListener('click', () => showToast('当前为示意地图版本：点位位置可在 POINTS 的 x/y 字段中调整；导航使用经纬度跳转高德地图。'));
+      $('#listTipBtn').addEventListener('click', () => showToast('列表支持分类筛选和关键词搜索。后续可接入真实点位库或后台管理。'));
+      $('#locateBtn').addEventListener('click', () => showToast('已回到多稼十分钟生活圈中心点。实际项目可接入浏览器定位。'));
+      $('#aboutBtn').addEventListener('click', () => showToast('稼享指南：面向新居民、社区居民和周边工作者的社区生活服务导览 H5。'));
+    }
+
+    /*
+      初始化函数。
+      页面第一次打开时，只执行一次。
+      它会把所有数据渲染到页面上，并绑定各种点击事件。
+    */
+    function init() {
+      renderQuickEntries();
+      renderFilterRows();
+      renderMap();
+      renderList();
+      renderContacts();
+      bindEvents();
+    }
+
+    // 启动整个网页。
+    init();
+  </script>
+</body>
+</html>

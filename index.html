@@ -984,10 +984,10 @@
         <h1>稼享指南</h1>
         <h2>多稼十分钟生活圈服务地图</h2>
         <p>从家门口出发，发现身边的服务、生活与社区记忆。</p>
-        <div class="hero-badge">小东门街区</div>
+        <div class="hero-badge">小东门街道</div>
         <div class="bird one"></div>
         <div class="bird two"></div>
-        <div class="street-illustration" aria-hidden="true">
+        <div class="street-illustration" aria-hidden="true"> /* 这是hero的背景图 */
           <div class="gate"></div>
           <div class="building b1"></div>
           <div class="building b2"></div>
@@ -1000,7 +1000,7 @@
       <div class="quick-card" id="quickEntries"></div>
 
       <div class="section-head">
-        <div class="section-title">本周推荐</div>
+        <div class="section-title">稼园推荐</div>
         <button class="more-btn" data-go="list">更多路线 ›</button>
       </div>
 
@@ -1140,6 +1140,11 @@
       lng/lat  ：真实经纬度，用于点击“一键导航”后跳转高德地图。
       x/y      ：示意地图上的位置，范围 0-100；x 越大越靠右，y 越大越靠下。
     */
+    
+    /* 
+    多稼居民委员会位置已更新（百度地图），请将其经纬度修改为：121.509382, 31.219165，xy 还没有更新
+    社区卫生服务中心位置已更新（百度地图）
+    */
     const POINTS = [
       {
         id: 'duojia-jwh',
@@ -1147,25 +1152,25 @@
         category: 'service',
         icon: '👥',
         intro: '居民咨询、社区活动报名、便民联系的重要窗口。',
-        address: '多稼路88号（邻里中心2楼）',
-        phone: '021-1234 5678',
-        hours: '周一至周五 8:30-17:00',
-        lng: 121.49912,
-        lat: 31.22488,
+        address: '会馆街66号',
+        phone: '021-33766298',
+        hours: '周一至周日 8:30-21:00',
+        lng: 121.509382,
+        lat: 31.219165,
         x: 52,
         y: 44
       },
       {
         id: 'health-station',
-        name: '社区卫生服务站',
+        name: '社区卫生服务中心',
         category: 'service',
         icon: '✚',
         intro: '基本医疗、健康咨询、慢病随访，提供居民身边的健康服务。',
-        address: '多稼路102号',
-        phone: '021-2233 7788',
-        hours: '周一至周日 8:00-16:30',
-        lng: 121.50136,
-        lat: 31.22291,
+        address: '陆家浜路525号',
+        phone: '021-63770202',
+        hours: '周一至周日 8:00-11:00,13:30-16:30',
+        lng: 121.504448,
+        lat: 31.218086,
         x: 38,
         y: 69
       },

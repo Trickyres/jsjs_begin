@@ -53,11 +53,23 @@
     /*
       box-sizing: border-box 的作用：
       让元素的 width 包含 padding 和 border，布局时更直观。
-      对初学者来说，可以理解为“宽度更好算”
+      对初学者来说，可以理解为“宽度更好算”，这个计算方式就是按照由外往内计算的，明确了width之后就会向内作减法；
       。
     */
     * { box-sizing: border-box; }
+    /*
+      页面真正显示出来的内容；
+      min-height: 100% 确保内容区至少占满整个屏幕高度，避免内容过少时页面顶部出现空白；
+      100vh应该是更加稳妥的选择；
+      背景是由css画出来的：
+      第一层：左上角一团浅橙色光晕 在15% 4%位置，半径为28%透明度，颜色是rgba(255, 218, 169, .38)，向外渐变为透明
+      第二层：右上角一团浅绿色光晕
+      第三层：从上到下的米白渐变底色
+      linear-graient是线性渐变；color整个网页默认文字用--text变量，也就是#37281e这个深棕色；
+      html,body这里的意思是并列选择的意思 html和body都应用这些样式
+      html中一定有
 
+    */
     html, body {
       margin: 0;
       min-height: 100%;
@@ -67,7 +79,17 @@
         linear-gradient(180deg, #fff7e9 0%, #fffaf2 45%, #fdf6ec 100%);
       color: var(--text);
     }
+    
 
+    
+    /*
+      -webkit-font-smoothing: antialiased; # 在 WebKit 内核的浏览器（如 Safari 和 Chrome）中启用抗锯齿字体渲染，使字体边缘更平滑。
+      antialiased 可以理解为“抗锯齿”。
+      text-rendering: optimizeLegibility; 启用一些字体排版优化，比如字距、连字
+
+      button,input：所有按钮和输入框，都继承父元素的字体。
+
+    */
     body {
       display: flex;
       justify-content: center;
@@ -75,12 +97,19 @@
       text-rendering: optimizeLegibility;
     }
 
+    
     button, input { font-family: inherit; }
 
     /*
-      .app 是整个手机 H5 的外壳。
+      .app 是整个手机 H5 的外壳。为了在电脑网页端看起来合理，让底部导航、地图、列表都放在一个页面里面。
       max-width: 430px 表示即使在电脑上打开，也会保持接近手机屏幕的宽度。
-    */
+      .是一个class选择器，表示HTML中class属性包含app的元素；position: relative 让它成为一个定位上下文，方便内部绝对定位的元素（比如首页头图、地图点位信息卡片）以它为参考进行定位；overflow: hidden 隐藏超出 app 边界的部分，保持界面整洁；box-shadow 给 app 添加一个细微的边框阴影，让它在白色背景上更有层次感。
+      .app理解为手机里的整个小应用
+      relaticve定位：元素相对于其正常位置进行定位，可以使用top、right、bottom、left属性来调整位置，但不会脱离文档流。
+      app成为内部绝对定位元素的参照物
+      overflow的意思是 超出.app边界的内容隐藏掉
+      box-shadow是给外壳加一圈淡淡的阴影
+      */
     .app {
       position: relative;
       width: 100%;
@@ -92,8 +121,11 @@
     }
 
     /*
+      .view 是 app 内的一个子容器，表示一个独立的页面视图。每个页面视图都有自己的内容，当切换页面时，通过切换 active 类来显示或隐藏相应的视图。
+      .是 class 的选择器
       .view 表示一个“页面”：首页、地图页、列表页、电话页。
       默认 display: none 隐藏；当有 active 类时才显示。
+      animation: fadeIn（淡入动画） .18s ease（动画时长 0.18秒，动画速度是 ease）; 给页面切换添加一个淡入动画，让界面切换更流畅自然。
       JS 里的 setView() 函数就是通过切换 active 来切换页面。
     */
     .view {
@@ -103,13 +135,20 @@
       animation: fadeIn .18s ease;
     }
 
-    .view.active { display: block; }
-
+    .view.active { display: block; } /* 当 .view 元素具有 active 类时，display 就是 block 了，显示该页面视图 */
+    /* fadeIn 是一个关键帧动画，定义了从透明度为 0 且向下偏移 8px，到透明度为 1 且回到原位的动画效果。 */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* 顶部导航栏  flex的意思是变成弹性布局即横向布局  flex的默认主轴是横向 不写 flex div块级元素通查会独占一行
+    align-items: center 让导航栏内的元素垂直居中；gap: 12px 导航栏内元素之间的间距；min-height: 44px 导航栏的最小高度；margin-bottom: 10px 导航栏与下方内容的间距。
+    section有语义，是一个独立内容区块；
+    div 没有什么语义 是一个盒子
+    class = 'view active' 这说明这个 HTML 元素有两个 class 名 view 和 active ；class 和 data-view 是两个属性
+    .view 可以选中 clasa 中有 view 的元素 同时需要注意两个元素之间的空格是分隔符  .view.active 选中同时具有 view 和 active 的元素
+    */
     .topbar {
       display: flex;
       align-items: center;
@@ -205,6 +244,9 @@
       pointer-events: none;
     }
 
+    /*  ::表示伪元素 可以通过 css 在特定的元素前生成一个虚拟元素
+    : 一个冒号可以表示伪类.hover active 之类
+    */
     .tree {
       position: absolute;
       right: 28px;
@@ -671,6 +713,7 @@
       box-shadow: 0 18px 44px rgba(82, 56, 37, .22);
       backdrop-filter: blur(16px);
     }
+    /* 点位头部信息 */
     .sheet-handle {
       width: 42px;
       height: 4px;
@@ -710,6 +753,7 @@
       font-size: 14px;
       margin-bottom: 12px;
     }
+    /* 动作包含了一键导航 查看列表等*/
     .sheet-actions {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
@@ -730,11 +774,13 @@
       text-decoration: none;
       white-space: nowrap;
     }
+    /* 主要按钮 */
     .btn-primary {
       color: #fff;
       background: linear-gradient(180deg, #ff7a36, #ed4e20);
       box-shadow: 0 10px 22px rgba(237, 78, 32, .28);
     }
+    /* 次要按钮 */
     .btn-ghost {
       color: #5e7a48;
       background: #fff;
@@ -878,7 +924,7 @@
     }
     .nav-item .nav-icon { font-size: 21px; line-height: 1; }
     .nav-item.active { color: var(--brand-2); background: #fff0e7; }
-
+    /* 轻提示 短暂提示框 临时提示 */
     .toast {
       position: fixed;
       left: 50%;
@@ -923,6 +969,10 @@
     2. data-view="map"   地图页
     3. data-view="list"  点位列表页
     4. data-view="phone" 便民电话页
+    5. nav.bottom-nav 固定底部导航栏
+    main.app管理整个应用
+    section.view 管理每个页面视图
+    div card button 管理等元素构成页面内容
 
     这些 section 同时存在，但一次只显示一个。
     JS 会给当前页面加 active 类，其余页面隐藏。

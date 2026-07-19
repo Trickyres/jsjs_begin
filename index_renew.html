@@ -712,7 +712,19 @@
       border-radius: 28px;
       box-shadow: 0 18px 44px rgba(82, 56, 37, .22);
       backdrop-filter: blur(16px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(calc(100% + 28px));
+      transition: transform .28s cubic-bezier(.22, .8, .24, 1), opacity .2s ease, visibility .2s ease;
     }
+    .sheet.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
     /* 点位头部信息 */
     .sheet-handle {
       width: 42px;
@@ -758,6 +770,22 @@
       display: grid;
       grid-template-columns: 1fr 1.1fr;
       gap: 10px;
+    }
+
+    .map-sheet-actions {
+      grid-template-columns: 1.1fr 1fr;
+      margin-top: 14px;
+    }
+    .map-sheet-actions .btn {
+      min-height: 46px;
+      border-radius: 15px;
+      font-size: 14px;
+      box-shadow: 0 8px 18px rgba(93, 61, 39, .1);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .map-sheet-actions .btn:active {
+      transform: scale(.98);
+      box-shadow: 0 4px 10px rgba(93, 61, 39, .08);
     }
 
     .btn {
@@ -1122,7 +1150,7 @@
         <div class="real-design-map" id="duojiaMap" aria-label="多稼生活地图">
           <img src="./assets/duojia-map-bg.webp" alt="稼享指南多稼生活地图">
         </div>
-        <button class="locate-btn" id="locateBtn" aria-label="回到中心">⌖</button>
+        <button class="locate-btn" id="locateBtn" aria-label="回到中心" hidden>⌖</button>
         <div class="sheet" id="mapSheet"></div>
       </div>
     </section>
@@ -1357,36 +1385,37 @@
 
     /* 
     用于地图上的点位标记，包含了点位的名称、地址和在示意地图上的位置坐标（x/y）。
+    zyf 新增的；
     */
     const MAP_POINTS = [
-      { id: "employment", name: "小东门街道社区就业服务站", address: "上海市黄浦区小东门街道社区就业服务站", x: 24.8, y: 11.4 },
-      { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区小南门地铁站", x: 21.0, y: 18.0 },
-      { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区小南门警钟楼", x: 17.0, y: 25.0 },
-      { id: "police", name: "小东门派出所", address: "上海市黄浦区小东门派出所", x: 70.5, y: 6.9 },
-      { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区外滩金融都市运动中心", x: 71.6, y: 19.7 },
-      { id: "huangpu-riverside", name: "黄浦滨江", address: "上海市黄浦区黄浦滨江", x: 82.0, y: 17.0 },
-      { id: "shanghai-bank", name: "上海银行", address: "上海市黄浦区上海银行董家渡附近网点", x: 48.2, y: 21.6 },
-      { id: "boc", name: "中国银行", address: "上海市黄浦区中国银行董家渡附近网点", x: 53.8, y: 27.8 },
-      { id: "bund-trendy", name: "外滩潮方", address: "上海市黄浦区外滩潮方", x: 57.0, y: 25.3 },
-      { id: "dongjiadu-ferry", name: "董家渡渡口", address: "上海市黄浦区董家渡渡口", x: 84.2, y: 24.6 },
-      { id: "dongjiadu-flower-bridge", name: "董家渡花桥", address: "上海市黄浦区董家渡花桥", x: 78.8, y: 31.1 },
-      { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡天主堂", x: 47.5, y: 32.1 },
-      { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区青龙桥街66弄8号", x: 50.0, y: 40.0 },
-      { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号 商船会馆", x: 57.0, y: 43.9 },
-      { id: "guotai-haitong", name: "国泰海通", address: "上海市黄浦区国泰海通董家渡附近网点", x: 66.0, y: 40.1 },
-      { id: "guohai-sec", name: "国海证券", address: "上海市黄浦区国海证券董家渡附近网点", x: 63.3, y: 47.0 },
-      { id: "time-plastic", name: "上海时光整形外科医院", address: "上海市黄浦区普安路189号 上海时光整形外科医院", x: 78.6, y: 50.5 },
-      { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区强生医院", x: 75.5, y: 51.5 },
-      { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号 小东门街道社区卫生服务中心", x: 30.2, y: 51.4 },
-      { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号 南外滩轻纺面料市场", x: 24.9, y: 56.7 },
-      { id: "icbc", name: "中国工商银行", address: "上海市黄浦区中国工商银行董家渡附近网点", x: 38.8, y: 59.5 },
-      { id: "gotterwell", name: "歌特维康门诊部", address: "上海市黄浦区歌特维康门诊部", x: 42.7, y: 63.3 },
-      { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区南浦大桥地铁站", x: 31.2, y: 66.3 },
-      { id: "sinopec", name: "中国石化加油站", address: "上海市黄浦区中国石化加油站南浦大桥附近", x: 52.9, y: 61.8 },
-      { id: "toilet", name: "公共厕所", address: "上海市黄浦区南浦大桥附近公共厕所", x: 49.7, y: 67.0 },
-      { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号 黄浦区工人体育馆", x: 54.3, y: 77.0 },
-      { id: "dongjiadu-road-ferry", name: "董家渡路轮渡站", address: "上海市黄浦区董家渡路轮渡站", x: 61.6, y: 78.1 },
-      { id: "nanpu-bridge", name: "南浦大桥", address: "上海市黄浦区南浦大桥", x: 53.6, y: 90.5 }
+      { id: "employment", name: "小东门街道社区就业服务站", address: "上海市黄浦区小东门街道社区就业服务站", category: "service", x: 24.8, y: 11.4 },
+      { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区小南门地铁站", category: "service", x: 21.0, y: 18.0 },
+      { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区小南门警钟楼", category: "memory", x: 17.0, y: 25.0 },
+      { id: "police", name: "小东门派出所", address: "上海市黄浦区小东门派出所", category: "service", x: 70.5, y: 6.9 },
+      { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区外滩金融都市运动中心", category: "leisure", x: 71.6, y: 19.7 },
+      { id: "huangpu-riverside", name: "黄浦滨江", address: "上海市黄浦区黄浦滨江", category: "leisure", x: 82.0, y: 17.0 },
+      { id: "shanghai-bank", name: "上海银行", address: "上海市黄浦区上海银行董家渡附近网点", category: "shopping", x: 48.2, y: 21.6 },
+      { id: "boc", name: "中国银行", address: "上海市黄浦区中国银行董家渡附近网点", category: "shopping", x: 53.8, y: 27.8 },
+      { id: "bund-trendy", name: "外滩潮方", address: "上海市黄浦区外滩潮方", category: "shopping", x: 57.0, y: 25.3 },
+      { id: "dongjiadu-ferry", name: "董家渡渡口", address: "上海市黄浦区董家渡渡口", category: "service", x: 84.2, y: 24.6 },
+      { id: "dongjiadu-flower-bridge", name: "董家渡花桥", address: "上海市黄浦区董家渡花桥", category: "leisure", x: 78.8, y: 31.1 },
+      { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡天主堂", category: "memory", x: 47.5, y: 32.1 },
+      { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区青龙桥街66弄8号", category: "service", x: 50.0, y: 40.0 },
+      { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号 商船会馆", category: "memory", x: 57.0, y: 43.9 },
+      { id: "guotai-haitong", name: "国泰海通", address: "上海市黄浦区国泰海通董家渡附近网点", category: "shopping", x: 66.0, y: 40.1 },
+      { id: "guohai-sec", name: "国海证券", address: "上海市黄浦区国海证券董家渡附近网点", category: "shopping", x: 63.3, y: 47.0 },
+      { id: "time-plastic", name: "上海时光整形外科医院", address: "上海市黄浦区普安路189号 上海时光整形外科医院", category: "service", x: 78.6, y: 50.5 },
+      { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区强生医院", category: "service", x: 75.5, y: 51.5 },
+      { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号 小东门街道社区卫生服务中心", category: "service", x: 30.2, y: 51.4 },
+      { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号 南外滩轻纺面料市场", category: "shopping", x: 24.9, y: 56.7 },
+      { id: "icbc", name: "中国工商银行", address: "上海市黄浦区中国工商银行董家渡附近网点", category: "shopping", x: 38.8, y: 59.5 },
+      { id: "gotterwell", name: "歌特维康门诊部", address: "上海市黄浦区歌特维康门诊部", category: "service", x: 42.7, y: 63.3 },
+      { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区南浦大桥地铁站", category: "service", x: 31.2, y: 66.3 },
+      { id: "sinopec", name: "中国石化加油站", address: "上海市黄浦区中国石化加油站南浦大桥附近", category: "shopping", x: 52.9, y: 61.8 },
+      { id: "toilet", name: "公共厕所", address: "上海市黄浦区南浦大桥附近公共厕所", category: "service", x: 49.7, y: 67.0 },
+      { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号 黄浦区工人体育馆", category: "leisure", x: 54.3, y: 77.0 },
+      { id: "dongjiadu-road-ferry", name: "董家渡路轮渡站", address: "上海市黄浦区董家渡路轮渡站", category: "service", x: 61.6, y: 78.1 },
+      { id: "nanpu-bridge", name: "南浦大桥", address: "上海市黄浦区南浦大桥", category: "leisure", x: 53.6, y: 90.5 }
     ];
 
     /*
@@ -1467,7 +1496,7 @@
       state.view = view;
       $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
       $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === view));
-      if (view === 'map') renderMap();
+      if (view === 'map') renderImageMap();
       if (view === 'list') renderList();
       if (view === 'phone') renderContacts();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1480,7 +1509,7 @@
     */
     function setCategory(category, targetView = state.view) {
       state.category = category;
-      if (targetView === 'map') renderMap();
+      if (targetView === 'map') renderImageMap();
       if (targetView === 'list') renderList();
     }
 
@@ -1568,6 +1597,7 @@
 
       renderSheet(getPoint(state.selectedId));
     }
+
 
     /*
       渲染地图底部的点位详情卡片。
@@ -1712,10 +1742,14 @@
     const mapEl = document.querySelector("#duojiaMap");
     if (!mapEl) return;
 
+    renderFilterRows();
+    closeImageMapSheet();
+
     // 避免重复渲染热点
     mapEl.querySelectorAll(".map-hotspot").forEach(el => el.remove());
 
-    MAP_IMAGE_POINTS.forEach(point => {
+    const visiblePoints = MAP_POINTS.filter(point => state.category === 'all' || point.category === state.category);
+    visiblePoints.forEach(point => {
       const btn = document.createElement("button");
       btn.className = "map-hotspot";
       btn.style.setProperty("--x", `${point.x}%`);
@@ -1729,40 +1763,64 @@
 
       mapEl.appendChild(btn);
     });
+
+    // 点击地图图片的空白处时，收起点位详情面板。 event.target 表示用户实际点击的元素
+    mapEl.onclick = event => {
+      if (!event.target.closest(".map-hotspot")) closeImageMapSheet();
+    };
   }
 
+   function closeImageMapSheet() {
+    document.querySelectorAll(".map-hotspot.active").forEach(btn => btn.classList.remove("active"));
+    const sheet = document.querySelector("#mapSheet");
+    if (sheet) sheet.classList.remove("is-open");
+  }
+
+   // 只负责更新“当前选中了哪个地图点位”。
    function selectImageMapPoint(point) {
+    if (!point) return null;
+
     document.querySelectorAll(".map-hotspot").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.id === point.id);
     });
 
-    const sheet = document.querySelector("#placeSheet");
-    if (!sheet) return;
+    return renderImageMapSheet(point);
+  }
+
+   // 只负责生成详情内容、绑定详情按钮事件并打开详情卡片。
+   function renderImageMapSheet(point) {
+    if (!point) return null;
+
+    const sheet = document.querySelector("#mapSheet");
+    if (!sheet) return null;
+
+    const category = getCategory(point.category);
 
     sheet.innerHTML = `
       <div class="sheet-handle"></div>
-
-      <div class="place-main">
+      <div class="sheet-title-row">
         <h3>${point.name}</h3>
-        <p>${point.address || "暂无详细地址，可后续补充。"}</p>
+        <span class="tag ${point.category}">${category.full || category.label}</span>
       </div>
-
-      <div class="meta">
-        <span>点击“一键导航”后，将打开高德地图。</span>
+      <p>${point.address || "暂无详细地址，可后续补充。"}</p>
+      <div class="sheet-meta">
+        <span>⌖ 点击导航可在高德地图中查看路线</span>
       </div>
-
-      <div class="sheet-actions">
-        <button class="btn-primary" id="navBtn">一键导航</button>
-        <button class="btn-ghost" id="copyBtn">复制名称</button>
+      <div class="sheet-actions map-sheet-actions">
+        <button class="btn btn-primary" id="navBtn"><span aria-hidden="true">➤</span> 一键导航</button>
+        <button class="btn btn-ghost" id="copyBtn"><span aria-hidden="true">⧉</span> 复制名称</button>
       </div>
     `;
 
-    document.querySelector("#navBtn").addEventListener("click", () => {
+    const navButton = sheet.querySelector("#navBtn");
+    const copyButton = sheet.querySelector("#copyBtn");
+
+    navButton.addEventListener("click", () => {
       showToast("正在打开高德地图");
       window.location.href = buildAmapUrl(point);
     });
 
-    document.querySelector("#copyBtn").addEventListener("click", async () => {
+    copyButton.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(point.name);
         showToast("已复制点位名称");
@@ -1770,6 +1828,12 @@
         showToast(point.name);
       }
     });
+
+    requestAnimationFrame(() => {
+      sheet.classList.add("is-open");
+    });
+
+    return sheet;
   }
 
     /*

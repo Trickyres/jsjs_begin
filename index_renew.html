@@ -916,7 +916,7 @@
       border: 1px dashed rgba(138, 96, 62, .22);
     }
 
-    /* 
+    /*
 
     新增地图式样的相关空间
 
@@ -946,8 +946,8 @@
       position: absolute;
       left: var(--x);
       top: var(--y);
-      width: 34px;
-      height: 34px;
+      width: var(--hit-size, 34px);
+      height: var(--hit-size, 34px);
       transform: translate(-50%, -50%);
       border: 0;
       border-radius: 999px;
@@ -990,6 +990,163 @@
       background: #ff5a24;
       opacity: 1;
       box-shadow: 0 0 0 3px rgba(255, 255, 255, .72);
+    }
+
+    /* 组合点位详情：一个热点内列出多个可独立导航的地点。 */
+    .cluster-sheet-intro { margin-bottom: 10px !important; }
+    .cluster-location-list {
+      display: grid;
+      gap: 7px;
+      max-height: 210px;
+      overflow-y: auto;
+    }
+    .cluster-location {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border: 1px solid rgba(125, 82, 48, .12);
+      border-radius: 13px;
+      background: rgba(255, 250, 244, .88);
+    }
+    .cluster-location-index {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #fff0e8;
+      color: #d44c22;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .cluster-location-info { min-width: 0; }
+    .cluster-location-info strong {
+      display: block;
+      overflow: hidden;
+      color: var(--text);
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cluster-location-info small {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cluster-nav-btn {
+      min-height: 30px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 10px;
+      background: #f2672a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .cluster-sheet-actions { margin-top: 10px; }
+    .cluster-sheet-actions .btn { width: 100%; }
+
+    /*
+      地图临时校准工具。
+      只有 MAP_CALIBRATION_MODE 为 true 时才会显示，不影响正式浏览模式。
+    */
+    .map-calibrator[hidden] { display: none; }
+    .map-calibrator {
+      margin: 14px 0 0;
+      padding: 14px;
+      border: 2px solid rgba(238, 87, 35, .28);
+      border-radius: 18px;
+      background: rgba(255, 250, 243, .98);
+      box-shadow: 0 10px 28px rgba(82, 56, 37, .12);
+    }
+    .map-calibrator h3 { margin: 0 0 6px; font-size: 16px; }
+    .map-calibrator p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .calibration-select {
+      width: 100%;
+      min-height: 40px;
+      margin-bottom: 10px;
+      padding: 0 10px;
+      border: 1px solid rgba(125, 82, 48, .18);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+    .calibration-fields {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .calibration-fields label {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .calibration-fields input {
+      width: 100%;
+      min-width: 0;
+      padding: 9px 7px;
+      border: 1px solid rgba(125, 82, 48, .18);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .calibration-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .calibration-actions .btn { min-height: 38px; padding: 8px; font-size: 12px; }
+    .calibration-output {
+      width: 100%;
+      min-height: 74px;
+      margin-top: 10px;
+      padding: 9px;
+      resize: vertical;
+      border: 1px solid rgba(125, 82, 48, .16);
+      border-radius: 10px;
+      background: #2f2925;
+      color: #fff7eb;
+      font: 11px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .view.is-calibrating #mapFilters { opacity: .45; pointer-events: none; }
+    .view.is-calibrating #mapSheet { display: none; }
+    .real-design-map.is-calibrating .map-hotspot {
+      display: grid;
+      place-items: center;
+      border: 1px dashed rgba(255, 255, 255, .9);
+      background: rgba(238, 87, 35, .26);
+      color: #fff;
+      touch-action: none;
+      user-select: none;
+      box-shadow: 0 0 0 1px rgba(173, 54, 18, .5);
+    }
+    .real-design-map.is-calibrating .map-hotspot.active {
+      border: 2px solid #fff;
+      background: rgba(255, 90, 36, .68);
+      box-shadow: 0 0 0 3px #ff5a24, 0 6px 16px rgba(36, 28, 20, .28);
+    }
+    .real-design-map.is-calibrating .map-hotspot::before,
+    .real-design-map.is-calibrating .map-hotspot::after { display: none; }
+    .map-hotspot-label {
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
     }
 
     /*
@@ -1153,6 +1310,25 @@
         <button class="locate-btn" id="locateBtn" aria-label="回到中心" hidden>⌖</button>
         <div class="sheet" id="mapSheet"></div>
       </div>
+
+      <section class="map-calibrator" id="mapCalibrator" hidden aria-label="地图点位校准工具">
+        <h3>🛠 地图点位校准模式</h3>
+        <p>选择地点后直接拖动圆圈；也可以修改 X、Y 和点击范围。调整结果会暂存在本浏览器中。</p>
+        <select class="calibration-select" id="calibrationPointSelect" aria-label="选择需要校准的地点"></select>
+        <div class="calibration-fields">
+          <label>X（左右）<input id="calibrationX" type="number" min="0" max="100" step="0.1"></label>
+          <label>Y（上下）<input id="calibrationY" type="number" min="0" max="100" step="0.1"></label>
+          <label>范围 px<input id="calibrationSize" type="number" min="20" max="80" step="2"></label>
+        </div>
+        <div class="calibration-actions">
+          <button class="btn btn-ghost" id="calibrationPrevBtn" type="button">← 上一个</button>
+          <button class="btn btn-ghost" id="calibrationNextBtn" type="button">下一个 →</button>
+          <button class="btn btn-primary" id="copyCurrentPointBtn" type="button">复制当前点</button>
+          <button class="btn btn-primary" id="copyAllPointsBtn" type="button">复制全部点位</button>
+          <button class="btn btn-ghost" id="resetCalibrationBtn" type="button">恢复源文件坐标</button>
+        </div>
+        <textarea class="calibration-output" id="calibrationOutput" readonly aria-label="校准数据输出"></textarea>
+      </section>
     </section>
 
     <!-- 点位列表页：搜索框、分类筛选、点位卡片列表 -->
@@ -1387,36 +1563,95 @@
     用于地图上的点位标记，包含了点位的名称、地址和在示意地图上的位置坐标（x/y）。
     zyf 新增的；
     */
+    // const MAP_POINTS = [
+    //   { id: "employment", name: "小东门街道社区就业服务站", address: "上海市黄浦区小东门街道社区就业服务站", category: "service", x: 24.8, y: 11.4 },
+    //   { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区小南门地铁站", category: "service", x: 21.0, y: 18.0 },
+    //   { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区小南门警钟楼", category: "memory", x: 17.0, y: 25.0 },
+    //   { id: "police", name: "小东门派出所", address: "上海市黄浦区小东门派出所", category: "service", x: 70.5, y: 6.9 },
+    //   { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区外滩金融都市运动中心", category: "leisure", x: 71.6, y: 19.7 },
+    //   { id: "huangpu-riverside", name: "黄浦滨江", address: "上海市黄浦区黄浦滨江", category: "leisure", x: 82.0, y: 17.0 },
+    //   { id: "shanghai-bank", name: "上海银行", address: "上海市黄浦区上海银行董家渡附近网点", category: "shopping", x: 48.2, y: 21.6 },
+    //   { id: "boc", name: "中国银行", address: "上海市黄浦区中国银行董家渡附近网点", category: "shopping", x: 53.8, y: 27.8 },
+    //   { id: "bund-trendy", name: "外滩潮方", address: "上海市黄浦区外滩潮方", category: "shopping", x: 57.0, y: 25.3 },
+    //   { id: "dongjiadu-ferry", name: "董家渡渡口", address: "上海市黄浦区董家渡渡口", category: "service", x: 84.2, y: 24.6 },
+    //   { id: "dongjiadu-flower-bridge", name: "董家渡花桥", address: "上海市黄浦区董家渡花桥", category: "leisure", x: 78.8, y: 31.1 },
+    //   { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡天主堂", category: "memory", x: 47.5, y: 32.1 },
+    //   { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区青龙桥街66弄8号", category: "service", x: 50.0, y: 40.0 },
+    //   { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号 商船会馆", category: "memory", x: 57.0, y: 43.9 },
+    //   { id: "guotai-haitong", name: "国泰海通", address: "上海市黄浦区国泰海通董家渡附近网点", category: "shopping", x: 66.0, y: 40.1 },
+    //   { id: "guohai-sec", name: "国海证券", address: "上海市黄浦区国海证券董家渡附近网点", category: "shopping", x: 63.3, y: 47.0 },
+    //   { id: "time-plastic", name: "上海时光整形外科医院", address: "上海市黄浦区普安路189号 上海时光整形外科医院", category: "service", x: 78.6, y: 50.5 },
+    //   { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区强生医院", category: "service", x: 75.5, y: 51.5 },
+    //   { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号 小东门街道社区卫生服务中心", category: "service", x: 30.2, y: 51.4 },
+    //   { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号 南外滩轻纺面料市场", category: "shopping", x: 24.9, y: 56.7 },
+    //   { id: "icbc", name: "中国工商银行", address: "上海市黄浦区中国工商银行董家渡附近网点", category: "shopping", x: 38.8, y: 59.5 },
+    //   { id: "gotterwell", name: "歌特维康门诊部", address: "上海市黄浦区歌特维康门诊部", category: "service", x: 42.7, y: 63.3 },
+    //   { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区南浦大桥地铁站", category: "service", x: 31.2, y: 66.3 },
+    //   { id: "sinopec", name: "中国石化加油站", address: "上海市黄浦区中国石化加油站南浦大桥附近", category: "shopping", x: 52.9, y: 61.8 },
+    //   { id: "toilet", name: "公共厕所", address: "上海市黄浦区南浦大桥附近公共厕所", category: "service", x: 49.7, y: 67.0 },
+    //   { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号 黄浦区工人体育馆", category: "leisure", x: 54.3, y: 77.0 },
+    //   { id: "dongjiadu-road-ferry", name: "董家渡路轮渡站", address: "上海市黄浦区董家渡路轮渡站", category: "service", x: 61.6, y: 78.1 },
+    //   { id: "nanpu-bridge", name: "南浦大桥", address: "上海市黄浦区南浦大桥", category: "leisure", x: 53.6, y: 90.5 }
+    // ];
+    /*
+    用于地图上的点位标记，包含了点位的名称、地址和在示意地图上的位置坐标（x/y）。
+    zyf 新增的；
+    完成地图位置的修订
+    */
     const MAP_POINTS = [
-      { id: "employment", name: "小东门街道社区就业服务站", address: "上海市黄浦区小东门街道社区就业服务站", category: "service", x: 24.8, y: 11.4 },
-      { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区小南门地铁站", category: "service", x: 21.0, y: 18.0 },
-      { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区小南门警钟楼", category: "memory", x: 17.0, y: 25.0 },
-      { id: "police", name: "小东门派出所", address: "上海市黄浦区小东门派出所", category: "service", x: 70.5, y: 6.9 },
-      { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区外滩金融都市运动中心", category: "leisure", x: 71.6, y: 19.7 },
-      { id: "huangpu-riverside", name: "黄浦滨江", address: "上海市黄浦区黄浦滨江", category: "leisure", x: 82.0, y: 17.0 },
-      { id: "shanghai-bank", name: "上海银行", address: "上海市黄浦区上海银行董家渡附近网点", category: "shopping", x: 48.2, y: 21.6 },
-      { id: "boc", name: "中国银行", address: "上海市黄浦区中国银行董家渡附近网点", category: "shopping", x: 53.8, y: 27.8 },
-      { id: "bund-trendy", name: "外滩潮方", address: "上海市黄浦区外滩潮方", category: "shopping", x: 57.0, y: 25.3 },
-      { id: "dongjiadu-ferry", name: "董家渡渡口", address: "上海市黄浦区董家渡渡口", category: "service", x: 84.2, y: 24.6 },
-      { id: "dongjiadu-flower-bridge", name: "董家渡花桥", address: "上海市黄浦区董家渡花桥", category: "leisure", x: 78.8, y: 31.1 },
-      { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡天主堂", category: "memory", x: 47.5, y: 32.1 },
-      { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区青龙桥街66弄8号", category: "service", x: 50.0, y: 40.0 },
-      { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号 商船会馆", category: "memory", x: 57.0, y: 43.9 },
-      { id: "guotai-haitong", name: "国泰海通", address: "上海市黄浦区国泰海通董家渡附近网点", category: "shopping", x: 66.0, y: 40.1 },
-      { id: "guohai-sec", name: "国海证券", address: "上海市黄浦区国海证券董家渡附近网点", category: "shopping", x: 63.3, y: 47.0 },
-      { id: "time-plastic", name: "上海时光整形外科医院", address: "上海市黄浦区普安路189号 上海时光整形外科医院", category: "service", x: 78.6, y: 50.5 },
-      { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区强生医院", category: "service", x: 75.5, y: 51.5 },
-      { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号 小东门街道社区卫生服务中心", category: "service", x: 30.2, y: 51.4 },
-      { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号 南外滩轻纺面料市场", category: "shopping", x: 24.9, y: 56.7 },
-      { id: "icbc", name: "中国工商银行", address: "上海市黄浦区中国工商银行董家渡附近网点", category: "shopping", x: 38.8, y: 59.5 },
-      { id: "gotterwell", name: "歌特维康门诊部", address: "上海市黄浦区歌特维康门诊部", category: "service", x: 42.7, y: 63.3 },
-      { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区南浦大桥地铁站", category: "service", x: 31.2, y: 66.3 },
-      { id: "sinopec", name: "中国石化加油站", address: "上海市黄浦区中国石化加油站南浦大桥附近", category: "shopping", x: 52.9, y: 61.8 },
-      { id: "toilet", name: "公共厕所", address: "上海市黄浦区南浦大桥附近公共厕所", category: "service", x: 49.7, y: 67.0 },
-      { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号 黄浦区工人体育馆", category: "leisure", x: 54.3, y: 77.0 },
-      { id: "dongjiadu-road-ferry", name: "董家渡路轮渡站", address: "上海市黄浦区董家渡路轮渡站", category: "service", x: 61.6, y: 78.1 },
-      { id: "nanpu-bridge", name: "南浦大桥", address: "上海市黄浦区南浦大桥", category: "leisure", x: 53.6, y: 90.5 }
+      { id: "employment", name: "小东门街道融创就业服务站", address: "上海市黄浦区中华路518弄16号", category: "service", x: 24.6, y: 11.7, hitSize: 28 },
+      { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区中华路与王家码头路交叉口", category: "service", x: 21.1, y: 17.9, hitSize: 34 },
+      { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区中华路581号", category: "memory", x: 16.8, y: 25.6, hitSize: 30 },
+      { id: "police", name: "上海市公安局黄浦分局小东门派出所", address: "上海市黄浦区新码头街66号", category: "service", x: 70.3, y: 6.3, hitSize: 34 },
+      { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区中山南路609号鑫景金融中心地下空间", category: "leisure", x: 71.3, y: 20.5, hitSize: 28 },
+      { id: "huangpu-riverside", name: "黄浦滨江南外滩段", address: "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧", category: "leisure", x: 81.1, y: 17.5, hitSize: 30 },
+      { id: "shanghai-bank", name: "上海银行总行（上银金融大厦）", address: "上海市黄浦区中山南路688号", category: "shopping", x: 59.2, y: 22.8, hitSize: 28 },
+      { id: "boc", name: "中国银行上海市南外滩支行", address: "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号", category: "shopping", x: 65.7, y: 31.2, hitSize: 22 },
+      { id: "bund-trendy", name: "绿地·外滩潮方", address: "上海市黄浦区中山南路800弄1号", category: "shopping", x: 70.4, y: 34.6, hitSize: 22 },
+      { id: "dongjiadu-ferry", name: "董家渡渡口（董家渡轮渡站）", address: "上海市黄浦区外马路737号", category: "service", x: 84.3, y: 29.1, hitSize: 32 },
+      { id: "dongjiadu-flower-bridge", name: "董家渡路花桥", address: "上海市黄浦区董家渡路185号（中山南路至黄浦滨江）", category: "leisure", x: 78.8, y: 37.6, hitSize: 34 },
+      { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡路185号", category: "memory", x: 59.6, y: 34.4, hitSize: 26 },
+      { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区会馆街66号（多稼居委会党群服务站）", category: "service", x: 49.4, y: 41.7, hitSize: 24 },
+      { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号", category: "memory", x: 57, y: 43.9, hitSize: 28 },
+      {
+        id: "ccb-cmb-donghao-cluster",
+        name: "中国建设银行、招商银行、东浩兰生",
+        address: "上海市黄浦区董家渡路182号至208号一带",
+        category: "shopping",
+        x: 53.2,
+        y: 38.4,
+        hitSize: 24,
+        locations: [
+          { name: "中国建设银行上海董家渡路支行", address: "上海市黄浦区董家渡路182号、184号、186号、188号1层" },
+          { name: "招商银行上海董家渡支行", address: "上海市黄浦区董家渡路208号1层" },
+          { name: "东浩兰生（集团）有限公司", address: "上海市黄浦区董家渡路200号47层" }
+        ]
+      },
+      { id: "guotai-haitong", name: "国泰海通外滩金融广场", address: "上海市黄浦区中山南路888号", category: "shopping", x: 66.6, y: 40.7, hitSize: 26 },
+      { id: "guohai-sec", name: "国海证券上海中山南路证券营业部", address: "上海市黄浦区中山南路988号2层201室", category: "shopping", x: 63.3, y: 47, hitSize: 24 },
+      { id: "time-plastic", name: "上海时光整形外科医院（外滩总院）", address: "上海市黄浦区中山南路935号", category: "service", x: 70.3, y: 50.4, hitSize: 22 },
+      { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", category: "service", x: 75.8, y: 52.4, hitSize: 22 },
+      { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", category: "service", x: 19, y: 50.7, hitSize: 26 },
+      { id: "fabric-market", name: "上海南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号", category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
+      { id: "icbc", name: "中国工商银行上海市南市支行", address: "上海市黄浦区陆家浜路275号", category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },
+      { id: "gotterwell", name: "上海歌特维康门诊部", address: "上海市黄浦区中山南路1228号", category: "service", x: 43, y: 64.3, hitSize: 28 },
+      { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区中山南路与国货路交叉口", category: "service", x: 32.1, y: 68.5, hitSize: 34 },
+      { id: "sinopec", name: "中国石化齐爱加油站", address: "上海市黄浦区中山南路1133号", category: "shopping", x: 53.5, y: 65, hitSize: 26 },
+      { id: "toilet", name: "南浦大桥附近公共厕所", address: "上海市黄浦区中山南路与陆家浜路交叉口附近", category: "service", x: 49.6, y: 70.8, hitSize: 30 },
+      { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号", category: "leisure", x: 54.2, y: 78.5, hitSize: 30 },
+      { id: "dongjiadu-road-ferry", name: "陆家浜路轮渡站", address: "上海市黄浦区外马路1279号", category: "service", x: 62.1, y: 79.4, hitSize: 30 },
+      { id: "nanpu-bridge", name: "南浦大桥（浦西引桥）", address: "上海市黄浦区中山南路与陆家浜路交叉口", category: "leisure", x: 54.5, y: 91.4, hitSize: 34 },
     ];
+
+    /*
+      临时地图校准开关：
+      true  = 显示拖动、坐标和点击范围工具；
+      false = 恢复普通访客看到的地图。
+      校准完成并把数据复制回 MAP_POINTS 后，请改成 false。
+    */
+    const MAP_CALIBRATION_MODE = false;
+    const MAP_CALIBRATION_STORAGE_KEY = 'jiaxiang-map-calibration-v1';
+    let calibrationSelectedId = MAP_POINTS[0]?.id || null;
 
     /*
       CONTACTS：便民电话页的数据。
@@ -1738,6 +1973,223 @@
     return `https://uri.amap.com/search?keyword=${keyword}&city=上海&callnative=1&src=jiaxiang-guide`;
   }
 
+   function clampCalibrationNumber(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+   function roundCalibrationNumber(value) {
+    return Number(value.toFixed(1));
+  }
+
+   function getCalibrationPoint() {
+    return MAP_POINTS.find(point => point.id === calibrationSelectedId) || MAP_POINTS[0] || null;
+  }
+
+   function mapPointToSource(point) {
+    const hitSize = Number(point.hitSize) || 34;
+    const locations = Array.isArray(point.locations)
+      ? `, locations: ${JSON.stringify(point.locations)}`
+      : '';
+    return `      { id: ${JSON.stringify(point.id)}, name: ${JSON.stringify(point.name)}, address: ${JSON.stringify(point.address)}, category: ${JSON.stringify(point.category)}, x: ${roundCalibrationNumber(point.x)}, y: ${roundCalibrationNumber(point.y)}, hitSize: ${hitSize}${locations} }`;
+  }
+
+   function allMapPointsToSource() {
+    return `const MAP_POINTS = [\n${MAP_POINTS.map(point => `${mapPointToSource(point)},`).join('\n')}\n    ];`;
+  }
+
+   function saveMapCalibration() {
+    if (!MAP_CALIBRATION_MODE) return;
+
+    const savedPoints = Object.fromEntries(MAP_POINTS.map(point => [point.id, {
+      x: roundCalibrationNumber(point.x),
+      y: roundCalibrationNumber(point.y),
+      hitSize: Number(point.hitSize) || 34
+    }]));
+
+    try {
+      localStorage.setItem(MAP_CALIBRATION_STORAGE_KEY, JSON.stringify(savedPoints));
+    } catch {
+      // 浏览器禁用本地存储时仍可继续校准，只是刷新后不会自动保留。
+    }
+  }
+
+   function restoreMapCalibration() {
+    if (!MAP_CALIBRATION_MODE) return;
+
+    try {
+      const savedPoints = JSON.parse(localStorage.getItem(MAP_CALIBRATION_STORAGE_KEY) || '{}');
+      MAP_POINTS.forEach(point => {
+        const saved = savedPoints[point.id];
+        if (!saved) return;
+        if (Number.isFinite(saved.x)) point.x = clampCalibrationNumber(saved.x, 0, 100);
+        if (Number.isFinite(saved.y)) point.y = clampCalibrationNumber(saved.y, 0, 100);
+        if (Number.isFinite(saved.hitSize)) point.hitSize = clampCalibrationNumber(saved.hitSize, 20, 80);
+      });
+    } catch {
+      localStorage.removeItem(MAP_CALIBRATION_STORAGE_KEY);
+    }
+  }
+
+   function refreshCalibrationPanel(point = getCalibrationPoint()) {
+    if (!MAP_CALIBRATION_MODE || !point) return;
+
+    calibrationSelectedId = point.id;
+    document.querySelectorAll('.map-hotspot').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.id === point.id);
+    });
+
+    const select = document.querySelector('#calibrationPointSelect');
+    const xInput = document.querySelector('#calibrationX');
+    const yInput = document.querySelector('#calibrationY');
+    const sizeInput = document.querySelector('#calibrationSize');
+    const output = document.querySelector('#calibrationOutput');
+
+    if (select) select.value = point.id;
+    if (xInput) xInput.value = roundCalibrationNumber(point.x);
+    if (yInput) yInput.value = roundCalibrationNumber(point.y);
+    if (sizeInput) sizeInput.value = Number(point.hitSize) || 34;
+    if (output) output.value = `${point.name}\n${mapPointToSource(point).trim()}`;
+  }
+
+   function updateCalibrationPoint(point, x, y, hitSize, shouldSave = true) {
+    if (!point) return;
+
+    point.x = roundCalibrationNumber(clampCalibrationNumber(Number(x), 0, 100));
+    point.y = roundCalibrationNumber(clampCalibrationNumber(Number(y), 0, 100));
+    point.hitSize = clampCalibrationNumber(Number(hitSize) || 34, 20, 80);
+
+    const btn = document.querySelector(`.map-hotspot[data-id="${point.id}"]`);
+    if (btn) {
+      btn.style.setProperty('--x', `${point.x}%`);
+      btn.style.setProperty('--y', `${point.y}%`);
+      btn.style.setProperty('--hit-size', `${point.hitSize}px`);
+    }
+
+    refreshCalibrationPanel(point);
+    if (shouldSave) saveMapCalibration();
+  }
+
+   function selectCalibrationPoint(pointOrId) {
+    const point = typeof pointOrId === 'string'
+      ? MAP_POINTS.find(item => item.id === pointOrId)
+      : pointOrId;
+    if (!point) return;
+    refreshCalibrationPanel(point);
+  }
+
+   function selectAdjacentCalibrationPoint(direction) {
+    const currentIndex = Math.max(0, MAP_POINTS.findIndex(point => point.id === calibrationSelectedId));
+    const nextIndex = (currentIndex + direction + MAP_POINTS.length) % MAP_POINTS.length;
+    selectCalibrationPoint(MAP_POINTS[nextIndex]);
+  }
+
+   async function copyCalibrationText(text, successMessage) {
+    const output = document.querySelector('#calibrationOutput');
+    if (output) {
+      output.value = text;
+      output.focus();
+      output.select();
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(successMessage);
+    } catch {
+      const copied = document.execCommand('copy');
+      showToast(copied ? successMessage : '请在黑色文本框内手动复制');
+    }
+  }
+
+   function bindHotspotCalibrationDrag(btn, point, mapEl) {
+    if (!MAP_CALIBRATION_MODE) return;
+
+    let isDragging = false;
+
+    btn.addEventListener('pointerdown', event => {
+      isDragging = true;
+      selectCalibrationPoint(point);
+      btn.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+
+    btn.addEventListener('pointermove', event => {
+      if (!isDragging) return;
+      const rect = mapEl.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      updateCalibrationPoint(point, x, y, point.hitSize || 34, false);
+    });
+
+    const finishDrag = event => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (btn.hasPointerCapture(event.pointerId)) btn.releasePointerCapture(event.pointerId);
+      saveMapCalibration();
+    };
+
+    btn.addEventListener('pointerup', finishDrag);
+    btn.addEventListener('pointercancel', finishDrag);
+  }
+
+   function setupMapCalibration() {
+    const panel = document.querySelector('#mapCalibrator');
+    const mapEl = document.querySelector('#duojiaMap');
+    const mapView = document.querySelector('[data-view="map"]');
+    if (!panel || !mapEl || !mapView) return;
+
+    panel.hidden = !MAP_CALIBRATION_MODE;
+    mapEl.classList.toggle('is-calibrating', MAP_CALIBRATION_MODE);
+    mapView.classList.toggle('is-calibrating', MAP_CALIBRATION_MODE);
+    if (!MAP_CALIBRATION_MODE) return;
+
+    restoreMapCalibration();
+
+    const select = document.querySelector('#calibrationPointSelect');
+    select.innerHTML = MAP_POINTS.map((point, index) => (
+      `<option value="${point.id}">${index + 1}. ${point.name}</option>`
+    )).join('');
+
+    select.addEventListener('change', () => selectCalibrationPoint(select.value));
+    document.querySelector('#calibrationPrevBtn').addEventListener('click', () => selectAdjacentCalibrationPoint(-1));
+    document.querySelector('#calibrationNextBtn').addEventListener('click', () => selectAdjacentCalibrationPoint(1));
+
+    const updateFromInputs = () => {
+      const point = getCalibrationPoint();
+      const xValue = document.querySelector('#calibrationX').value;
+      const yValue = document.querySelector('#calibrationY').value;
+      const sizeValue = document.querySelector('#calibrationSize').value;
+      if (!xValue || !yValue || !sizeValue) return;
+
+      updateCalibrationPoint(
+        point,
+        Number(xValue),
+        Number(yValue),
+        Number(sizeValue)
+      );
+    };
+
+    document.querySelector('#calibrationX').addEventListener('input', updateFromInputs);
+    document.querySelector('#calibrationY').addEventListener('input', updateFromInputs);
+    document.querySelector('#calibrationSize').addEventListener('input', updateFromInputs);
+
+    document.querySelector('#copyCurrentPointBtn').addEventListener('click', () => {
+      const point = getCalibrationPoint();
+      if (point) copyCalibrationText(`${mapPointToSource(point)},`, '已复制当前点位数据');
+    });
+
+    document.querySelector('#copyAllPointsBtn').addEventListener('click', () => {
+      copyCalibrationText(allMapPointsToSource(), '已复制全部点位数据');
+    });
+
+    document.querySelector('#resetCalibrationBtn').addEventListener('click', () => {
+      if (!window.confirm('确定清除浏览器中暂存的校准结果，并恢复源文件坐标吗？')) return;
+      localStorage.removeItem(MAP_CALIBRATION_STORAGE_KEY);
+      window.location.reload();
+    });
+
+    refreshCalibrationPanel();
+  }
+
    function renderImageMap() {
     const mapEl = document.querySelector("#duojiaMap");
     if (!mapEl) return;
@@ -1748,16 +2200,32 @@
     // 避免重复渲染热点
     mapEl.querySelectorAll(".map-hotspot").forEach(el => el.remove());
 
-    const visiblePoints = MAP_POINTS.filter(point => state.category === 'all' || point.category === state.category);
+    const visiblePoints = MAP_CALIBRATION_MODE
+      ? MAP_POINTS
+      : MAP_POINTS.filter(point => state.category === 'all' || point.category === state.category);
     visiblePoints.forEach(point => {
       const btn = document.createElement("button");
       btn.className = "map-hotspot";
       btn.style.setProperty("--x", `${point.x}%`);
       btn.style.setProperty("--y", `${point.y}%`);
+      btn.style.setProperty("--hit-size", `${point.hitSize || 34}px`);
       btn.dataset.id = point.id;
       btn.setAttribute("aria-label", point.name);
+      btn.title = point.name;
+
+      if (MAP_CALIBRATION_MODE) {
+        const label = document.createElement('span');
+        label.className = 'map-hotspot-label';
+        label.textContent = MAP_POINTS.indexOf(point) + 1;
+        btn.appendChild(label);
+        bindHotspotCalibrationDrag(btn, point, mapEl);
+      }
 
       btn.addEventListener("click", () => {
+        if (MAP_CALIBRATION_MODE) {
+          selectCalibrationPoint(point);
+          return;
+        }
         selectImageMapPoint(point);
       });
 
@@ -1766,8 +2234,10 @@
 
     // 点击地图图片的空白处时，收起点位详情面板。 event.target 表示用户实际点击的元素
     mapEl.onclick = event => {
-      if (!event.target.closest(".map-hotspot")) closeImageMapSheet();
+      if (!MAP_CALIBRATION_MODE && !event.target.closest(".map-hotspot")) closeImageMapSheet();
     };
+
+    if (MAP_CALIBRATION_MODE) refreshCalibrationPanel();
   }
 
    function closeImageMapSheet() {
@@ -1795,6 +2265,55 @@
     if (!sheet) return null;
 
     const category = getCategory(point.category);
+    const locations = Array.isArray(point.locations) ? point.locations : [];
+
+    if (locations.length) {
+      sheet.innerHTML = `
+        <div class="sheet-handle"></div>
+        <div class="sheet-title-row">
+          <h3>${point.name}</h3>
+          <span class="tag ${point.category}">${locations.length}个地点</span>
+        </div>
+        <p class="cluster-sheet-intro">地图上合并为一个点位，请在下方选择具体目的地。</p>
+        <div class="cluster-location-list">
+          ${locations.map((location, index) => `
+            <article class="cluster-location">
+              <span class="cluster-location-index">${index + 1}</span>
+              <div class="cluster-location-info">
+                <strong>${location.name}</strong>
+                <small>${location.address || '暂无详细地址'}</small>
+              </div>
+              <button class="cluster-nav-btn" type="button" data-cluster-nav="${index}" aria-label="导航到${location.name}">导航</button>
+            </article>
+          `).join('')}
+        </div>
+        <div class="cluster-sheet-actions">
+          <button class="btn btn-ghost" id="copyClusterBtn"><span aria-hidden="true">⧉</span> 复制三个地点名称</button>
+        </div>
+      `;
+
+      sheet.querySelectorAll('[data-cluster-nav]').forEach(button => {
+        button.addEventListener('click', () => {
+          const location = locations[Number(button.dataset.clusterNav)];
+          if (!location) return;
+          showToast(`正在打开${location.name}`);
+          window.location.href = buildAmapUrl(location);
+        });
+      });
+
+      sheet.querySelector('#copyClusterBtn').addEventListener('click', async () => {
+        const names = locations.map(location => location.name).join('、');
+        try {
+          await navigator.clipboard.writeText(names);
+          showToast('已复制三个地点名称');
+        } catch {
+          showToast(names);
+        }
+      });
+
+      requestAnimationFrame(() => sheet.classList.add('is-open'));
+      return sheet;
+    }
 
     sheet.innerHTML = `
       <div class="sheet-handle"></div>
@@ -1842,6 +2361,7 @@
       它会把所有数据渲染到页面上，并绑定各种点击事件。
     */
     function init() {
+      setupMapCalibration();
       renderQuickEntries();
       renderFilterRows();
       // renderMap(); // zyf revise

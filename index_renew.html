@@ -1266,7 +1266,7 @@
         <button class="more-btn" data-go="list">更多路线 ›</button>
       </div>
 
-      <article class="recommend-card" data-select-point="binjiang-walk">
+      <article class="recommend-card" data-select-point="huangpu-riverside">
         <div class="thumb-river"></div>
         <div class="recommend-content">
           <h3>滨江散步路线 <span class="tag leisure">休闲游玩</span></h3>
@@ -1425,180 +1425,14 @@
       x/y      ：示意地图上的位置，范围 0-100；x 越大越靠右，y 越大越靠下。
     */
     
-    /* 
-    多稼居民委员会位置已更新（百度地图），请将其经纬度修改为：121.509382, 31.219165，xy 还没有更新
-    社区卫生服务中心位置已更新（百度地图）
-    社区口袋花园用了新的地址（青龙桥街与会馆街交叉口），经纬度用了商船会馆的经纬度
+    /*
+      POINTS：全站唯一的点位数据源。
+      地图热点、列表搜索、详情卡片和高德导航都从这里读取。
+      x/y 控制图片地图上的位置；hitSize 控制热点点击范围；
+      lng/lat 可选，未提供时导航会按名称和地址在高德地图中搜索。
     */
     const POINTS = [
-      {
-        id: 'duojia-jwh',
-        name: '多稼居民委员会',
-        category: 'service',
-        icon: '👥',
-        intro: '居民咨询、社区活动报名、便民联系的重要窗口。',
-        address: '会馆街66号',
-        phone: '021-3376 6298',
-        hours: '周一至周日 8:30-21:00',
-        lng: 121.509382,
-        lat: 31.219165,
-        x: 52,
-        y: 44
-      },
-      {
-        id: 'health-station',
-        name: '社区卫生服务中心',
-        category: 'service',
-        icon: '✚',
-        intro: '基本医疗、健康咨询、慢病随访，提供居民身边的健康服务。',
-        address: '陆家浜路525号',
-        phone: '021-6377 0202',
-        hours: '周一至周日 8:00-11:00,13:30-16:30',
-        lng: 121.504448,
-        lat: 31.218086,
-        x: 38,
-        y: 69
-      },
-      {
-        id: 'street-office',
-        name: '小东门街道办事处',
-        category: 'service',
-        icon: '🏢',
-        intro: '街道事务办理、社区服务咨询，是居民处理日常事务的重要场所。',
-        address: '白渡路 252号',
-        phone: '021-6332 5638',
-        hours: '周一至周五 8:30-11:30,13:30-17:00',
-        lng: 121.507660,
-        lat: 31.225680,
-        x: 22,
-        y: 40
-      },
-      {
-        id: 'market',
-        name: '绿地外滩潮方',
-        category: 'shopping',
-        icon: '🛒',
-        intro: '可以走向外滩的商业综合体。',
-        address: '中山南路 800弄1号',
-        phone: '021-3335 5198',
-        hours: '周一至周日 10:00-22:00',
-        lng: 121.512189,
-        lat: 31.220271,
-        x: 24,
-        y: 57
-      },
-      {
-        id: 'vegetable-market',
-        name: '多稼菜场',
-        category: 'shopping',
-        icon: '🥬',
-        intro: '蔬菜、水果、肉禽、水产一站式采购，是居民熟悉的烟火气去处。',
-        address: '薛家浜路与熙福路交叉口',
-        phone: '021-8888 8888',
-        hours: '周一至周日 5:30-19:00',
-        lng: 121.50026,
-        lat: 31.22610,
-        x: 62,
-        y: 22
-      },
-      {
-        id: 'binjiang-walk',
-        name: '滨江散步路线',
-        category: 'leisure',
-        icon: '🌳',
-        intro: '沿江步道开阔舒适，适合散步、亲子活动和黄昏休闲。',
-        address: '黄浦滨江步道小东门段',
-        phone: '无',
-        hours: '全天开放',
-        lng: 121.50342,
-        lat: 31.22546,
-        x: 68,
-        y: 28
-      },
-      {
-        id: 'community-square',
-        name: '社区口袋花园',
-        category: 'leisure',
-        icon: '🪁',
-        intro: '邻里休憩、活动集合、儿童游戏的小型公共空间。',
-        address: '青龙桥街与会馆街交叉口',
-        phone: '无',
-        hours: '全天开放',
-        lng: 121.510773,
-        lat: 31.218414,
-        x: 70,
-        y: 50
-      },
-      {
-        id: 'shangchuan-hall',
-        name: '商船会馆',
-        category: 'memory',
-        icon: '🏛️',
-        intro: '建于1870年代的历史建筑,曾是商船同业会所,见证了多稼地区的商业繁荣与变迁。',
-        address: '会馆街 38 号',
-        phone: '021-8888 8888',
-        hours: '周一至周日 10:00-16:00',
-        lng: 121.510773,
-        lat: 31.218414,
-        x: 86,
-        y: 37
-      },
-      {
-        id: 'dongjiadu-church',
-        name: '董家渡天主堂',
-        category: 'memory',
-        icon: '⛪',
-        intro: '建于1906年的哥特式建筑,曾是多稼地区重要的宗教场所,也是社区历史记忆的重要组成部分。',
-        address: '董家渡路 185 号',
-        phone: '无',
-        hours: '外部空间全天开放',
-        lng: 121.511118,
-        lat: 31.220321,
-        x: 76,
-        y: 72
-      }
-    ];
-
-    /* 
-    用于地图上的点位标记，包含了点位的名称、地址和在示意地图上的位置坐标（x/y）。
-    zyf 新增的；
-    */
-    // const MAP_POINTS = [
-    //   { id: "employment", name: "小东门街道社区就业服务站", address: "上海市黄浦区小东门街道社区就业服务站", category: "service", x: 24.8, y: 11.4 },
-    //   { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区小南门地铁站", category: "service", x: 21.0, y: 18.0 },
-    //   { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区小南门警钟楼", category: "memory", x: 17.0, y: 25.0 },
-    //   { id: "police", name: "小东门派出所", address: "上海市黄浦区小东门派出所", category: "service", x: 70.5, y: 6.9 },
-    //   { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区外滩金融都市运动中心", category: "leisure", x: 71.6, y: 19.7 },
-    //   { id: "huangpu-riverside", name: "黄浦滨江", address: "上海市黄浦区黄浦滨江", category: "leisure", x: 82.0, y: 17.0 },
-    //   { id: "shanghai-bank", name: "上海银行", address: "上海市黄浦区上海银行董家渡附近网点", category: "shopping", x: 48.2, y: 21.6 },
-    //   { id: "boc", name: "中国银行", address: "上海市黄浦区中国银行董家渡附近网点", category: "shopping", x: 53.8, y: 27.8 },
-    //   { id: "bund-trendy", name: "外滩潮方", address: "上海市黄浦区外滩潮方", category: "shopping", x: 57.0, y: 25.3 },
-    //   { id: "dongjiadu-ferry", name: "董家渡渡口", address: "上海市黄浦区董家渡渡口", category: "service", x: 84.2, y: 24.6 },
-    //   { id: "dongjiadu-flower-bridge", name: "董家渡花桥", address: "上海市黄浦区董家渡花桥", category: "leisure", x: 78.8, y: 31.1 },
-    //   { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡天主堂", category: "memory", x: 47.5, y: 32.1 },
-    //   { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区青龙桥街66弄8号", category: "service", x: 50.0, y: 40.0 },
-    //   { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号 商船会馆", category: "memory", x: 57.0, y: 43.9 },
-    //   { id: "guotai-haitong", name: "国泰海通", address: "上海市黄浦区国泰海通董家渡附近网点", category: "shopping", x: 66.0, y: 40.1 },
-    //   { id: "guohai-sec", name: "国海证券", address: "上海市黄浦区国海证券董家渡附近网点", category: "shopping", x: 63.3, y: 47.0 },
-    //   { id: "time-plastic", name: "上海时光整形外科医院", address: "上海市黄浦区普安路189号 上海时光整形外科医院", category: "service", x: 78.6, y: 50.5 },
-    //   { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区强生医院", category: "service", x: 75.5, y: 51.5 },
-    //   { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号 小东门街道社区卫生服务中心", category: "service", x: 30.2, y: 51.4 },
-    //   { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号 南外滩轻纺面料市场", category: "shopping", x: 24.9, y: 56.7 },
-    //   { id: "icbc", name: "中国工商银行", address: "上海市黄浦区中国工商银行董家渡附近网点", category: "shopping", x: 38.8, y: 59.5 },
-    //   { id: "gotterwell", name: "歌特维康门诊部", address: "上海市黄浦区歌特维康门诊部", category: "service", x: 42.7, y: 63.3 },
-    //   { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区南浦大桥地铁站", category: "service", x: 31.2, y: 66.3 },
-    //   { id: "sinopec", name: "中国石化加油站", address: "上海市黄浦区中国石化加油站南浦大桥附近", category: "shopping", x: 52.9, y: 61.8 },
-    //   { id: "toilet", name: "公共厕所", address: "上海市黄浦区南浦大桥附近公共厕所", category: "service", x: 49.7, y: 67.0 },
-    //   { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号 黄浦区工人体育馆", category: "leisure", x: 54.3, y: 77.0 },
-    //   { id: "dongjiadu-road-ferry", name: "董家渡路轮渡站", address: "上海市黄浦区董家渡路轮渡站", category: "service", x: 61.6, y: 78.1 },
-    //   { id: "nanpu-bridge", name: "南浦大桥", address: "上海市黄浦区南浦大桥", category: "leisure", x: 53.6, y: 90.5 }
-    // ];
-    /*
-    用于地图上的点位标记，包含了点位的名称、地址和在示意地图上的位置坐标（x/y）。
-    zyf 新增的；
-    完成地图位置的修订
-    */
-    const MAP_POINTS = [
+      { id: "swimming-pool", name: "馨园健身游泳会所", address: "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心", category: "leisure", x: 33.2, y: 47.3, hitSize: 26 },
       { id: "employment", name: "小东门街道融创就业服务站", address: "上海市黄浦区中华路518弄16号", category: "service", x: 24.6, y: 11.7, hitSize: 28 },
       { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区中华路与王家码头路交叉口", category: "service", x: 21.1, y: 17.9, hitSize: 34 },
       { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区中华路581号", category: "memory", x: 16.8, y: 25.6, hitSize: 30 },
@@ -1641,17 +1475,23 @@
       { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号", category: "leisure", x: 54.2, y: 78.5, hitSize: 30 },
       { id: "dongjiadu-road-ferry", name: "陆家浜路轮渡站", address: "上海市黄浦区外马路1279号", category: "service", x: 62.1, y: 79.4, hitSize: 30 },
       { id: "nanpu-bridge", name: "南浦大桥（浦西引桥）", address: "上海市黄浦区中山南路与陆家浜路交叉口", category: "leisure", x: 54.5, y: 91.4, hitSize: 34 },
-    ];
+    ].map(point => ({
+      icon: CATEGORIES.find(category => category.key === point.category)?.icon || '⌖',
+      intro: '提供地点位置、地址与导航信息。',
+      phone: '无',
+      hours: '开放或服务时间请以现场公告为准',
+      ...point
+    }));
 
     /*
       临时地图校准开关：
       true  = 显示拖动、坐标和点击范围工具；
       false = 恢复普通访客看到的地图。
-      校准完成并把数据复制回 MAP_POINTS 后，请改成 false。
+      校准完成并把数据复制回 POINTS 后，请改成 false。
     */
-    const MAP_CALIBRATION_MODE = false;
+    const MAP_CALIBRATION_MODE = true;
     const MAP_CALIBRATION_STORAGE_KEY = 'jiaxiang-map-calibration-v1';
-    let calibrationSelectedId = MAP_POINTS[0]?.id || null;
+    let calibrationSelectedId = POINTS[0]?.id || null;
 
     /*
       CONTACTS：便民电话页的数据。
@@ -1677,7 +1517,7 @@
     const state = {
       view: 'home',
       category: 'all',
-      selectedId: 'duojia-jwh',
+      selectedId: 'duojia-committee',
       search: ''
     };
 
@@ -1708,9 +1548,9 @@
       手机里如果装了高德地图，通常会尝试打开 App；否则会打开网页地图。
     */
     function navigateToPoint(point) {
-      const name = encodeURIComponent(point.name);
-      const url = `https://uri.amap.com/navigation?to=${point.lng},${point.lat},${name}&mode=walk&policy=1&src=jiaxiang-guide&coordinate=gaode`;
-      window.location.href = url;
+      if (!point) return;
+      showToast(`正在打开${point.name}`);
+      window.location.href = buildAmapUrl(point);
     }
 
     // 页面底部黑色提示条，例如点击“我的”时弹出的说明。
@@ -1982,25 +1822,39 @@
   }
 
    function getCalibrationPoint() {
-    return MAP_POINTS.find(point => point.id === calibrationSelectedId) || MAP_POINTS[0] || null;
+    return POINTS.find(point => point.id === calibrationSelectedId) || POINTS[0] || null;
   }
 
-   function mapPointToSource(point) {
-    const hitSize = Number(point.hitSize) || 34;
-    const locations = Array.isArray(point.locations)
-      ? `, locations: ${JSON.stringify(point.locations)}`
-      : '';
-    return `      { id: ${JSON.stringify(point.id)}, name: ${JSON.stringify(point.name)}, address: ${JSON.stringify(point.address)}, category: ${JSON.stringify(point.category)}, x: ${roundCalibrationNumber(point.x)}, y: ${roundCalibrationNumber(point.y)}, hitSize: ${hitSize}${locations} }`;
+   function pointToSource(point) {
+    const sourcePoint = {
+      id: point.id,
+      name: point.name,
+      address: point.address,
+      category: point.category,
+      icon: point.icon,
+      intro: point.intro,
+      phone: point.phone,
+      hours: point.hours,
+      x: roundCalibrationNumber(point.x),
+      y: roundCalibrationNumber(point.y),
+      hitSize: Number(point.hitSize) || 34
+    };
+    if (Number.isFinite(point.lng) && Number.isFinite(point.lat)) {
+      sourcePoint.lng = point.lng;
+      sourcePoint.lat = point.lat;
+    }
+    if (Array.isArray(point.locations)) sourcePoint.locations = point.locations;
+    return `      ${JSON.stringify(sourcePoint)}`;
   }
 
-   function allMapPointsToSource() {
-    return `const MAP_POINTS = [\n${MAP_POINTS.map(point => `${mapPointToSource(point)},`).join('\n')}\n    ];`;
+   function allPointsToSource() {
+    return `const POINTS = [\n${POINTS.map(point => `${pointToSource(point)},`).join('\n')}\n    ];`;
   }
 
    function saveMapCalibration() {
     if (!MAP_CALIBRATION_MODE) return;
 
-    const savedPoints = Object.fromEntries(MAP_POINTS.map(point => [point.id, {
+    const savedPoints = Object.fromEntries(POINTS.map(point => [point.id, {
       x: roundCalibrationNumber(point.x),
       y: roundCalibrationNumber(point.y),
       hitSize: Number(point.hitSize) || 34
@@ -2018,7 +1872,7 @@
 
     try {
       const savedPoints = JSON.parse(localStorage.getItem(MAP_CALIBRATION_STORAGE_KEY) || '{}');
-      MAP_POINTS.forEach(point => {
+      POINTS.forEach(point => {
         const saved = savedPoints[point.id];
         if (!saved) return;
         if (Number.isFinite(saved.x)) point.x = clampCalibrationNumber(saved.x, 0, 100);
@@ -2048,7 +1902,7 @@
     if (xInput) xInput.value = roundCalibrationNumber(point.x);
     if (yInput) yInput.value = roundCalibrationNumber(point.y);
     if (sizeInput) sizeInput.value = Number(point.hitSize) || 34;
-    if (output) output.value = `${point.name}\n${mapPointToSource(point).trim()}`;
+    if (output) output.value = `${point.name}\n${pointToSource(point).trim()}`;
   }
 
    function updateCalibrationPoint(point, x, y, hitSize, shouldSave = true) {
@@ -2071,16 +1925,16 @@
 
    function selectCalibrationPoint(pointOrId) {
     const point = typeof pointOrId === 'string'
-      ? MAP_POINTS.find(item => item.id === pointOrId)
+      ? POINTS.find(item => item.id === pointOrId)
       : pointOrId;
     if (!point) return;
     refreshCalibrationPanel(point);
   }
 
    function selectAdjacentCalibrationPoint(direction) {
-    const currentIndex = Math.max(0, MAP_POINTS.findIndex(point => point.id === calibrationSelectedId));
-    const nextIndex = (currentIndex + direction + MAP_POINTS.length) % MAP_POINTS.length;
-    selectCalibrationPoint(MAP_POINTS[nextIndex]);
+    const currentIndex = Math.max(0, POINTS.findIndex(point => point.id === calibrationSelectedId));
+    const nextIndex = (currentIndex + direction + POINTS.length) % POINTS.length;
+    selectCalibrationPoint(POINTS[nextIndex]);
   }
 
    async function copyCalibrationText(text, successMessage) {
@@ -2145,7 +1999,7 @@
     restoreMapCalibration();
 
     const select = document.querySelector('#calibrationPointSelect');
-    select.innerHTML = MAP_POINTS.map((point, index) => (
+    select.innerHTML = POINTS.map((point, index) => (
       `<option value="${point.id}">${index + 1}. ${point.name}</option>`
     )).join('');
 
@@ -2174,11 +2028,11 @@
 
     document.querySelector('#copyCurrentPointBtn').addEventListener('click', () => {
       const point = getCalibrationPoint();
-      if (point) copyCalibrationText(`${mapPointToSource(point)},`, '已复制当前点位数据');
+      if (point) copyCalibrationText(`${pointToSource(point)},`, '已复制当前点位数据');
     });
 
     document.querySelector('#copyAllPointsBtn').addEventListener('click', () => {
-      copyCalibrationText(allMapPointsToSource(), '已复制全部点位数据');
+      copyCalibrationText(allPointsToSource(), '已复制全部点位数据');
     });
 
     document.querySelector('#resetCalibrationBtn').addEventListener('click', () => {
@@ -2201,8 +2055,8 @@
     mapEl.querySelectorAll(".map-hotspot").forEach(el => el.remove());
 
     const visiblePoints = MAP_CALIBRATION_MODE
-      ? MAP_POINTS
-      : MAP_POINTS.filter(point => state.category === 'all' || point.category === state.category);
+      ? POINTS
+      : POINTS.filter(point => state.category === 'all' || point.category === state.category);
     visiblePoints.forEach(point => {
       const btn = document.createElement("button");
       btn.className = "map-hotspot";
@@ -2216,7 +2070,7 @@
       if (MAP_CALIBRATION_MODE) {
         const label = document.createElement('span');
         label.className = 'map-hotspot-label';
-        label.textContent = MAP_POINTS.indexOf(point) + 1;
+        label.textContent = POINTS.indexOf(point) + 1;
         btn.appendChild(label);
         bindHotspotCalibrationDrag(btn, point, mapEl);
       }
@@ -2231,6 +2085,12 @@
 
       mapEl.appendChild(btn);
     });
+
+    if (!MAP_CALIBRATION_MODE) {
+      const selectedPoint = visiblePoints.find(point => point.id === state.selectedId) || visiblePoints[0] || null;
+      state.selectedId = selectedPoint?.id || null;
+      if (selectedPoint) selectImageMapPoint(selectedPoint);
+    }
 
     // 点击地图图片的空白处时，收起点位详情面板。 event.target 表示用户实际点击的元素
     mapEl.onclick = event => {
@@ -2250,6 +2110,7 @@
    function selectImageMapPoint(point) {
     if (!point) return null;
 
+    state.selectedId = point.id;
     document.querySelectorAll(".map-hotspot").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.id === point.id);
     });
@@ -2297,7 +2158,7 @@
           const location = locations[Number(button.dataset.clusterNav)];
           if (!location) return;
           showToast(`正在打开${location.name}`);
-          window.location.href = buildAmapUrl(location);
+          navigateToPoint(location);
         });
       });
 
@@ -2335,8 +2196,7 @@
     const copyButton = sheet.querySelector("#copyBtn");
 
     navButton.addEventListener("click", () => {
-      showToast("正在打开高德地图");
-      window.location.href = buildAmapUrl(point);
+      navigateToPoint(point);
     });
 
     copyButton.addEventListener("click", async () => {

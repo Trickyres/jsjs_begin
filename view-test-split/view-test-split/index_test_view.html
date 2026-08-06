@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View 页面切换学习</title>
+
+  <!-- HTML 通过 link 标签加载外部 CSS 文件 -->
+  <link rel="stylesheet" href="./style_test_view.css">
+</head>
+<body>
+  <main class="app">
+    <h1>View 页面切换实验</h1>
+    <p class="description">
+      点击按钮切换页面。按 F12 打开控制台，可以观察 JavaScript 的执行过程。
+    </p>
+
+    <!-- 三个“页面”从一开始就同时存在 -->
+    <section class="view active" data-view="home">
+      <div class="page-icon">🏠</div>
+      <h2>这是首页</h2>
+      <p>data-view="home"</p>
+    </section>
+
+    <section class="view" data-view="map">
+      <div class="page-icon">🗺️</div>
+      <h2>这是地图页</h2>
+      <p>data-view="map"</p>
+    </section>
+
+    <section class="view" data-view="phone">
+      <div class="page-icon">☎️</div>
+      <h2>这是电话页</h2>
+      <p>data-view="phone"</p>
+    </section>
+
+    <!-- data-go 与 data-view 使用同一个名字 -->
+    <nav class="navigation">
+      <button class="nav-item active" data-go="home" type="button">首页</button>
+      <button class="nav-item" data-go="map" type="button">地图</button>
+      <button class="nav-item" data-go="phone" type="button">电话</button>
+    </nav>
+
+    <div class="state-panel">
+      当前 state.view：<strong id="currentView">home</strong>
+    </div>
+  </main>
+
+  <!-- 页面结构加载完成后，再加载 JavaScript -->
+  <script src="./script_test_view.js"></script>
+</body>
+</html>

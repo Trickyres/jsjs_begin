@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>View切换学习</title>
+<style>
+
+/* 所有页面默认隐藏 */
+.view {
+
+    display:none;
+    padding:40px;
+    font-size:30px;
+
+}
+
+
+/* 当前页面显示 */
+.view.active {
+
+    display:block;
+
+}
+
+
+/* 导航按钮 */
+
+.nav-item {
+
+    padding:10px 20px;
+    margin:10px;
+    cursor:pointer;
+
+}
+
+/* 当前按钮 */
+
+.nav-item.active {
+
+    background:green;
+
+    color:white;
+
+}
+
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>
+View切换实验
+</h1>
+
+
+
+<!-- ======================
+     三个页面
+====================== -->
+
+
+<div class="view active" data-view="home">
+
+    🏠
+
+    这是首页
+
+</div>
+
+
+
+<div class="view" data-view="map">
+
+    🗺️
+
+    这是地图页
+
+</div>
+
+
+
+<div class="view" data-view="phone">
+
+    ☎️
+
+    这是电话页
+
+</div>
+
+
+
+
+<hr>
+
+
+
+<!-- ======================
+     底部导航
+====================== -->
+
+
+<button class="nav-item active" data-go="home">
+
+首页
+
+</button>
+
+
+<button class="nav-item" data-go="map">
+
+地图
+
+</button>
+
+
+
+<button class="nav-item" data-go="phone">
+
+电话
+
+</button>
+
+
+
+
+
+
+<script>
+
+
+// ============================
+// 1. 创建状态
+// ============================
+
+
+const state = {
+
+    view:"home"
+
+};
+
+
+
+
+// ============================
+// 2. 简化选择器
+// ============================
+
+
+function $$(selector){
+
+    return document.querySelectorAll(selector);
+
+}
+
+
+
+
+
+
+// ============================
+// 3. 页面切换核心函数
+// ============================
+
+
+function setView(view){
+
+
+    console.log("我要切换到:",view);
+
+
+
+    // -------------------------
+    // 第一步
+    // 记录当前页面
+    // -------------------------
+
+    state.view=view;
+
+
+
+    console.log(
+        "当前状态:",
+        state
+    );
+
+
+
+
+
+    // -------------------------
+    // 第二步
+    // 切换页面显示
+    // -------------------------
+
+
+    $$(".view").forEach(function(page){
+
+
+
+        console.log(
+            "正在检查页面:",
+            page.dataset.view
+        );
+
+
+
+        if(page.dataset.view===view){
+
+
+            console.log(
+                "显示:",
+                page.dataset.view
+            );
+
+
+            page.classList.add("active");
+
+
+        }
+
+        else{
+
+
+            console.log(
+                "隐藏:",
+                page.dataset.view
+            );
+
+
+            page.classList.remove("active");
+
+
+        }
+
+
+
+    });
+
+
+
+
+
+
+
+
+    // -------------------------
+    // 第三步
+    // 切换按钮颜色
+    // -------------------------
+
+
+
+    $$(".nav-item").forEach(function(btn){
+
+
+        if(btn.dataset.go===view){
+
+
+            btn.classList.add("active");
+
+
+        }
+
+        else{
+
+
+            btn.classList.remove("active");
+
+
+        }
+
+
+
+    });
+
+
+
+
+}
+
+
+
+
+
+
+// ============================
+// 4. 给按钮绑定点击事件
+// ============================
+
+
+
+$$(".nav-item").forEach(function(btn){
+
+
+
+    btn.addEventListener(
+        "click",
+        function(){
+
+
+
+            console.log(
+                "点击按钮:",
+                btn.dataset.go
+            );
+
+
+
+            setView(
+                btn.dataset.go
+            );
+
+
+
+        }
+    );
+
+
+
+});
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

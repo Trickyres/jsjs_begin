@@ -18,7 +18,8 @@
     2. data-view="map"   地图页
     3. data-view="list"  点位列表页
     4. data-view="phone" 便民电话页
-    5. nav.bottom-nav 固定底部导航栏
+    5. data-view="route" 滨江散步路线详情页
+    6. nav.bottom-nav 固定底部导航栏
     main.app管理整个应用
     section.view 管理每个页面视图
     div card button 管理等元素构成页面内容
@@ -54,14 +55,14 @@
         <button class="more-btn" data-go="list">更多路线 ›</button>
       </div>
 
-      <article class="recommend-card" data-select-point="huangpu-riverside">
+      <button class="recommend-card" type="button" data-route-detail="binjiang" aria-label="查看滨江散步路线详情">
         <div class="thumb-river"></div>
         <div class="recommend-content">
           <h3>滨江散步路线 <span class="tag leisure">休闲游玩</span></h3>
           <p>沿江步道，风景宜人，适合散步与亲子时光。</p>
           <div class="meta"><span>◷ 约40分钟</span><span>⌖ 1.8公里</span></div>
         </div>
-      </article>
+      </button>
 
       <article class="route-card" data-go="list">
         <h3>新居民熟悉路线</h3>
@@ -70,10 +71,69 @@
       </article>
     </section>
 
+    <!-- 滨江散步路线详情页：主视觉、路线导览、亮点与开始按钮 -->
+    <section class="view route-view" data-view="route">
+      <header class="route-topbar">
+        <button class="route-back-btn" type="button" data-go="home" aria-label="返回首页">‹</button>
+        <div class="route-brand">
+          <strong>稼享指南</strong>
+          <span>多稼十分钟生活圈</span>
+        </div>
+        <div class="route-location">小东门街道 <span aria-hidden="true">●</span></div>
+      </header>
+
+      <section class="route-hero-card" aria-label="滨江散步路线主视觉">
+        <div class="route-hero-copy">
+          <h2>滨江散步路线</h2>
+          <span class="route-category">休闲游玩</span>
+          <p>沿江步道，风景宜人，<br>适合散步与亲子时光。</p>
+        </div>
+        <div class="route-stats" aria-label="路线信息">
+          <div class="route-stat"><span class="route-stat-icon orange">◷</span><strong>约40分钟</strong><small>步行时间</small></div>
+          <div class="route-stat"><span class="route-stat-icon green">●</span><strong>约1.8公里</strong><small>路线长度</small></div>
+          <div class="route-stat"><span class="route-stat-icon coral">●●</span><strong>适合散步 / 亲子</strong><small>适合人群</small></div>
+        </div>
+      </section>
+
+      <section class="route-section">
+        <div class="route-section-head">
+          <h3>路线导览</h3>
+          <button type="button" class="route-text-btn" data-route-map>查看地图 ›</button>
+        </div>
+        <div class="route-stops" aria-label="滨江散步路线站点">
+          <article class="route-stop"><div class="route-stop-photo ferry" role="img" aria-label="董家渡渡口"></div><strong>董家渡渡口</strong></article>
+          <span class="route-arrow" aria-hidden="true">→</span>
+          <article class="route-stop"><div class="route-stop-photo walkway" role="img" aria-label="滨江步道"></div><strong>滨江步道</strong></article>
+          <span class="route-arrow" aria-hidden="true">→</span>
+          <article class="route-stop"><div class="route-stop-photo platform" role="img" aria-label="观景平台"></div><strong>观景平台</strong></article>
+          <span class="route-arrow" aria-hidden="true">→</span>
+          <article class="route-stop"><div class="route-stop-photo stop-park" role="img" aria-label="南园公园"></div><strong>南园公园</strong></article>
+        </div>
+      </section>
+
+      <section class="route-section">
+        <div class="route-section-head"><h3>沿途亮点</h3></div>
+        <div class="route-highlights">
+          <article class="route-highlight"><div class="route-highlight-photo river-view" role="img" aria-label="开阔江景"></div><h4>江景开阔</h4><p>江面宽阔，视野开阔，心旷神怡。</p></article>
+          <article class="route-highlight"><div class="route-highlight-photo photo-spot" role="img" aria-label="滨江拍照点"></div><h4>适合拍照</h4><p>城市天际线与江边景色很出片。</p></article>
+          <article class="route-highlight"><div class="route-highlight-photo night-view" role="img" aria-label="滨江夜景"></div><h4>夜景迷人</h4><p>夜晚灯光璀璨，散步氛围舒适惬意。</p></article>
+        </div>
+      </section>
+
+      <aside class="route-tips" aria-label="温馨提示">
+        <div class="route-tip-title"><span>💡</span><strong>温馨提示</strong></div>
+        <div class="route-tip"><span>☀</span><p>建议晴天或<br>傍晚前往</p></div>
+        <div class="route-tip"><span>💧</span><p>注意防晒<br>及时补水</p></div>
+        <div class="route-tip"><span>👪</span><p>亲子出行<br>请看护儿童</p></div>
+      </aside>
+
+      <button class="route-start-btn" type="button" data-route-start>开始逛逛</button>
+    </section>
+
     <!-- 地图页：分类筛选、示意地图、底部点位卡片 -->
     <section class="view" data-view="map">
       <div class="topbar">
-        <button class="back-btn" data-go="home" aria-label="返回">‹</button>
+        <button class="back-btn" id="mapBackBtn" type="button" aria-label="返回上一页">‹</button>
         <div class="topbar-title">生活地图</div>
         <button class="icon-btn" id="mapTipBtn" aria-label="说明">•••</button>
       </div>

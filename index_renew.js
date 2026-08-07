@@ -146,7 +146,8 @@ const state = {
   view: 'home',
   category: 'all',
   selectedId: 'duojia-committee',
-  search: ''
+  search: '',
+  mapReturnView: 'home'
 };
 
 /*
@@ -197,8 +198,9 @@ function showToast(text) {
 */
 function setView(view) {
   state.view = view;
+  const activeNavView = view === 'route' ? 'home' : view;
   $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
-  $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === view));
+  $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === activeNavView));
   if (view === 'map') renderImageMap();
   if (view === 'list') renderList();
   if (view === 'phone') renderContacts();
@@ -378,6 +380,7 @@ function renderList() {
 
   $$('[data-nav]', list).forEach(btn => btn.addEventListener('click', () => navigateToPoint(getPoint(btn.dataset.nav))));
   $$('[data-view-map]', list).forEach(btn => btn.addEventListener('click', () => {
+    state.mapReturnView = 'list';
     state.selectedId = btn.dataset.viewMap;
     setView('map');
   }));
@@ -409,9 +412,31 @@ function renderContacts() {
   - 点击搜索框输入 -> renderList()
   - 点击说明按钮 -> showToast()
 */
+
+function openBinjiangRoute() {
+  state.selectedId = 'huangpu-riverside';
+  setView('route');
+}
+
+function openBinjiangMap(shouldAnnounce = false) {
+  state.mapReturnView = 'route';
+  state.category = 'leisure';
+  state.selectedId = 'huangpu-riverside';
+  setView('map');
+  if (shouldAnnounce) showToast('已打开滨江散步路线起点，可继续点击一键导航。');
+}
+
 function bindEvents() {
-  $$('[data-go]').forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.go)));
+  $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
+    if (btn.dataset.go === 'map') state.mapReturnView = state.view === 'route' ? 'route' : 'home';
+    setView(btn.dataset.go);
+  }));
+  $$('[data-route-detail]').forEach(card => card.addEventListener('click', openBinjiangRoute));
+  $$('[data-route-map]').forEach(button => button.addEventListener('click', () => openBinjiangMap(false)));
+  $$('[data-route-start]').forEach(button => button.addEventListener('click', () => openBinjiangMap(true)));
+  $('#mapBackBtn').addEventListener('click', () => setView(state.mapReturnView || 'home'));
   $$('[data-select-point]').forEach(card => card.addEventListener('click', () => {
+    state.mapReturnView = 'home';
     state.selectedId = card.dataset.selectPoint;
     setView('map');
   }));

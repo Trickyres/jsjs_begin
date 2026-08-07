@@ -1209,3 +1209,196 @@ class = 'view active' 这说明这个 HTML 元素有两个 class 名 view 和 ac
   }
   .bottom-nav { border-radius: 0 0 34px 34px; }
 }
+
+
+/* 滨江散步路线详情页 */
+.recommend-card[type="button"] {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.recommend-card[type="button"]:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.recommend-card[type="button"]:focus-visible { outline: 3px solid rgba(242, 103, 42, .3); outline-offset: 3px; }
+.thumb-river {
+  background-color: #cce7ef;
+  background-image:
+    linear-gradient(180deg, rgba(204, 231, 239, .08), rgba(132, 180, 206, .12)),
+    url("assets/routes/binjiang/hero.webp"),
+    linear-gradient(180deg, #cce7ef 0 42%, #84b4ce 43% 55%, #e9cf93 56% 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.route-view {
+  padding: 0 14px calc(96px + var(--safe-bottom));
+  background:
+    radial-gradient(circle at 8% 2%, rgba(255, 207, 148, .3), transparent 24%),
+    linear-gradient(180deg, #fffaf1 0%, #fffdf9 62%, #fff7ec 100%);
+}
+.route-topbar {
+  display: grid;
+  grid-template-columns: 58px 1fr 104px;
+  align-items: center;
+  gap: 8px;
+  min-height: 92px;
+}
+.route-back-btn {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  color: #38291f;
+  font-size: 42px;
+  line-height: 1;
+  cursor: pointer;
+}
+.route-brand { text-align: center; line-height: 1.15; }
+.route-brand strong { display: block; color: #e75025; font-size: 28px; font-weight: 950; letter-spacing: .08em; }
+.route-brand span { display: block; margin-top: 5px; color: #6d5547; font-size: 13px; letter-spacing: .08em; }
+.route-location {
+  justify-self: end;
+  padding: 9px 11px;
+  border: 1px solid #ff9a63;
+  border-radius: 999px;
+  color: #eb632c;
+  background: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.route-location span { font-size: 9px; }
+
+.route-hero-card {
+  position: relative;
+  min-height: 270px;
+  overflow: hidden;
+  border-radius: 28px;
+  background-color: #dcebf1;
+  background-image:
+    linear-gradient(90deg, rgba(255,250,240,.98) 0%, rgba(255,250,240,.82) 30%, rgba(255,250,240,.06) 66%),
+    linear-gradient(180deg, rgba(208,230,238,.08), rgba(63,92,111,.08)),
+    url("assets/routes/binjiang/hero.webp"),
+    linear-gradient(145deg, #dcecf3 0 44%, #9fc6d7 45% 62%, #dfc997 63% 100%);
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow);
+}
+.route-hero-copy { position: relative; z-index: 1; padding: 34px 28px 0; }
+.route-hero-copy h2 { margin: 0 0 10px; font-size: 38px; line-height: 1.08; letter-spacing: .05em; }
+.route-category { display: inline-flex; padding: 6px 12px; border-radius: 999px; color: #fff; background: #6eaa57; font-size: 15px; font-weight: 800; }
+.route-hero-copy p { margin: 14px 0 0; color: #4f3b2e; font-size: 17px; line-height: 1.65; font-weight: 600; }
+.route-stats {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: .9fr .9fr 1.25fr;
+  gap: 2px;
+  padding: 16px 10px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.93);
+  box-shadow: 0 12px 30px rgba(73, 48, 30, .12);
+  backdrop-filter: blur(10px);
+}
+.route-stat { min-width: 0; display: grid; grid-template-columns: 36px 1fr; grid-template-rows: auto auto; align-items: center; padding: 0 8px; border-right: 1px solid rgba(116,83,60,.14); }
+.route-stat:last-child { border-right: 0; }
+.route-stat-icon { grid-row: 1 / 3; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; font-size: 15px; font-weight: 900; }
+.route-stat-icon.orange { color: #f26824; background: #fff1e6; }
+.route-stat-icon.green { color: #659b4e; background: #eef7e8; }
+.route-stat-icon.coral { color: #ed612b; background: #fff0e7; font-size: 8px; letter-spacing: -2px; }
+.route-stat strong { overflow: hidden; color: #37281e; font-size: 12px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
+.route-stat small { color: #8d7c70; font-size: 10px; }
+
+.route-section { margin-top: 22px; }
+.route-section-head { display: flex; align-items: center; justify-content: space-between; margin: 0 4px 10px; }
+.route-section-head h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 19px; }
+.route-section-head h3::before { content: ""; width: 5px; height: 22px; border-radius: 999px; background: linear-gradient(180deg, #ff5c24, #ff9e46); }
+.route-text-btn { border: 0; background: transparent; color: #79685b; font-size: 13px; cursor: pointer; }
+.route-stops {
+  display: grid;
+  grid-template-columns: 1fr 18px 1fr 18px 1fr 18px 1fr;
+  align-items: center;
+  padding: 16px 10px 14px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 24px;
+  background: rgba(255,255,255,.84);
+  box-shadow: var(--shadow-soft);
+}
+.route-stop { min-width: 0; text-align: center; }
+.route-stop strong { display: block; margin-top: 8px; font-size: 11px; white-space: nowrap; }
+.route-stop-photo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  border: 3px solid rgba(255,255,255,.9);
+  border-radius: 50%;
+  background-color: #d9e9e8;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 6px 14px rgba(72, 78, 54, .12);
+}
+.route-stop-photo.ferry { background-image: url("assets/routes/binjiang/stop-ferry.webp"), linear-gradient(145deg, #d7e8ef, #83b2c5 58%, #d9c795 59%); }
+.route-stop-photo.walkway { background-image: url("assets/routes/binjiang/stop-walkway.webp"), linear-gradient(145deg, #dcebf2, #9fc2d2 52%, #d7c493 53%); }
+.route-stop-photo.platform { background-image: url("assets/routes/binjiang/stop-platform.webp"), linear-gradient(145deg, #e4eef0, #8ab8c9 50%, #c8d3a7 51%); }
+.route-stop-photo.stop-park { background-image: url("assets/routes/binjiang/stop-park.webp"), radial-gradient(circle at 58% 35%, #89b669 0 24%, transparent 25%), linear-gradient(180deg, #dfeef2 0 55%, #c7d79f 56%); }
+.route-arrow { color: #69a74f; font-size: 21px; font-weight: 900; text-align: center; }
+
+.route-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.route-highlight { overflow: hidden; padding: 7px 7px 12px; border: 1px solid rgba(255,255,255,.8); border-radius: 22px; background: rgba(255,255,255,.86); box-shadow: var(--shadow-soft); }
+.route-highlight-photo { height: 106px; border-radius: 16px; background-color: #d6e7ed; background-size: cover; background-position: center; }
+.route-highlight-photo.river-view { background-image: url("assets/routes/binjiang/highlight-river.webp"), linear-gradient(160deg, #d8e9ef 0 40%, #79aeca 41% 60%, #d7c48e 61%); }
+.route-highlight-photo.photo-spot { background-image: url("assets/routes/binjiang/highlight-photo.webp"), linear-gradient(150deg, #dcebf0 0 44%, #89b5c8 45% 60%, #d9bf83 61%); }
+.route-highlight-photo.night-view { background-image: url("assets/routes/binjiang/highlight-night.webp"), linear-gradient(150deg, #111d2d 0 55%, #174563 56% 70%, #d7a155 71%); }
+.route-highlight h4 { margin: 10px 3px 4px; font-size: 15px; }
+.route-highlight p { margin: 0 3px; color: #806d5f; font-size: 11px; line-height: 1.5; }
+
+.route-tips {
+  display: grid;
+  grid-template-columns: 1.1fr repeat(3, 1fr);
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 13px 10px;
+  border: 1px solid rgba(245, 187, 98, .36);
+  border-radius: 24px;
+  background: linear-gradient(100deg, #fff4d9, #fff9e9);
+}
+.route-tip-title, .route-tip { min-width: 0; display: flex; align-items: center; gap: 6px; }
+.route-tip-title { flex-direction: column; justify-content: center; color: #473327; font-size: 13px; }
+.route-tip-title span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(145deg, #ffad38, #f26b22); font-size: 20px; }
+.route-tip { padding-left: 7px; border-left: 1px solid rgba(151,109,64,.18); }
+.route-tip > span { color: #f68b2b; font-size: 20px; }
+.route-tip:nth-child(3) > span { color: #55a4cf; }
+.route-tip:nth-child(4) > span { color: #6ba45c; }
+.route-tip p { margin: 0; color: #705b4c; font-size: 10px; line-height: 1.5; }
+.route-start-btn {
+  width: 100%;
+  min-height: 58px;
+  margin: 16px 0 4px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(90deg, #f14d16, #ff6d20, #ef4e18);
+  box-shadow: 0 10px 24px rgba(239, 78, 24, .24);
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.route-start-btn:active { transform: translateY(1px); }
+
+@media (max-width: 374px) {
+  .route-brand strong { font-size: 24px; }
+  .route-location { padding: 8px; font-size: 10px; }
+  .route-hero-copy h2 { font-size: 33px; }
+  .route-stop-photo { width: 56px; height: 56px; }
+  .route-stop strong { font-size: 10px; }
+  .route-stats { padding-inline: 5px; }
+  .route-stat { grid-template-columns: 30px 1fr; padding-inline: 4px; }
+  .route-stat-icon { width: 27px; height: 27px; }
+}

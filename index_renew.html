@@ -19,7 +19,8 @@
     3. data-view="list"  点位列表页
     4. data-view="phone" 便民电话页
     5. data-view="route" 滨江散步路线详情页
-    6. nav.bottom-nav 固定底部导航栏
+    6. data-view="guide" 纸质《稼享指南》电子版
+    7. nav.bottom-nav 固定底部导航栏
     main.app管理整个应用
     section.view 管理每个页面视图
     div card button 管理等元素构成页面内容
@@ -69,6 +70,94 @@
         <p>社区服务一站式指南，快速熟悉居委、卫生、药房与生活配套。</p>
         <button class="btn btn-mini btn-primary">去看看</button>
       </article>
+
+      <button class="guide-promo" type="button" data-guide-open aria-label="查看纸质稼享指南电子版">
+        <span class="guide-promo-copy">
+          <strong>纸质《稼享指南》电子版</strong>
+          <small>翻开纸质指南，查看完整生活地图</small>
+          <span class="guide-promo-link">立即查看 <b aria-hidden="true">›</b></span>
+        </span>
+        <img src="assets/guide/jiaxiang-guide-cover.png" alt="稼享指南纸质手册封面">
+      </button>
+    </section>
+
+    <!-- 纸质《稼享指南》电子版：封面、使用说明与四个章节入口 -->
+    <section class="view guide-view" data-view="guide">
+      <header class="guide-topbar">
+        <button class="guide-back-btn" type="button" data-go="home" aria-label="返回首页">‹</button>
+        <div>
+          <strong>稼享指南</strong>
+          <span>纸质指南电子版</span>
+        </div>
+        <span class="guide-topbar-mark">小东门</span>
+      </header>
+
+      <section class="guide-cover-card" aria-label="稼享指南电子版封面">
+        <div class="guide-cover-copy">
+          <span class="guide-edition">COMMUNITY GUIDE · 电子版</span>
+          <h2>把社区生活<br>装进口袋</h2>
+          <p>纸质《稼享指南》的线上延伸版，随时查看身边服务与社区记忆。</p>
+        </div>
+        <img src="assets/guide/jiaxiang-guide-cover.png" alt="手持稼享指南纸质手册">
+      </section>
+
+      <section class="guide-intro-card">
+        <span class="guide-intro-number">01</span>
+        <div>
+          <h3>一册在手，生活不愁</h3>
+          <p>以多稼十分钟生活圈为范围，整合办事、购物、休闲与社区文化点位。</p>
+        </div>
+      </section>
+
+      <section class="guide-gallery" aria-labelledby="guideGalleryTitle">
+        <div class="guide-section-head guide-gallery-head">
+          <div>
+            <span>INNER PAGES</span>
+            <h3 id="guideGalleryTitle">纸质指南内页</h3>
+          </div>
+          <small>点击图片查看大图</small>
+        </div>
+
+        <div class="guide-gallery-grid">
+          <button type="button" class="guide-gallery-item" data-gallery-page="0" aria-label="查看稼享指南正面大图">
+            <span class="guide-gallery-photo"><img src="assets/guide/guide-page-01.webp" alt="稼享指南正面：欢迎到多稼生活圈地图" loading="lazy"></span>
+            <span class="guide-gallery-caption"><b>正面</b><small>生活圈地图与服务清单</small><i aria-hidden="true">↗</i></span>
+          </button>
+          <button type="button" class="guide-gallery-item" data-gallery-page="1" aria-label="查看稼享指南反面大图">
+            <span class="guide-gallery-photo"><img src="assets/guide/guide-page-02.webp" alt="稼享指南反面：社区记忆与指南封面" loading="lazy"></span>
+            <span class="guide-gallery-caption"><b>反面</b><small>社区记忆与折页封面</small><i aria-hidden="true">↗</i></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="guide-chapters" aria-labelledby="guideChapterTitle">
+        <div class="guide-section-head">
+          <div>
+            <span>CONTENTS</span>
+            <h3 id="guideChapterTitle">电子指南目录</h3>
+          </div>
+          <small>点击章节开始浏览</small>
+        </div>
+        <div class="guide-chapter-grid">
+          <button type="button" class="guide-chapter service" data-guide-category="service">
+            <span class="guide-chapter-icon">👥</span><span><b>便民服务</b><small>居委、医疗与公共服务</small></span><i>›</i>
+          </button>
+          <button type="button" class="guide-chapter shopping" data-guide-category="shopping">
+            <span class="guide-chapter-icon">🛒</span><span><b>生活购物</b><small>菜场、银行与生活配套</small></span><i>›</i>
+          </button>
+          <button type="button" class="guide-chapter leisure" data-guide-category="leisure">
+            <span class="guide-chapter-icon">🌳</span><span><b>休闲游玩</b><small>滨江、公园与运动空间</small></span><i>›</i>
+          </button>
+          <button type="button" class="guide-chapter memory" data-guide-category="memory">
+            <span class="guide-chapter-icon">🏛️</span><span><b>多稼记忆</b><small>街区建筑与历史印记</small></span><i>›</i>
+          </button>
+        </div>
+      </section>
+
+      <aside class="guide-note">
+        <span aria-hidden="true">✦</span>
+        <p><strong>纸质版与电子版配合使用</strong><br>纸质版适合随身翻阅，电子版可继续查看地图、点位详情与导航。</p>
+      </aside>
     </section>
 
     <!-- 滨江散步路线详情页：主视觉、路线导览、亮点与开始按钮 -->
@@ -182,7 +271,7 @@
     <!-- 点位列表页：搜索框、分类筛选、点位卡片列表 -->
     <section class="view" data-view="list">
       <div class="topbar">
-        <button class="back-btn" data-go="home" aria-label="返回">‹</button>
+        <button class="back-btn" id="listBackBtn" type="button" aria-label="返回">‹</button>
         <div class="topbar-title" id="listTitle">便民服务</div>
         <button class="icon-btn" id="listTipBtn" aria-label="说明">•••</button>
       </div>
@@ -216,6 +305,28 @@
 
     <div class="toast" id="toast"></div>
   </main>
+
+  <div class="guide-lightbox" id="guideLightbox" role="dialog" aria-modal="true" aria-label="稼享指南图片预览" hidden>
+    <button class="guide-lightbox-backdrop" type="button" data-gallery-close aria-label="关闭图片预览"></button>
+    <div class="guide-lightbox-shell">
+      <header class="guide-lightbox-head">
+        <div><strong id="guideLightboxTitle">稼享指南 · 正面</strong><span id="guideLightboxCounter">1 / 2</span></div>
+        <button class="guide-lightbox-close" type="button" data-gallery-close aria-label="关闭图片预览">×</button>
+      </header>
+      <div class="guide-lightbox-stage" id="guideLightboxStage" aria-label="大图区域，可滑动、拖动和缩放">
+        <img id="guideLightboxImage" src="assets/guide/guide-page-01.webp" alt="稼享指南正面大图" draggable="false">
+      </div>
+      <button class="guide-lightbox-arrow previous" type="button" data-gallery-action="previous" aria-label="查看上一张">‹</button>
+      <button class="guide-lightbox-arrow next" type="button" data-gallery-action="next" aria-label="查看下一张">›</button>
+      <footer class="guide-lightbox-foot">
+        <div class="guide-lightbox-dots" aria-label="图片页码">
+          <button type="button" class="active" data-gallery-dot="0" aria-label="查看正面"></button>
+          <button type="button" data-gallery-dot="1" aria-label="查看反面"></button>
+        </div>
+        <span>左右滑动翻页 · 双击或双指缩放</span>
+      </footer>
+    </div>
+  </div>
 
   <script src="index_renew.js"></script>
 </body>

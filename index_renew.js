@@ -147,7 +147,8 @@ const state = {
   category: 'all',
   selectedId: 'duojia-committee',
   search: '',
-  mapReturnView: 'home'
+  mapReturnView: 'home',
+  listReturnView: 'home'
 };
 
 /*
@@ -198,7 +199,7 @@ function showToast(text) {
 */
 function setView(view) {
   state.view = view;
-  const activeNavView = view === 'route' ? 'home' : view;
+  const activeNavView = ['route', 'guide'].includes(view) ? 'home' : view;
   $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
   $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === activeNavView));
   if (view === 'map') renderImageMap();
@@ -234,6 +235,7 @@ function renderQuickEntries() {
   $$('#quickEntries .quick-item').forEach(btn => {
     btn.addEventListener('click', () => {
       state.category = btn.dataset.quick;
+      state.listReturnView = 'home';
       setView('list');
     });
   });
@@ -426,14 +428,242 @@ function openBinjiangMap(shouldAnnounce = false) {
   if (shouldAnnounce) showToast('已打开滨江散步路线起点，可继续点击一键导航。');
 }
 
+function openGuideCategory(category) {
+  state.category = category;
+  state.search = '';
+  state.listReturnView = 'guide';
+  $('#searchInput').value = '';
+  setView('list');
+}
+
+const GUIDE_GALLERY_IMAGES = [
+  { src: 'assets/guide/guide-page-01.webp', title: '稼享指南 · 正面', alt: '稼享指南正面：欢迎到多稼生活圈地图' },
+  { src: 'assets/guide/guide-page-02.webp', title: '稼享指南 · 反面', alt: '稼享指南反面：社区记忆与指南封面' }
+];
+
+const guideGalleryState = {
+  index: 0,
+  scale: 1,
+  x: 0,
+  y: 0,
+  pointers: new Map(),
+  dragStartX: 0,
+  dragStartY: 0,
+  dragBaseX: 0,
+  dragBaseY: 0,
+  swipeX: 0,
+  pinchDistance: 0,
+  pinchScale: 1,
+  pinchMidX: 0,
+  pinchMidY: 0,
+  pinchBaseX: 0,
+  pinchBaseY: 0,
+  returnFocus: null
+};
+
+function clampGuideGalleryValue(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function clampGuideGalleryPan() {
+  const stage = $('#guideLightboxStage');
+  const image = $('#guideLightboxImage');
+  if (!stage || !image) return;
+  const maxX = Math.max(0, (image.clientWidth * guideGalleryState.scale - stage.clientWidth) / 2);
+  const maxY = Math.max(0, (image.clientHeight * guideGalleryState.scale - stage.clientHeight) / 2);
+  guideGalleryState.x = clampGuideGalleryValue(guideGalleryState.x, -maxX, maxX);
+  guideGalleryState.y = clampGuideGalleryValue(guideGalleryState.y, -maxY, maxY);
+}
+
+function renderGuideGallery(animate = false) {
+  const stage = $('#guideLightboxStage');
+  const image = $('#guideLightboxImage');
+  if (!stage || !image) return;
+  if (guideGalleryState.scale <= 1) {
+    guideGalleryState.scale = 1;
+    guideGalleryState.x = 0;
+    guideGalleryState.y = 0;
+  }
+  clampGuideGalleryPan();
+  stage.classList.toggle('is-animating', animate);
+  image.style.transform = `translate3d(${guideGalleryState.x}px, ${guideGalleryState.y}px, 0) scale(${guideGalleryState.scale})`;
+  if (animate) setTimeout(() => stage.classList.remove('is-animating'), 220);
+}
+
+function resetGuideGallery(animate = true) {
+  guideGalleryState.scale = 1;
+  guideGalleryState.x = 0;
+  guideGalleryState.y = 0;
+  guideGalleryState.swipeX = 0;
+  renderGuideGallery(animate);
+}
+
+function showGuideGalleryImage(index) {
+  const image = $('#guideLightboxImage');
+  const title = $('#guideLightboxTitle');
+  const counter = $('#guideLightboxCounter');
+  if (!image || !title || !counter) return;
+  const imageCount = GUIDE_GALLERY_IMAGES.length;
+  guideGalleryState.index = (index + imageCount) % imageCount;
+  const current = GUIDE_GALLERY_IMAGES[guideGalleryState.index];
+  if (!image.src.endsWith(current.src)) image.src = current.src;
+  image.alt = current.alt;
+  title.textContent = current.title;
+  counter.textContent = `${guideGalleryState.index + 1} / ${imageCount}`;
+  $$('[data-gallery-dot]').forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === guideGalleryState.index));
+  resetGuideGallery(true);
+}
+
+function openGuideGallery(index, opener) {
+  const lightbox = $('#guideLightbox');
+  if (!lightbox) return;
+  guideGalleryState.returnFocus = opener || document.activeElement;
+  lightbox.hidden = false;
+  document.body.classList.add('guide-lightbox-open');
+  showGuideGalleryImage(index);
+  requestAnimationFrame(() => lightbox.classList.add('is-open'));
+  $('.guide-lightbox-close', lightbox)?.focus();
+}
+
+function closeGuideGallery() {
+  const lightbox = $('#guideLightbox');
+  if (!lightbox || lightbox.hidden) return;
+  lightbox.classList.remove('is-open');
+  document.body.classList.remove('guide-lightbox-open');
+  setTimeout(() => {
+    if (!lightbox.classList.contains('is-open')) lightbox.hidden = true;
+  }, 210);
+  if (guideGalleryState.returnFocus?.focus) guideGalleryState.returnFocus.focus();
+}
+
+function changeGuideGalleryScale(nextScale, animate = true) {
+  guideGalleryState.scale = clampGuideGalleryValue(nextScale, 1, 4);
+  renderGuideGallery(animate);
+}
+
+function getGuideGalleryPinchData() {
+  const points = Array.from(guideGalleryState.pointers.values());
+  if (points.length < 2) return null;
+  const [first, second] = points;
+  return {
+    distance: Math.hypot(second.x - first.x, second.y - first.y),
+    midX: (first.x + second.x) / 2,
+    midY: (first.y + second.y) / 2
+  };
+}
+
+function setupGuideGallery() {
+  const lightbox = $('#guideLightbox');
+  const stage = $('#guideLightboxStage');
+  const image = $('#guideLightboxImage');
+  if (!lightbox || !stage || !image) return;
+
+  $$('[data-gallery-page]').forEach(button => {
+    button.addEventListener('click', () => openGuideGallery(Number(button.dataset.galleryPage), button));
+  });
+  $$('[data-gallery-close]').forEach(button => button.addEventListener('click', closeGuideGallery));
+  $$('[data-gallery-dot]').forEach(button => button.addEventListener('click', () => showGuideGalleryImage(Number(button.dataset.galleryDot))));
+  $$('[data-gallery-action]').forEach(button => {
+    button.addEventListener('click', () => showGuideGalleryImage(
+      guideGalleryState.index + (button.dataset.galleryAction === 'next' ? 1 : -1)
+    ));
+  });
+
+  stage.addEventListener('wheel', event => {
+    event.preventDefault();
+    changeGuideGalleryScale(guideGalleryState.scale + (event.deltaY < 0 ? .25 : -.25), false);
+  }, { passive: false });
+  stage.addEventListener('dblclick', () => changeGuideGalleryScale(guideGalleryState.scale > 1 ? 1 : 2, true));
+
+  document.addEventListener('keydown', event => {
+    if (lightbox.hidden) return;
+    if (event.key === 'Escape') closeGuideGallery();
+    if (event.key === 'ArrowLeft') showGuideGalleryImage(guideGalleryState.index - 1);
+    if (event.key === 'ArrowRight') showGuideGalleryImage(guideGalleryState.index + 1);
+    if (event.key === '+' || event.key === '=') changeGuideGalleryScale(guideGalleryState.scale + .35);
+    if (event.key === '-') changeGuideGalleryScale(guideGalleryState.scale - .35);
+    if (event.key === '0') resetGuideGallery(true);
+  });
+
+  stage.addEventListener('pointerdown', event => {
+    if (event.button !== undefined && event.button !== 0) return;
+    stage.setPointerCapture(event.pointerId);
+    guideGalleryState.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    if (guideGalleryState.pointers.size === 1) {
+      guideGalleryState.dragStartX = event.clientX;
+      guideGalleryState.dragStartY = event.clientY;
+      guideGalleryState.dragBaseX = guideGalleryState.x;
+      guideGalleryState.dragBaseY = guideGalleryState.y;
+      guideGalleryState.swipeX = 0;
+    } else if (guideGalleryState.pointers.size === 2) {
+      const pinch = getGuideGalleryPinchData();
+      guideGalleryState.pinchDistance = pinch.distance;
+      guideGalleryState.pinchScale = guideGalleryState.scale;
+      guideGalleryState.pinchMidX = pinch.midX;
+      guideGalleryState.pinchMidY = pinch.midY;
+      guideGalleryState.pinchBaseX = guideGalleryState.x;
+      guideGalleryState.pinchBaseY = guideGalleryState.y;
+    }
+  });
+
+  stage.addEventListener('pointermove', event => {
+    if (!guideGalleryState.pointers.has(event.pointerId)) return;
+    guideGalleryState.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    if (guideGalleryState.pointers.size >= 2) {
+      const pinch = getGuideGalleryPinchData();
+      if (!pinch || !guideGalleryState.pinchDistance) return;
+      guideGalleryState.scale = clampGuideGalleryValue(
+        guideGalleryState.pinchScale * (pinch.distance / guideGalleryState.pinchDistance),
+        1,
+        4
+      );
+      guideGalleryState.x = guideGalleryState.pinchBaseX + pinch.midX - guideGalleryState.pinchMidX;
+      guideGalleryState.y = guideGalleryState.pinchBaseY + pinch.midY - guideGalleryState.pinchMidY;
+      renderGuideGallery(false);
+      return;
+    }
+    if (guideGalleryState.scale > 1) {
+      guideGalleryState.x = guideGalleryState.dragBaseX + event.clientX - guideGalleryState.dragStartX;
+      guideGalleryState.y = guideGalleryState.dragBaseY + event.clientY - guideGalleryState.dragStartY;
+      renderGuideGallery(false);
+    } else {
+      guideGalleryState.swipeX = event.clientX - guideGalleryState.dragStartX;
+    }
+  });
+
+  const finishPointer = (event, allowSwipe) => {
+    const wasSinglePointer = guideGalleryState.pointers.size === 1;
+    guideGalleryState.pointers.delete(event.pointerId);
+    if (allowSwipe && wasSinglePointer && guideGalleryState.scale === 1 && Math.abs(guideGalleryState.swipeX) >= 50) {
+      showGuideGalleryImage(guideGalleryState.index + (guideGalleryState.swipeX < 0 ? 1 : -1));
+    }
+    if (guideGalleryState.pointers.size === 1) {
+      const remaining = Array.from(guideGalleryState.pointers.values())[0];
+      guideGalleryState.dragStartX = remaining.x;
+      guideGalleryState.dragStartY = remaining.y;
+      guideGalleryState.dragBaseX = guideGalleryState.x;
+      guideGalleryState.dragBaseY = guideGalleryState.y;
+    }
+    guideGalleryState.swipeX = 0;
+  };
+
+  stage.addEventListener('pointerup', event => finishPointer(event, true));
+  stage.addEventListener('pointercancel', event => finishPointer(event, false));
+  image.addEventListener('load', () => renderGuideGallery(false));
+}
+
 function bindEvents() {
   $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
     if (btn.dataset.go === 'map') state.mapReturnView = state.view === 'route' ? 'route' : 'home';
+    if (btn.dataset.go === 'list') state.listReturnView = state.view === 'guide' ? 'guide' : 'home';
     setView(btn.dataset.go);
   }));
   $$('[data-route-detail]').forEach(card => card.addEventListener('click', openBinjiangRoute));
   $$('[data-route-map]').forEach(button => button.addEventListener('click', () => openBinjiangMap(false)));
   $$('[data-route-start]').forEach(button => button.addEventListener('click', () => openBinjiangMap(true)));
+  $$('[data-guide-open]').forEach(button => button.addEventListener('click', () => setView('guide')));
+  $$('[data-guide-category]').forEach(button => button.addEventListener('click', () => openGuideCategory(button.dataset.guideCategory)));
+  $('#listBackBtn').addEventListener('click', () => setView(state.listReturnView || 'home'));
   $('#mapBackBtn').addEventListener('click', () => setView(state.mapReturnView || 'home'));
   $$('[data-select-point]').forEach(card => card.addEventListener('click', () => {
     state.mapReturnView = 'home';
@@ -875,6 +1105,7 @@ return sheet;
 */
 function init() {
   setupMapCalibration();
+  setupGuideGallery();
   renderQuickEntries();
   renderFilterRows();
   // renderMap(); // zyf revise

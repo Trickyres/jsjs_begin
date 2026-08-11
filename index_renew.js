@@ -73,7 +73,19 @@ const POINTS = [
   { id: "dongjiadu-ferry", name: "董家渡渡口（董家渡轮渡站）", address: "上海市黄浦区外马路737号", category: "service", x: 84.3, y: 29.1, hitSize: 32 },
   { id: "dongjiadu-flower-bridge", name: "董家渡路花桥", address: "上海市黄浦区董家渡路185号（中山南路至黄浦滨江）", category: "leisure", x: 78.8, y: 37.6, hitSize: 34 },
   { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡路185号", category: "memory", x: 59.6, y: 34.4, hitSize: 26 },
-  { id: "duojia-committee", name: "多稼居民委员会", address: "上海市黄浦区会馆街66号（多稼居委会党群服务站）", category: "service", x: 49.4, y: 41.7, hitSize: 24 },
+  {
+    id: "duojia-committee",
+    name: "多稼居民委员会",
+    address: "上海市黄浦区会馆街66号（多稼居委会党群服务站）",
+    description: "社区咨询、活动报名、便民联系与党群服务。",
+    image: "assets/points/duojia-committee.jpg",
+    imageAlt: "多稼居民委员会实景",
+    imageCaption: "多稼居民委员会 · 会馆街66号",
+    category: "service",
+    x: 49.4,
+    y: 41.7,
+    hitSize: 24
+  },
   { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号", category: "memory", x: 57, y: 43.9, hitSize: 28 },
   {
     id: "ccb-cmb-donghao-cluster",
@@ -652,6 +664,86 @@ function setupGuideGallery() {
   image.addEventListener('load', () => renderGuideGallery(false));
 }
 
+function setupActivityPage() {
+  const feature = $('#activityFeature');
+  const video = $('#activityFeatureVideo');
+  const title = $('#activityFeatureTitle');
+  const lightbox = $('#activityPhotoLightbox');
+  const lightboxImage = $('#activityPhotoImage');
+  const lightboxTitle = $('#activityPhotoTitle');
+  if (!feature || !video || !title || !lightbox || !lightboxImage || !lightboxTitle) return;
+
+  let photoOpener = null;
+  let failedVideoSrc = '';
+
+  const resetFeatureVideo = () => {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    video.hidden = true;
+    feature.classList.remove('is-playing');
+  };
+
+  const reportMissingVideo = src => {
+    if (failedVideoSrc === src) return;
+    failedVideoSrc = src;
+    resetFeatureVideo();
+    showToast(`视频文件尚未放入：${src}`);
+    setTimeout(() => { failedVideoSrc = ''; }, 1200);
+  };
+
+  const playActivityVideo = button => {
+    const src = button.dataset.activityVideo;
+    const nextTitle = button.dataset.activityTitle || '多稼社区活动回顾';
+    if (!src) return;
+
+    title.textContent = nextTitle;
+    video.src = src;
+    video.hidden = false;
+    feature.classList.add('is-playing');
+    const playRequest = video.play();
+    if (playRequest) playRequest.catch(() => reportMissingVideo(src));
+
+    if (!button.classList.contains('activity-play-btn')) {
+      feature.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  $$('[data-activity-video]').forEach(button => {
+    button.addEventListener('click', () => playActivityVideo(button));
+  });
+
+  video.addEventListener('error', () => {
+    const src = video.getAttribute('src');
+    if (src) reportMissingVideo(src);
+  });
+  video.addEventListener('ended', resetFeatureVideo);
+
+  const closePhoto = () => {
+    if (lightbox.hidden) return;
+    lightbox.hidden = true;
+    document.body.classList.remove('activity-photo-open');
+    if (photoOpener) photoOpener.focus();
+  };
+
+  $$('[data-activity-photo]').forEach(button => {
+    button.addEventListener('click', () => {
+      photoOpener = button;
+      lightboxImage.src = button.dataset.activityPhoto;
+      lightboxImage.alt = button.dataset.activityPhotoTitle || '社区活动照片';
+      lightboxTitle.textContent = button.dataset.activityPhotoTitle || '社区活动照片';
+      lightbox.hidden = false;
+      document.body.classList.add('activity-photo-open');
+      $('[data-activity-photo-close]', lightbox).focus();
+    });
+  });
+
+  $$('[data-activity-photo-close]', lightbox).forEach(button => button.addEventListener('click', closePhoto));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !lightbox.hidden) closePhoto();
+  });
+}
+
 function bindEvents() {
   $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
     if (btn.dataset.go === 'map') state.mapReturnView = state.view === 'route' ? 'route' : 'home';
@@ -677,7 +769,6 @@ function bindEvents() {
   $('#mapTipBtn').addEventListener('click', () => showToast('当前为示意地图版本：点位位置可在 POINTS 的 x/y 字段中调整；导航使用经纬度跳转高德地图。'));
   $('#listTipBtn').addEventListener('click', () => showToast('列表支持分类筛选和关键词搜索。后续可接入真实点位库或后台管理。'));
   $('#locateBtn').addEventListener('click', () => showToast('已回到多稼十分钟生活圈中心点。实际项目可接入浏览器定位。'));
-  $('#aboutBtn').addEventListener('click', () => showToast('稼享指南：面向新居民、社区居民和周边工作者的社区生活服务导览 H5。'));
 }
 
 
@@ -1013,26 +1104,28 @@ const locations = Array.isArray(point.locations) ? point.locations : [];
 
 if (locations.length) {
   sheet.innerHTML = `
-    <div class="sheet-handle"></div>
-    <div class="sheet-title-row">
-      <h3>${point.name}</h3>
-      <span class="tag ${point.category}">${locations.length}个地点</span>
-    </div>
-    <p class="cluster-sheet-intro">地图上合并为一个点位，请在下方选择具体目的地。</p>
-    <div class="cluster-location-list">
-      ${locations.map((location, index) => `
-        <article class="cluster-location">
-          <span class="cluster-location-index">${index + 1}</span>
-          <div class="cluster-location-info">
-            <strong>${location.name}</strong>
-            <small>${location.address || '暂无详细地址'}</small>
-          </div>
-          <button class="cluster-nav-btn" type="button" data-cluster-nav="${index}" aria-label="导航到${location.name}">导航</button>
-        </article>
-      `).join('')}
-    </div>
-    <div class="cluster-sheet-actions">
-      <button class="btn btn-ghost" id="copyClusterBtn"><span aria-hidden="true">⧉</span> 复制三个地点名称</button>
+    <span class="sheet-selection-label">已选择地图点位</span>
+    <div class="cluster-sheet-card">
+      <div class="sheet-title-row">
+        <h3>${point.name}</h3>
+        <span class="tag ${point.category}">${locations.length}个地点</span>
+      </div>
+      <p class="cluster-sheet-intro">地图上合并为一个点位，请在下方选择具体目的地。</p>
+      <div class="cluster-location-list">
+        ${locations.map((location, index) => `
+          <article class="cluster-location">
+            <span class="cluster-location-index">${index + 1}</span>
+            <div class="cluster-location-info">
+              <strong>${location.name}</strong>
+              <small>${location.address || '暂无详细地址'}</small>
+            </div>
+            <button class="cluster-nav-btn" type="button" data-cluster-nav="${index}" aria-label="导航到${location.name}">导航</button>
+          </article>
+        `).join('')}
+      </div>
+      <div class="cluster-sheet-actions">
+        <button class="btn btn-ghost" id="copyClusterBtn"><span aria-hidden="true">⧉</span> 复制三个地点名称</button>
+      </div>
     </div>
   `;
 
@@ -1060,35 +1153,62 @@ if (locations.length) {
 }
 
 sheet.innerHTML = `
-  <div class="sheet-handle"></div>
-  <div class="sheet-title-row">
-    <h3>${point.name}</h3>
-    <span class="tag ${point.category}">${category.full || category.label}</span>
+  <span class="sheet-selection-label">已选择地图点位</span>
+  <div class="map-sheet-compact ${point.image ? '' : 'no-photo'}">
+    ${point.image ? `
+      <figure class="map-place-photo">
+        <img src="${point.image}" alt="${point.imageAlt || point.name}">
+        <div class="map-place-photo-fallback" hidden>
+          <span aria-hidden="true">▣</span>
+          <strong>${point.name}</strong>
+          <small>请将实景照片放入指定素材目录</small>
+        </div>
+        <figcaption>${point.imageCaption || point.name}</figcaption>
+      </figure>
+    ` : ''}
+    <div class="map-sheet-summary">
+      <div class="sheet-title-row">
+        <h3>${point.name}</h3>
+        <span class="tag ${point.category}">${category.full || category.label}</span>
+      </div>
+      ${point.description ? `<p class="sheet-description">${point.description}</p>` : ''}
+      <p class="sheet-address"><span aria-hidden="true">⌖</span> ${point.address || "暂无详细地址，可后续补充。"}</p>
+      <div class="map-sheet-compact-actions">
+        <button class="sheet-details-btn" id="detailsBtn" type="button" aria-expanded="false">查看详情 <span aria-hidden="true">›</span></button>
+        <button class="btn btn-primary" id="navBtn"><span aria-hidden="true">➤</span> 一键导航</button>
+      </div>
+    </div>
   </div>
-  <p>${point.address || "暂无详细地址，可后续补充。"}</p>
-  <div class="sheet-meta">
-    <span>⌖ 点击导航可在高德地图中查看路线</span>
-  </div>
-  <div class="sheet-actions map-sheet-actions">
-    <button class="btn btn-primary" id="navBtn"><span aria-hidden="true">➤</span> 一键导航</button>
-    <button class="btn btn-ghost" id="copyBtn"><span aria-hidden="true">⧉</span> 复制名称</button>
+  <div class="sheet-detail-extra" id="sheetDetailExtra" hidden>
+    <span><b>完整地址</b>${point.address || "暂无详细地址"}</span>
+    <span><b>路线提示</b>点击一键导航，可在高德地图中查看步行路线。</span>
   </div>
 `;
 
 const navButton = sheet.querySelector("#navBtn");
-const copyButton = sheet.querySelector("#copyBtn");
+const detailsButton = sheet.querySelector("#detailsBtn");
+const detailExtra = sheet.querySelector("#sheetDetailExtra");
+const placePhoto = sheet.querySelector(".map-place-photo img");
+
+if (placePhoto) {
+  placePhoto.addEventListener("error", () => {
+    placePhoto.hidden = true;
+    const fallback = sheet.querySelector(".map-place-photo-fallback");
+    if (fallback) fallback.hidden = false;
+  });
+}
 
 navButton.addEventListener("click", () => {
   navigateToPoint(point);
 });
 
-copyButton.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(point.name);
-    showToast("已复制点位名称");
-  } catch {
-    showToast(point.name);
-  }
+detailsButton.addEventListener("click", () => {
+  const isExpanded = detailsButton.getAttribute("aria-expanded") === "true";
+  detailsButton.setAttribute("aria-expanded", String(!isExpanded));
+  detailExtra.hidden = isExpanded;
+  detailsButton.innerHTML = isExpanded
+    ? '查看详情 <span aria-hidden="true">›</span>'
+    : '收起详情 <span aria-hidden="true">⌃</span>';
 });
 
 requestAnimationFrame(() => {
@@ -1106,6 +1226,7 @@ return sheet;
 function init() {
   setupMapCalibration();
   setupGuideGallery();
+  setupActivityPage();
   renderQuickEntries();
   renderFilterRows();
   // renderMap(); // zyf revise

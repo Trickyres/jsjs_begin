@@ -295,16 +295,103 @@
       <div class="list" id="contactList"></div>
     </section>
 
+    <!-- 社区活动页：视频精选、活动相册与历史活动回顾 -->
+    <section class="view activity-view" data-view="activity">
+      <header class="activity-header">
+        <div>
+          <h2>精彩活动</h2>
+          <p>用影像重温每一个欢聚时刻</p>
+        </div>
+        <span class="activity-header-tag"><span aria-hidden="true">▶</span> 视频回顾</span>
+      </header>
+
+      <section class="activity-feature" id="activityFeature" aria-label="年度精选活动视频">
+        <video class="activity-feature-video" id="activityFeatureVideo" playsinline controls preload="none" hidden></video>
+        <button class="activity-play-btn" type="button" data-activity-video="assets/activities/featured.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
+          <span aria-hidden="true">▶</span>
+        </button>
+        <div class="activity-feature-caption">
+          <small>03:26 · 年度精选</small>
+          <h3 id="activityFeatureTitle">多稼社区 2025 精彩瞬间</h3>
+        </div>
+      </section>
+
+      <section class="activity-section" aria-labelledby="activityMomentsTitle">
+        <div class="activity-section-head">
+          <h3 id="activityMomentsTitle">活动瞬间</h3>
+          <span>社区精彩相册</span>
+        </div>
+        <div class="activity-moments">
+          <button class="activity-moment activity-moment-main" type="button" data-activity-photo="assets/routes/binjiang/highlight-photo.jpg" data-activity-photo-title="邻里欢聚时刻" aria-label="查看邻里欢聚活动照片">
+            <span>邻里欢聚</span>
+          </button>
+          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-photo="assets/routes/binjiang/stop-park.jpg" data-activity-photo-title="亲子公益活动" aria-label="查看亲子公益活动照片">
+            <span>亲子公益</span>
+          </button>
+          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-photo="assets/routes/binjiang/highlight-river.jpg" data-activity-photo-title="滨江健步活动" aria-label="查看滨江健步活动照片">
+            <span>滨江健步</span>
+          </button>
+          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-photo="assets/routes/binjiang/stop-ferry.jpg" data-activity-photo-title="传统文化活动" aria-label="查看传统文化活动照片">
+            <span>传统文化</span>
+          </button>
+          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-photo="assets/routes/binjiang/hero.jpg" data-activity-photo-title="社区共建活动" aria-label="查看社区共建活动照片">
+            <span>社区共建</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="activity-section activity-history" aria-labelledby="activityHistoryTitle">
+        <div class="activity-section-head">
+          <h3 id="activityHistoryTitle">往期视频</h3>
+          <span>历史活动回顾</span>
+        </div>
+        <div class="activity-video-list">
+          <button class="activity-video-item" type="button" data-activity-video="assets/activities/dragon-boat-2025.mp4" data-activity-title="端午邻里包粽会">
+            <span class="activity-video-date"><strong>05.31</strong><small>2025</small></span>
+            <span class="activity-video-copy"><strong>端午邻里包粽会</strong><small>传统文化 · 邻里互动</small></span>
+            <span class="activity-video-duration">02:18</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="activity-video-item" type="button" data-activity-video="assets/activities/river-walk-2025.mp4" data-activity-title="春日滨江健步行">
+            <span class="activity-video-date"><strong>03.22</strong><small>2025</small></span>
+            <span class="activity-video-copy"><strong>春日滨江健步行</strong><small>健康生活 · 社区漫步</small></span>
+            <span class="activity-video-duration">04:05</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="activity-video-item" type="button" data-activity-video="assets/activities/new-year-2024.mp4" data-activity-title="迎新邻里联欢会">
+            <span class="activity-video-date"><strong>12.28</strong><small>2024</small></span>
+            <span class="activity-video-copy"><strong>迎新邻里联欢会</strong><small>文艺演出 · 年度记忆</small></span>
+            <span class="activity-video-duration">03:42</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
+      </section>
+
+      <aside class="activity-note">
+        <span aria-hidden="true">✦</span>
+        <p><strong>多稼社区活动记忆</strong><br>记录居民参与、邻里互助和社区共建的温暖瞬间。</p>
+      </aside>
+    </section>
+
     <!-- 底部导航：点击按钮后，JS 根据 data-go 切换页面 -->
     <nav class="bottom-nav" aria-label="底部导航">
       <button class="nav-item active" data-go="home"><span class="nav-icon">⌂</span><span>首页</span></button>
       <button class="nav-item" data-go="map"><span class="nav-icon">⌖</span><span>地图</span></button>
       <button class="nav-item" data-go="phone"><span class="nav-icon">☎</span><span>电话</span></button>
-      <button class="nav-item" id="aboutBtn"><span class="nav-icon">♡</span><span>我的</span></button>
+      <button class="nav-item" data-go="activity"><span class="nav-icon">✦</span><span>活动</span></button>
     </nav>
 
     <div class="toast" id="toast"></div>
   </main>
+
+  <div class="activity-photo-lightbox" id="activityPhotoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityPhotoTitle" hidden>
+    <button class="activity-photo-backdrop" type="button" data-activity-photo-close aria-label="关闭活动照片"></button>
+    <figure class="activity-photo-dialog">
+      <button class="activity-photo-close" type="button" data-activity-photo-close aria-label="关闭活动照片">×</button>
+      <img id="activityPhotoImage" src="assets/routes/binjiang/highlight-photo.jpg" alt="活动照片">
+      <figcaption id="activityPhotoTitle">邻里欢聚时刻</figcaption>
+    </figure>
+  </div>
 
   <div class="guide-lightbox" id="guideLightbox" role="dialog" aria-modal="true" aria-label="稼享指南图片预览" hidden>
     <button class="guide-lightbox-backdrop" type="button" data-gallery-close aria-label="关闭图片预览"></button>

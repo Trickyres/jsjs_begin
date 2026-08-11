@@ -219,7 +219,7 @@
       <button class="route-start-btn" type="button" data-route-start>开始逛逛</button>
     </section>
 
-    <!-- 地图页：分类筛选、示意地图、底部点位卡片 -->
+    <!-- 地图页：分类筛选、真实高德地图、底部点位卡片 -->
     <section class="view" data-view="map">
       <div class="topbar">
         <button class="back-btn" id="mapBackBtn" type="button" aria-label="返回上一页">‹</button>
@@ -230,42 +230,18 @@
       <div class="pill-row" id="mapFilters"></div>
 
       <div class="map-shell">
-        <!-- <div class="map-canvas" id="mapCanvas">
-          <div class="river"></div>
-          <div class="park"></div>
-          <div class="park two"></div>
-          <span class="map-label" style="left:54%;top:10%;transform:rotate(-8deg);">小东门街区</span>
-          <span class="map-label" style="left:40%;top:22%;">东门小学</span>
-          <span class="map-label" style="left:66%;top:26%;transform:rotate(-20deg);">滨江步道</span>
-          <span class="map-label" style="left:63%;top:46%;">社区广场</span>
-          <span class="map-label" style="left:18%;top:56%;transform:rotate(76deg);">中山南路</span>
-          <span class="map-label" style="left:52%;top:62%;transform:rotate(64deg);">东新路</span>
-        </div> -->
-        <div class="real-design-map" id="duojiaMap" aria-label="多稼生活地图">
-          <img src="./assets/duojia-map-bg.webp" alt="稼享指南多稼生活地图">
+        <div class="real-design-map" aria-label="多稼生活高德地图">
+          <div class="amap-map-canvas" id="duojiaMap"></div>
+          <div class="amap-map-status" id="amapMapStatus" role="status">
+            <span class="amap-map-status-icon" aria-hidden="true">⌖</span>
+            <strong>正在准备生活地图</strong>
+            <small>地图将以多稼居民委员会为中心</small>
+          </div>
+          <button class="locate-btn" id="locateBtn" type="button" aria-label="回到多稼居民委员会" hidden>⌖</button>
         </div>
-        <button class="locate-btn" id="locateBtn" aria-label="回到中心" hidden>⌖</button>
         <div class="sheet" id="mapSheet"></div>
       </div>
 
-      <section class="map-calibrator" id="mapCalibrator" hidden aria-label="地图点位校准工具">
-        <h3>🛠 地图点位校准模式</h3>
-        <p>选择地点后直接拖动圆圈；也可以修改 X、Y 和点击范围。调整结果会暂存在本浏览器中。</p>
-        <select class="calibration-select" id="calibrationPointSelect" aria-label="选择需要校准的地点"></select>
-        <div class="calibration-fields">
-          <label>X（左右）<input id="calibrationX" type="number" min="0" max="100" step="0.1"></label>
-          <label>Y（上下）<input id="calibrationY" type="number" min="0" max="100" step="0.1"></label>
-          <label>范围 px<input id="calibrationSize" type="number" min="20" max="80" step="2"></label>
-        </div>
-        <div class="calibration-actions">
-          <button class="btn btn-ghost" id="calibrationPrevBtn" type="button">← 上一个</button>
-          <button class="btn btn-ghost" id="calibrationNextBtn" type="button">下一个 →</button>
-          <button class="btn btn-primary" id="copyCurrentPointBtn" type="button">复制当前点</button>
-          <button class="btn btn-primary" id="copyAllPointsBtn" type="button">复制全部点位</button>
-          <button class="btn btn-ghost" id="resetCalibrationBtn" type="button">恢复源文件坐标</button>
-        </div>
-        <textarea class="calibration-output" id="calibrationOutput" readonly aria-label="校准数据输出"></textarea>
-      </section>
     </section>
 
     <!-- 点位列表页：搜索框、分类筛选、点位卡片列表 -->
@@ -415,6 +391,7 @@
     </div>
   </div>
 
+  <script src="amap.config.js"></script>
   <script src="index_renew.js"></script>
 </body>
 </html>

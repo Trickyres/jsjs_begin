@@ -8,13 +8,13 @@
  * 1. 先准备数据：分类 CATEGORIES、点位 POINTS、电话 CONTACTS。
  * 2. 页面打开时执行 init()。
  * 3. init() 根据数据自动生成快捷入口、筛选按钮、地图点位、列表卡片和电话卡片。
- * 4. 用户点击按钮时，调用 setView() 切换页面，或调用 renderMap()/renderList() 刷新内容。
+ * 4. 用户点击按钮时，调用 setView() 切换页面，或调用 renderRealMap()/renderList() 刷新内容。
  *
  * 使用说明：
  * 1. 直接把本文件保存为 index.html，双击即可打开。
  * 2. 下方 POINTS 为点位数据，可按实际点位修改名称、地址、电话、经纬度等。
- * 3. x/y 用来控制示意地图上的点位位置，范围 0-100；lng/lat 用于跳转高德导航。
- * 4. 如果后续接入真实高德 JS API，可保留页面结构，只替换 map-shell 内部地图实现。
+ * 3. 地图优先使用 POINTS 中的 lng/lat；没有坐标时会通过高德地址解析自动补齐。
+ * 4. 高德 Key 与安全配置统一放在 amap.config.js 中。
  */
 
 /*
@@ -56,8 +56,8 @@ const CATEGORIES = [
 /*
   POINTS：全站唯一的点位数据源。
   地图热点、列表搜索、详情卡片和高德导航都从这里读取。
-  x/y 控制图片地图上的位置；hitSize 控制热点点击范围；
-  lng/lat 可选，未提供时导航会按名称和地址在高德地图中搜索。
+  lng/lat 可选：真实高德地图会优先使用它们；没有时会按 address 自动解析并缓存。
+  x/y 与 hitSize 仅作为旧版图片地图的数据保留，不再控制真实地图的位置。
 */
 const POINTS = [
   { id: "swimming-pool", name: "馨园健身游泳会所", address: "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心", category: "leisure", x: 33.2, y: 47.3, hitSize: 26 },
@@ -124,7 +124,7 @@ const POINTS = [
 }));
 
 /*
-  临时地图校准开关：
+  旧版图片地图校准开关（真实高德地图不再使用）：
   true  = 显示拖动、坐标和点击范围工具；
   false = 恢复普通访客看到的地图。
   校准完成并把数据复制回 POINTS 后，请改成 false。
@@ -132,6 +132,23 @@ const POINTS = [
 const MAP_CALIBRATION_MODE = false;
 const MAP_CALIBRATION_STORAGE_KEY = 'jiaxiang-map-calibration-v1';
 let calibrationSelectedId = POINTS[0]?.id || null;
+
+/*
+  真实高德地图配置与运行状态。
+  正式地图的 Key / 安全密钥请填写在 amap.config.js，不要写进 POINTS。
+*/
+const DUOJIA_CENTER_POINT_ID = 'duojia-committee';
+const AMAP_FALLBACK_CENTER = [121.5004, 31.2111];
+const AMAP_GEOCODE_STORAGE_KEY = 'jiaxiang-amap-geocodes-v2';
+const AMAP_LOADER_URL = 'https://webapi.amap.com/loader.js';
+const amapRuntime = {
+  api: null,
+  map: null,
+  markers: new Map(),
+  loadPromise: null,
+  coordinatesReady: false,
+  fallbackCount: 0
+};
 
 /*
   CONTACTS：便民电话页的数据。
@@ -210,11 +227,12 @@ function showToast(text) {
   核心原理：给目标 section 添加 active 类，其他 section 去掉 active 类。
 */
 function setView(view) {
+  const enteringMap = view === 'map' && state.view !== 'map';
   state.view = view;
   const activeNavView = ['route', 'guide'].includes(view) ? 'home' : view;
   $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === view));
   $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.go === activeNavView));
-  if (view === 'map') renderImageMap();
+  if (view === 'map') renderRealMap({ resetCenter: enteringMap });
   if (view === 'list') renderList();
   if (view === 'phone') renderContacts();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -227,7 +245,7 @@ function setView(view) {
 */
 function setCategory(category, targetView = state.view) {
   state.category = category;
-  if (targetView === 'map') renderImageMap();
+  if (targetView === 'map') renderRealMap();
   if (targetView === 'list') renderList();
 }
 
@@ -278,76 +296,6 @@ function filteredPoints() {
     const keywordOk = !keyword || text.includes(keyword);
     return categoryOk && keywordOk;
   });
-}
-
-/*
-  渲染地图页。
-  做三件事：
-  1. 刷新分类按钮。
-  2. 根据 POINTS 数据在示意地图上生成 marker 点位。
-  3. 渲染底部点位信息卡片。
-*/
-function renderMap() {
-  renderFilterRows();
-  const canvas = $('#mapCanvas');
-  $$('.marker', canvas).forEach(m => m.remove());
-
-  const points = POINTS.filter(p => state.category === 'all' || p.category === state.category);
-  if (!points.some(p => p.id === state.selectedId)) {
-    state.selectedId = points[0]?.id || POINTS[0].id;
-  }
-
-  points.forEach(point => {
-    const category = getCategory(point.category);
-    const marker = document.createElement('button');
-    marker.className = `marker ${point.id === state.selectedId ? 'active' : ''}`;
-    marker.style.left = `${point.x}%`;
-    marker.style.top = `${point.y}%`;
-    marker.style.background = category.color;
-    marker.dataset.id = point.id;
-    marker.setAttribute('aria-label', point.name);
-    marker.innerHTML = `<span>${point.icon}</span>`;
-    marker.addEventListener('click', () => {
-      state.selectedId = point.id;
-      renderMap();
-    });
-    canvas.appendChild(marker);
-  });
-
-  renderSheet(getPoint(state.selectedId));
-}
-
-
-/*
-  渲染地图底部的点位详情卡片。
-  参数 point 就是当前选中的点位对象。
-*/
-function renderSheet(point) {
-  const category = getCategory(point.category);
-  $('#mapSheet').innerHTML = `
-    <div class="sheet-handle"></div>
-    <div class="sheet-title-row">
-      <h3>${point.name}</h3>
-      <span class="tag ${point.category}">${category.full || category.label}</span>
-      <button class="fav" aria-label="收藏">☆</button>
-    </div>
-    <p>${point.intro}</p>
-    <div class="sheet-meta">
-      <span>⌖ ${point.address}</span>
-      <span>☎ ${point.phone}</span>
-    </div>
-    <div class="sheet-actions">
-      <button class="btn btn-ghost" data-open-list="${point.id}">查看详情</button>
-      <button class="btn btn-primary" data-nav="${point.id}">➤ 一键导航</button>
-    </div>
-  `;
-  $('[data-nav]', $('#mapSheet')).addEventListener('click', () => navigateToPoint(point));
-  $('[data-open-list]', $('#mapSheet')).addEventListener('click', () => {
-    state.search = point.name;
-    $('#searchInput').value = point.name;
-    setView('list');
-  });
-  $('.fav', $('#mapSheet')).addEventListener('click', () => showToast('已加入常用点位示例。实际项目可接入本地存储或后台。'));
 }
 
 /*
@@ -766,9 +714,12 @@ function bindEvents() {
     state.search = e.target.value;
     renderList();
   });
-  $('#mapTipBtn').addEventListener('click', () => showToast('当前为示意地图版本：点位位置可在 POINTS 的 x/y 字段中调整；导航使用经纬度跳转高德地图。'));
+  $('#mapTipBtn').addEventListener('click', () => showToast(`当前为真实高德地图，共载入 ${POINTS.length} 个社区点位；可按上方分类筛选。`));
   $('#listTipBtn').addEventListener('click', () => showToast('列表支持分类筛选和关键词搜索。后续可接入真实点位库或后台管理。'));
-  $('#locateBtn').addEventListener('click', () => showToast('已回到多稼十分钟生活圈中心点。实际项目可接入浏览器定位。'));
+  $('#locateBtn').addEventListener('click', () => {
+    resetAmapToCommittee(true);
+    showToast('已回到多稼居民委员会。');
+  });
 }
 
 
@@ -1018,82 +969,312 @@ document.querySelector('#resetCalibrationBtn').addEventListener('click', () => {
 refreshCalibrationPanel();
   }
 
-   function renderImageMap() {
-const mapEl = document.querySelector("#duojiaMap");
-if (!mapEl) return;
-
-renderFilterRows();
-closeImageMapSheet();
-
-// 避免重复渲染热点
-mapEl.querySelectorAll(".map-hotspot").forEach(el => el.remove());
-
-const visiblePoints = MAP_CALIBRATION_MODE
-  ? POINTS
-  : POINTS.filter(point => state.category === 'all' || point.category === state.category);
-visiblePoints.forEach(point => {
-  const btn = document.createElement("button");
-  btn.className = "map-hotspot";
-  btn.style.setProperty("--x", `${point.x}%`);
-  btn.style.setProperty("--y", `${point.y}%`);
-  btn.style.setProperty("--hit-size", `${point.hitSize || 34}px`);
-  btn.dataset.id = point.id;
-  btn.setAttribute("aria-label", point.name);
-  btn.title = point.name;
-
-  if (MAP_CALIBRATION_MODE) {
-    const label = document.createElement('span');
-    label.className = 'map-hotspot-label';
-    label.textContent = POINTS.indexOf(point) + 1;
-    btn.appendChild(label);
-    bindHotspotCalibrationDrag(btn, point, mapEl);
-  }
-
-  btn.addEventListener("click", () => {
-    if (MAP_CALIBRATION_MODE) {
-      selectCalibrationPoint(point);
-      return;
-    }
-    selectImageMapPoint(point);
-  });
-
-  mapEl.appendChild(btn);
-});
-
-if (!MAP_CALIBRATION_MODE) {
-  const selectedPoint = visiblePoints.find(point => point.id === state.selectedId) || visiblePoints[0] || null;
-  state.selectedId = selectedPoint?.id || null;
-  if (selectedPoint) selectImageMapPoint(selectedPoint);
+function getAmapConfig() {
+  return window.DUOJIA_AMAP_CONFIG || {};
 }
 
-// 点击地图图片的空白处时，收起点位详情面板。 event.target 表示用户实际点击的元素
-mapEl.onclick = event => {
-  if (!MAP_CALIBRATION_MODE && !event.target.closest(".map-hotspot")) closeImageMapSheet();
-};
-
-if (MAP_CALIBRATION_MODE) refreshCalibrationPanel();
+function setAmapStatus(type, title, detail) {
+  const status = document.querySelector('#amapMapStatus');
+  if (!status) return;
+  if (type === 'ready') {
+    status.hidden = true;
+    return;
   }
 
-   function closeImageMapSheet() {
-document.querySelectorAll(".map-hotspot.active").forEach(btn => btn.classList.remove("active"));
-const sheet = document.querySelector("#mapSheet");
-if (sheet) sheet.classList.remove("is-open");
+  status.hidden = false;
+  status.classList.toggle('is-error', type === 'error');
+  status.innerHTML = `
+    <span class="amap-map-status-icon" aria-hidden="true">${type === 'error' ? '!' : '⌖'}</span>
+    <strong>${title}</strong>
+    <small>${detail}</small>
+  `;
+}
+
+function loadAmapLoaderScript() {
+  if (window.AMapLoader) return Promise.resolve(window.AMapLoader);
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-amap-loader]');
+    const script = existing || document.createElement('script');
+    const handleLoad = () => window.AMapLoader
+      ? resolve(window.AMapLoader)
+      : reject(new Error('高德地图加载器未正确初始化'));
+    const handleError = () => reject(new Error('无法连接高德地图服务'));
+
+    script.addEventListener('load', handleLoad, { once: true });
+    script.addEventListener('error', handleError, { once: true });
+    if (!existing) {
+      script.src = AMAP_LOADER_URL;
+      script.async = true;
+      script.dataset.amapLoader = 'true';
+      document.head.appendChild(script);
+    }
+  });
+}
+
+function loadAmapApi() {
+  if (amapRuntime.api) return Promise.resolve(amapRuntime.api);
+  if (amapRuntime.loadPromise) return amapRuntime.loadPromise;
+
+  const config = getAmapConfig();
+  const hasSecurityConfig = Boolean(config.securityJsCode || config.securityServiceHost);
+  if (!config.key || !hasSecurityConfig) {
+    return Promise.reject(new Error('AMAP_CONFIG_MISSING'));
   }
 
-   // 只负责更新“当前选中了哪个地图点位”。
-   function selectImageMapPoint(point) {
-if (!point) return null;
+  window._AMapSecurityConfig = config.securityServiceHost
+    ? { serviceHost: config.securityServiceHost }
+    : { securityJsCode: config.securityJsCode };
 
-state.selectedId = point.id;
-document.querySelectorAll(".map-hotspot").forEach(btn => {
-  btn.classList.toggle("active", btn.dataset.id === point.id);
-});
+  amapRuntime.loadPromise = loadAmapLoaderScript()
+    .then(loader => loader.load({
+      key: config.key,
+      version: '2.0',
+      plugins: ['AMap.Geocoder']
+    }))
+    .then(AMap => {
+      amapRuntime.api = AMap;
+      return AMap;
+    })
+    .catch(error => {
+      amapRuntime.loadPromise = null;
+      throw error;
+    });
 
-return renderImageMapSheet(point);
+  return amapRuntime.loadPromise;
+}
+
+function readAmapCoordinateCache() {
+  try {
+    return JSON.parse(localStorage.getItem(AMAP_GEOCODE_STORAGE_KEY) || '{}');
+  } catch {
+    localStorage.removeItem(AMAP_GEOCODE_STORAGE_KEY);
+    return {};
+  }
+}
+
+function saveAmapCoordinateCache(cache) {
+  try {
+    localStorage.setItem(AMAP_GEOCODE_STORAGE_KEY, JSON.stringify(cache));
+  } catch {
+    // 无痕模式等环境可能禁用本地存储；不影响本次地图展示。
+  }
+}
+
+function getFallbackCoordinate(point) {
+  if (point.id === DUOJIA_CENTER_POINT_ID) return [...AMAP_FALLBACK_CENTER];
+  const x = Number.isFinite(Number(point.x)) ? Number(point.x) : 49.4;
+  const y = Number.isFinite(Number(point.y)) ? Number(point.y) : 41.7;
+  return [
+    Number((AMAP_FALLBACK_CENTER[0] + (x - 49.4) * 0.00024).toFixed(6)),
+    Number((AMAP_FALLBACK_CENTER[1] - (y - 41.7) * 0.00022).toFixed(6))
+  ];
+}
+
+function applyPointCoordinate(point, coordinate, isFallback = false) {
+  const lng = Number(coordinate?.[0] ?? coordinate?.getLng?.());
+  const lat = Number(coordinate?.[1] ?? coordinate?.getLat?.());
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) return false;
+  point.lng = lng;
+  point.lat = lat;
+  point.coordinateFallback = isFallback;
+  return true;
+}
+
+function geocodePointBatch(geocoder, points) {
+  return new Promise(resolve => {
+    geocoder.getLocation(points.map(point => point.address || point.name), (status, result) => {
+      if (status !== 'complete' || result.info !== 'OK') {
+        resolve([]);
+        return;
+      }
+      resolve(result.geocodes || []);
+    });
+  });
+}
+
+async function resolveAmapPointCoordinates(AMap) {
+  if (amapRuntime.coordinatesReady) return;
+
+  const cache = readAmapCoordinateCache();
+  POINTS.forEach(point => {
+    if (Number.isFinite(Number(point.lng)) && Number.isFinite(Number(point.lat))) {
+      applyPointCoordinate(point, [point.lng, point.lat]);
+      return;
+    }
+    const saved = cache[point.id];
+    if (Array.isArray(saved)) applyPointCoordinate(point, saved);
+  });
+
+  const unresolved = POINTS.filter(point => !Number.isFinite(point.lng) || !Number.isFinite(point.lat));
+  if (unresolved.length) {
+    const geocoder = new AMap.Geocoder({ city: '上海', citylimit: true });
+    for (let index = 0; index < unresolved.length; index += 10) {
+      const batch = unresolved.slice(index, index + 10);
+      const geocodes = await geocodePointBatch(geocoder, batch);
+      batch.forEach((point, batchIndex) => {
+        const location = geocodes[batchIndex]?.location;
+        if (!location || !applyPointCoordinate(point, location)) return;
+        cache[point.id] = [point.lng, point.lat];
+      });
+    }
+    saveAmapCoordinateCache(cache);
   }
 
-   // 只负责生成详情内容、绑定详情按钮事件并打开详情卡片。
-   function renderImageMapSheet(point) {
+  amapRuntime.fallbackCount = 0;
+  POINTS.forEach(point => {
+    if (Number.isFinite(point.lng) && Number.isFinite(point.lat)) return;
+    applyPointCoordinate(point, getFallbackCoordinate(point), true);
+    amapRuntime.fallbackCount += 1;
+  });
+  amapRuntime.coordinatesReady = true;
+}
+
+function getAmapCenterCoordinate() {
+  const centerPoint = getPoint(DUOJIA_CENTER_POINT_ID);
+  return Number.isFinite(centerPoint?.lng) && Number.isFinite(centerPoint?.lat)
+    ? [centerPoint.lng, centerPoint.lat]
+    : AMAP_FALLBACK_CENTER;
+}
+
+function createAmapMarkerElement(point) {
+  const category = getCategory(point.category);
+  const element = document.createElement('div');
+  element.className = `amap-community-marker${point.id === DUOJIA_CENTER_POINT_ID ? ' is-center' : ''}`;
+  element.style.setProperty('--marker-color', category.color);
+  element.dataset.id = point.id;
+  element.setAttribute('role', 'button');
+  element.setAttribute('aria-label', point.name);
+  element.title = point.name;
+
+  const core = document.createElement('span');
+  core.className = 'amap-community-marker-core';
+  core.textContent = point.icon;
+  const label = document.createElement('span');
+  label.className = 'amap-community-marker-label';
+  label.textContent = point.name;
+  element.append(core, label);
+  return element;
+}
+
+function updateAmapMarkerSelection() {
+  amapRuntime.markers.forEach(({ marker, element }, pointId) => {
+    const selected = pointId === state.selectedId;
+    element.classList.toggle('is-selected', selected);
+    marker.setzIndex(selected ? 300 : 100);
+  });
+}
+
+function renderAmapMarkers() {
+  if (!amapRuntime.map || !amapRuntime.api) return;
+
+  amapRuntime.markers.forEach(({ marker }) => marker.setMap(null));
+  amapRuntime.markers.clear();
+
+  const visiblePoints = POINTS.filter(point => state.category === 'all' || point.category === state.category);
+  visiblePoints.forEach(point => {
+    const element = createAmapMarkerElement(point);
+    const marker = new amapRuntime.api.Marker({
+      map: amapRuntime.map,
+      position: [point.lng, point.lat],
+      content: element,
+      anchor: 'bottom-center',
+      title: point.name,
+      zIndex: point.id === state.selectedId ? 300 : 100
+    });
+
+    marker.on('click', () => selectRealMapPoint(point, true));
+    amapRuntime.markers.set(point.id, { marker, element });
+  });
+
+  updateAmapMarkerSelection();
+}
+
+function resetAmapToCommittee(selectPoint = false) {
+  const centerPoint = getPoint(DUOJIA_CENTER_POINT_ID);
+  if (amapRuntime.map) {
+    amapRuntime.map.setZoomAndCenter(15.5, getAmapCenterCoordinate(), false, 260);
+  }
+  if (selectPoint && centerPoint) selectRealMapPoint(centerPoint, false);
+}
+
+async function ensureAmapMap({ resetCenter = false } = {}) {
+  setAmapStatus('loading', '正在加载高德地图', '首次加载会自动解析 30 个社区地址，请稍候。');
+
+  try {
+    const AMap = await loadAmapApi();
+    await resolveAmapPointCoordinates(AMap);
+
+    if (!amapRuntime.map) {
+      amapRuntime.map = new AMap.Map('duojiaMap', {
+        center: getAmapCenterCoordinate(),
+        zoom: 15.5,
+        zooms: [13, 19],
+        viewMode: '2D',
+        mapStyle: 'amap://styles/whitesmoke',
+        features: ['bg', 'road', 'building'],
+        showLabel: true,
+        rotateEnable: false,
+        pitchEnable: false,
+        resizeEnable: true
+      });
+      amapRuntime.map.on('click', closeRealMapSheet);
+    }
+
+    renderAmapMarkers();
+    if (resetCenter) resetAmapToCommittee(false);
+    requestAnimationFrame(() => amapRuntime.map?.resize());
+    document.querySelector('#locateBtn').hidden = false;
+    setAmapStatus('ready');
+
+    if (amapRuntime.fallbackCount) {
+      showToast(`${POINTS.length} 个点位已显示，其中 ${amapRuntime.fallbackCount} 个使用备用位置，可在 POINTS 中补充 lng/lat。`);
+    }
+  } catch (error) {
+    const isMissingConfig = error?.message === 'AMAP_CONFIG_MISSING';
+    setAmapStatus(
+      'error',
+      isMissingConfig ? '请先填写高德地图配置' : '地图暂时无法加载',
+      isMissingConfig
+        ? '打开 <code>amap.config.js</code>，填写 Web 端 Key 和安全密钥后刷新页面。'
+        : '请检查网络、Key 的域名白名单和安全密钥配置。'
+    );
+    document.querySelector('#locateBtn').hidden = true;
+    console.error('高德地图初始化失败：', error);
+  }
+}
+
+function renderRealMap(options = {}) {
+  renderFilterRows();
+  closeRealMapSheet();
+
+  const visiblePoints = POINTS.filter(point => state.category === 'all' || point.category === state.category);
+  if (!visiblePoints.some(point => point.id === state.selectedId)) {
+    state.selectedId = visiblePoints[0]?.id || DUOJIA_CENTER_POINT_ID;
+  }
+
+  const selectedPoint = visiblePoints.find(point => point.id === state.selectedId) || null;
+  if (selectedPoint) renderMapSheet(selectedPoint);
+  void ensureAmapMap(options);
+}
+
+function closeRealMapSheet() {
+  const sheet = document.querySelector('#mapSheet');
+  if (sheet) sheet.classList.remove('is-open');
+}
+
+function selectRealMapPoint(point, panToPoint = false) {
+  if (!point) return null;
+  state.selectedId = point.id;
+  updateAmapMarkerSelection();
+  if (panToPoint && amapRuntime.map && Number.isFinite(point.lng) && Number.isFinite(point.lat)) {
+    amapRuntime.map.panTo([point.lng, point.lat], 260);
+  }
+  return renderMapSheet(point);
+}
+
+// 只负责生成详情内容、绑定详情按钮事件并打开详情卡片。
+function renderMapSheet(point) {
 if (!point) return null;
 
 const sheet = document.querySelector("#mapSheet");
@@ -1224,13 +1405,10 @@ return sheet;
   它会把所有数据渲染到页面上，并绑定各种点击事件。
 */
 function init() {
-  setupMapCalibration();
   setupGuideGallery();
   setupActivityPage();
   renderQuickEntries();
   renderFilterRows();
-  // renderMap(); // zyf revise
-  renderImageMap();
   renderList();
   renderContacts();
   bindEvents();

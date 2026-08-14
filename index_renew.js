@@ -49,34 +49,40 @@ const CATEGORIES = [
   address  ：地址。
   phone    ：电话，没有电话可以写“无”。
   hours    ：开放时间或服务时间。
-  lng/lat  ：真实经纬度，用于点击“一键导航”后跳转高德地图。
+  lng/lat  ：人工确认的高德 GCJ-02 坐标；未确认时保持 null。
+  baiduLng/baiduLat：人工确认的百度 BD-09 坐标；未确认时保持 null。
   x/y      ：示意地图上的位置，范围 0-100；x 越大越靠右，y 越大越靠下。
 */
 
 /*
   POINTS：全站唯一的点位数据源。
   地图热点、列表搜索、详情卡片和高德导航都从这里读取。
-  lng/lat 可选：真实高德地图会优先使用它们；没有时会按 address 自动解析并缓存。
+  lng/lat：高德 GCJ-02 坐标。人工确认后把 null 换成数字；没有时才按 address 自动解析并缓存。
+  baiduLng/baiduLat：百度 BD-09 坐标预留字段，不可直接复制高德坐标。
   x/y 与 hitSize 仅作为旧版图片地图的数据保留，不再控制真实地图的位置。
 */
 const POINTS = [
-  { id: "swimming-pool", name: "馨园健身游泳会所", address: "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心", category: "leisure", x: 33.2, y: 47.3, hitSize: 26 },
-  { id: "employment", name: "小东门街道融创就业服务站", address: "上海市黄浦区中华路518弄16号", category: "service", x: 24.6, y: 11.7, hitSize: 28 },
-  { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区中华路与王家码头路交叉口", category: "service", x: 21.1, y: 17.9, hitSize: 34 },
-  { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区中华路581号", category: "memory", x: 16.8, y: 25.6, hitSize: 30 },
-  { id: "police", name: "上海市公安局黄浦分局小东门派出所", address: "上海市黄浦区新码头街66号", category: "service", x: 70.3, y: 6.3, hitSize: 34 },
-  { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区中山南路609号鑫景金融中心地下空间", category: "leisure", x: 71.3, y: 20.5, hitSize: 28 },
-  { id: "huangpu-riverside", name: "黄浦滨江南外滩段", address: "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧", category: "leisure", x: 81.1, y: 17.5, hitSize: 30 },
-  { id: "shanghai-bank", name: "上海银行总行（上银金融大厦）", address: "上海市黄浦区中山南路688号", category: "shopping", x: 59.2, y: 22.8, hitSize: 28 },
-  { id: "boc", name: "中国银行上海市南外滩支行", address: "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号", category: "shopping", x: 65.7, y: 31.2, hitSize: 22 },
-  { id: "bund-trendy", name: "绿地·外滩潮方", address: "上海市黄浦区中山南路800弄1号", category: "shopping", x: 70.4, y: 34.6, hitSize: 22 },
-  { id: "dongjiadu-ferry", name: "董家渡渡口（董家渡轮渡站）", address: "上海市黄浦区外马路737号", category: "service", x: 84.3, y: 29.1, hitSize: 32 },
-  { id: "dongjiadu-flower-bridge", name: "董家渡路花桥", address: "上海市黄浦区董家渡路185号（中山南路至黄浦滨江）", category: "leisure", x: 78.8, y: 37.6, hitSize: 34 },
-  { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡路185号", category: "memory", x: 59.6, y: 34.4, hitSize: 26 },
+  { id: "swimming-pool", name: "馨园健身游泳会所", address: "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 33.2, y: 47.3, hitSize: 26 },
+  { id: "employment", name: "小东门街道融创就业服务站", address: "上海市黄浦区中华路518弄16号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 24.6, y: 11.7, hitSize: 28 },
+  { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区中华路与王家码头路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 21.1, y: 17.9, hitSize: 34 },
+  { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区中华路581号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 16.8, y: 25.6, hitSize: 30 },
+  { id: "police", name: "上海市公安局黄浦分局小东门派出所", address: "上海市黄浦区新码头街66号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 6.3, hitSize: 34 },
+  { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区中山南路609号鑫景金融中心地下空间", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 71.3, y: 20.5, hitSize: 28 },
+  { id: "huangpu-riverside", name: "黄浦滨江南外滩段", address: "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 81.1, y: 17.5, hitSize: 30 },
+  { id: "shanghai-bank", name: "上海银行总行（上银金融大厦）", address: "上海市黄浦区中山南路688号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 59.2, y: 22.8, hitSize: 28 },
+  { id: "boc", name: "中国银行上海市南外滩支行", address: "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 65.7, y: 31.2, hitSize: 22 },
+  { id: "bund-trendy", name: "绿地·外滩潮方", address: "上海市黄浦区中山南路800弄1号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 70.4, y: 34.6, hitSize: 22 },
+  { id: "dongjiadu-ferry", name: "董家渡渡口（董家渡轮渡站）", address: "上海市黄浦区外马路737号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 84.3, y: 29.1, hitSize: 32 },
+  { id: "dongjiadu-flower-bridge", name: "董家渡路花桥", address: "上海市黄浦区董家渡路185号（中山南路至黄浦滨江）", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 78.8, y: 37.6, hitSize: 34 },
+  { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡路185号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 59.6, y: 34.4, hitSize: 26 },
   {
     id: "duojia-committee",
     name: "多稼居民委员会",
     address: "上海市黄浦区会馆街66号（多稼居委会党群服务站）",
+    lng: null,
+    lat: null,
+    baiduLng: null,
+    baiduLat: null,
     description: "社区咨询、活动报名、便民联系与党群服务。",
     image: "assets/points/duojia-committee.jpg",
     imageAlt: "多稼居民委员会实景",
@@ -86,35 +92,39 @@ const POINTS = [
     y: 41.7,
     hitSize: 24
   },
-  { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号", category: "memory", x: 57, y: 43.9, hitSize: 28 },
+  { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 57, y: 43.9, hitSize: 28 },
   {
     id: "ccb-cmb-donghao-cluster",
     name: "中国建设银行、招商银行、东浩兰生",
     address: "上海市黄浦区董家渡路182号至208号一带",
+    lng: null,
+    lat: null,
+    baiduLng: null,
+    baiduLat: null,
     category: "shopping",
     x: 53.2,
     y: 38.4,
     hitSize: 24,
     locations: [
-      { name: "中国建设银行上海董家渡路支行", address: "上海市黄浦区董家渡路182号、184号、186号、188号1层" },
-      { name: "招商银行上海董家渡支行", address: "上海市黄浦区董家渡路208号1层" },
-      { name: "东浩兰生（集团）有限公司", address: "上海市黄浦区董家渡路200号47层" }
+      { name: "中国建设银行上海董家渡路支行", address: "上海市黄浦区董家渡路182号、184号、186号、188号1层", lng: null, lat: null, baiduLng: null, baiduLat: null },
+      { name: "招商银行上海董家渡支行", address: "上海市黄浦区董家渡路208号1层", lng: null, lat: null, baiduLng: null, baiduLat: null },
+      { name: "东浩兰生（集团）有限公司", address: "上海市黄浦区董家渡路200号47层", lng: null, lat: null, baiduLng: null, baiduLat: null }
     ]
   },
-  { id: "guotai-haitong", name: "国泰海通外滩金融广场", address: "上海市黄浦区中山南路888号", category: "shopping", x: 66.6, y: 40.7, hitSize: 26 },
-  { id: "guohai-sec", name: "国海证券上海中山南路证券营业部", address: "上海市黄浦区中山南路988号2层201室", category: "shopping", x: 63.3, y: 47, hitSize: 24 },
-  { id: "time-plastic", name: "上海时光整形外科医院（外滩总院）", address: "上海市黄浦区中山南路935号", category: "service", x: 70.3, y: 50.4, hitSize: 22 },
-  { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", category: "service", x: 75.8, y: 52.4, hitSize: 22 },
-  { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", category: "service", x: 19, y: 50.7, hitSize: 26 },
-  { id: "fabric-market", name: "上海南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号", category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
-  { id: "icbc", name: "中国工商银行上海市南市支行", address: "上海市黄浦区陆家浜路275号", category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },
-  { id: "gotterwell", name: "上海歌特维康门诊部", address: "上海市黄浦区中山南路1228号", category: "service", x: 43, y: 64.3, hitSize: 28 },
-  { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区中山南路与国货路交叉口", category: "service", x: 32.1, y: 68.5, hitSize: 34 },
-  { id: "sinopec", name: "中国石化齐爱加油站", address: "上海市黄浦区中山南路1133号", category: "shopping", x: 53.5, y: 65, hitSize: 26 },
-  { id: "toilet", name: "南浦大桥附近公共厕所", address: "上海市黄浦区中山南路与陆家浜路交叉口附近", category: "service", x: 49.6, y: 70.8, hitSize: 30 },
-  { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号", category: "leisure", x: 54.2, y: 78.5, hitSize: 30 },
-  { id: "dongjiadu-road-ferry", name: "陆家浜路轮渡站", address: "上海市黄浦区外马路1279号", category: "service", x: 62.1, y: 79.4, hitSize: 30 },
-  { id: "nanpu-bridge", name: "南浦大桥（浦西引桥）", address: "上海市黄浦区中山南路与陆家浜路交叉口", category: "leisure", x: 54.5, y: 91.4, hitSize: 34 },
+  { id: "guotai-haitong", name: "国泰海通外滩金融广场", address: "上海市黄浦区中山南路888号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 66.6, y: 40.7, hitSize: 26 },
+  { id: "guohai-sec", name: "国海证券上海中山南路证券营业部", address: "上海市黄浦区中山南路988号2层201室", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 63.3, y: 47, hitSize: 24 },
+  { id: "time-plastic", name: "上海时光整形外科医院（外滩总院）", address: "上海市黄浦区中山南路935号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 50.4, hitSize: 22 },
+  { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 75.8, y: 52.4, hitSize: 22 },
+  { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 19, y: 50.7, hitSize: 26 },
+  { id: "fabric-market", name: "上海南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
+  { id: "icbc", name: "中国工商银行上海市南市支行", address: "上海市黄浦区陆家浜路275号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },
+  { id: "gotterwell", name: "上海歌特维康门诊部", address: "上海市黄浦区中山南路1228号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 43, y: 64.3, hitSize: 28 },
+  { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区中山南路与国货路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 32.1, y: 68.5, hitSize: 34 },
+  { id: "sinopec", name: "中国石化齐爱加油站", address: "上海市黄浦区中山南路1133号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 53.5, y: 65, hitSize: 26 },
+  { id: "toilet", name: "南浦大桥附近公共厕所", address: "上海市黄浦区中山南路与陆家浜路交叉口附近", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 49.6, y: 70.8, hitSize: 30 },
+  { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 54.2, y: 78.5, hitSize: 30 },
+  { id: "dongjiadu-road-ferry", name: "陆家浜路轮渡站", address: "上海市黄浦区外马路1279号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 62.1, y: 79.4, hitSize: 30 },
+  { id: "nanpu-bridge", name: "南浦大桥（浦西引桥）", address: "上海市黄浦区中山南路与陆家浜路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 54.5, y: 91.4, hitSize: 34 },
 ].map(point => ({
   icon: CATEGORIES.find(category => category.key === point.category)?.icon || '⌖',
   intro: '提供地点位置、地址与导航信息。',
@@ -138,8 +148,11 @@ let calibrationSelectedId = POINTS[0]?.id || null;
   正式地图的 Key / 安全密钥请填写在 amap.config.js，不要写进 POINTS。
 */
 const DUOJIA_CENTER_POINT_ID = 'duojia-committee';
+// 只控制“一键导航”打开哪家地图；页面内嵌底图仍使用高德。
+const NAVIGATION_MAP_PROVIDER = 'amap'; // 可改为 'baidu'
 const AMAP_FALLBACK_CENTER = [121.5004, 31.2111];
-const AMAP_GEOCODE_STORAGE_KEY = 'jiaxiang-amap-geocodes-v2';
+// v3 会忽略此前可能已经错位的 v2 地址解析缓存。
+const AMAP_GEOCODE_STORAGE_KEY = 'jiaxiang-amap-geocodes-v3';
 const AMAP_LOADER_URL = 'https://webapi.amap.com/loader.js';
 const amapRuntime = {
   api: null,
@@ -203,13 +216,15 @@ function getPoint(id) {
 
 /*
   一键导航函数。
-  点击“导航前往”后，拼接一个高德地图 URI，然后让浏览器跳转。
-  手机里如果装了高德地图，通常会尝试打开 App；否则会打开网页地图。
+  点击“导航前往”后，根据 NAVIGATION_MAP_PROVIDER 拼接高德或百度地图 URI。
+  默认使用高德；以后可把配置改成 baidu。
 */
 function navigateToPoint(point) {
   if (!point) return;
   showToast(`正在打开${point.name}`);
-  window.location.href = buildAmapUrl(point);
+  window.location.href = NAVIGATION_MAP_PROVIDER === 'baidu'
+    ? buildBaiduMapUrl(point)
+    : buildAmapUrl(point);
 }
 
 // 页面底部黑色提示条，例如点击“我的”时弹出的说明。
@@ -726,9 +741,30 @@ function bindEvents() {
 /*
 增加渲染热点和跳转导航函数
 */
+   function isCoordinateValue(value) {
+return value !== null && value !== '' && Number.isFinite(Number(value));
+  }
+
+   function hasCoordinatePair(lng, lat) {
+return isCoordinateValue(lng)
+  && isCoordinateValue(lat)
+  && Number(lng) >= -180
+  && Number(lng) <= 180
+  && Number(lat) >= -90
+  && Number(lat) <= 90;
+  }
+
+   function hasAmapCoordinate(point) {
+return hasCoordinatePair(point?.lng, point?.lat);
+  }
+
+   function hasBaiduCoordinate(point) {
+return hasCoordinatePair(point?.baiduLng, point?.baiduLat);
+  }
+
    function buildAmapUrl(point) {
-// 如果后期补了 lng / lat，就可以直接步行导航
-if (point.lng && point.lat) {
+// lng / lat 是高德 GCJ-02 坐标；填写后直接按人工坐标步行导航。
+if (hasAmapCoordinate(point)) {
   const name = encodeURIComponent(point.name);
   return `https://uri.amap.com/navigation?to=${point.lng},${point.lat},${name}&mode=walk&coordinate=gaode&callnative=1&src=jiaxiang-guide`;
 }
@@ -736,6 +772,19 @@ if (point.lng && point.lat) {
 // 如果暂时没有精确经纬度，就先用地点名 / 地址打开高德搜索
 const keyword = encodeURIComponent(point.address || `上海市黄浦区 ${point.name}`);
 return `https://uri.amap.com/search?keyword=${keyword}&city=上海&callnative=1&src=jiaxiang-guide`;
+  }
+
+   function buildBaiduMapUrl(point) {
+const params = new URLSearchParams({
+  destination: hasBaiduCoordinate(point)
+    ? `latlng:${point.baiduLat},${point.baiduLng}|name:${point.name}`
+    : (point.address || `上海市黄浦区 ${point.name}`),
+  mode: 'walking',
+  region: '上海',
+  output: 'html',
+  src: 'jiaxiang-guide'
+});
+return `https://api.map.baidu.com/direction?${params.toString()}`;
   }
 
    function clampCalibrationNumber(value, min, max) {
@@ -755,6 +804,10 @@ const sourcePoint = {
   id: point.id,
   name: point.name,
   address: point.address,
+  lng: isCoordinateValue(point.lng) ? Number(point.lng) : null,
+  lat: isCoordinateValue(point.lat) ? Number(point.lat) : null,
+  baiduLng: isCoordinateValue(point.baiduLng) ? Number(point.baiduLng) : null,
+  baiduLat: isCoordinateValue(point.baiduLat) ? Number(point.baiduLat) : null,
   category: point.category,
   icon: point.icon,
   intro: point.intro,
@@ -764,10 +817,6 @@ const sourcePoint = {
   y: roundCalibrationNumber(point.y),
   hitSize: Number(point.hitSize) || 34
 };
-if (Number.isFinite(point.lng) && Number.isFinite(point.lat)) {
-  sourcePoint.lng = point.lng;
-  sourcePoint.lat = point.lat;
-}
 if (Array.isArray(point.locations)) sourcePoint.locations = point.locations;
 return `      ${JSON.stringify(sourcePoint)}`;
   }
@@ -1098,15 +1147,15 @@ async function resolveAmapPointCoordinates(AMap) {
 
   const cache = readAmapCoordinateCache();
   POINTS.forEach(point => {
-    if (Number.isFinite(Number(point.lng)) && Number.isFinite(Number(point.lat))) {
-      applyPointCoordinate(point, [point.lng, point.lat]);
+    if (hasAmapCoordinate(point)) {
+      applyPointCoordinate(point, [Number(point.lng), Number(point.lat)]);
       return;
     }
     const saved = cache[point.id];
     if (Array.isArray(saved)) applyPointCoordinate(point, saved);
   });
 
-  const unresolved = POINTS.filter(point => !Number.isFinite(point.lng) || !Number.isFinite(point.lat));
+  const unresolved = POINTS.filter(point => !hasAmapCoordinate(point));
   if (unresolved.length) {
     const geocoder = new AMap.Geocoder({ city: '上海', citylimit: true });
     for (let index = 0; index < unresolved.length; index += 10) {
@@ -1123,7 +1172,7 @@ async function resolveAmapPointCoordinates(AMap) {
 
   amapRuntime.fallbackCount = 0;
   POINTS.forEach(point => {
-    if (Number.isFinite(point.lng) && Number.isFinite(point.lat)) return;
+    if (hasAmapCoordinate(point)) return;
     applyPointCoordinate(point, getFallbackCoordinate(point), true);
     amapRuntime.fallbackCount += 1;
   });
@@ -1132,7 +1181,7 @@ async function resolveAmapPointCoordinates(AMap) {
 
 function getAmapCenterCoordinate() {
   const centerPoint = getPoint(DUOJIA_CENTER_POINT_ID);
-  return Number.isFinite(centerPoint?.lng) && Number.isFinite(centerPoint?.lat)
+  return hasAmapCoordinate(centerPoint)
     ? [centerPoint.lng, centerPoint.lat]
     : AMAP_FALLBACK_CENTER;
 }
@@ -1267,7 +1316,7 @@ function selectRealMapPoint(point, panToPoint = false) {
   if (!point) return null;
   state.selectedId = point.id;
   updateAmapMarkerSelection();
-  if (panToPoint && amapRuntime.map && Number.isFinite(point.lng) && Number.isFinite(point.lat)) {
+  if (panToPoint && amapRuntime.map && hasAmapCoordinate(point)) {
     amapRuntime.map.panTo([point.lng, point.lat], 260);
   }
   return renderMapSheet(point);
@@ -1285,7 +1334,7 @@ const locations = Array.isArray(point.locations) ? point.locations : [];
 
 if (locations.length) {
   sheet.innerHTML = `
-    <span class="sheet-selection-label">已选择地图点位</span>
+    <span class="sheet-selection-label"></span>
     <div class="cluster-sheet-card">
       <div class="sheet-title-row">
         <h3>${point.name}</h3>
@@ -1334,7 +1383,7 @@ if (locations.length) {
 }
 
 sheet.innerHTML = `
-  <span class="sheet-selection-label">已选择地图点位</span>
+  <span class="sheet-selection-label"></span>
   <div class="map-sheet-compact ${point.image ? '' : 'no-photo'}">
     ${point.image ? `
       <figure class="map-place-photo">

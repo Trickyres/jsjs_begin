@@ -72,62 +72,73 @@
 //   .catch(failureCallback);
   
 
-const promise = new Promise(function (resolve,reject){
-  const success = true;
-  console.log('开始执行异步操作');
-  setTimeout(function(){
-    console.log('异步操作ing');
-    if(success){
-      console.log('异步尾声了');
-      resolve('成功');
-    } else {
-      reject(new Error('失败'));
-    }
-  },500);
-  console.log('异步操作执行完毕');
-});
+// const promise = new Promise(function (resolve,reject){
+//   const success = true;
+//   console.log('开始执行异步操作');
+//   setTimeout(function(){
+//     console.log('异步操作ing');
+//     if(success){
+//       console.log('异步尾声了');
+//       resolve('成功');
+//     } else {
+//       reject(new Error('失败'));
+//     }
+//   },500);
+//   console.log('异步操作执行完毕');
+// });
 
-promise
-  .then(function(result){
-    console.log('成功的回调');
-    console.log(result);
-  })
-  .catch(function(error){
-    console.log('失败的回调');
-    console.error(error);
-  });
+// promise
+//   .then(function(result){
+//     console.log('成功的回调');
+//     console.log(result);
+//   })
+//   .catch(function(error){
+//     console.log('失败的回调');
+//     console.error(error);
+//   });
 
 const func = (x) => x * x; //隐含返回值
 const func2 = (x,y) => { return x + y }; //显式返回值
 
 
-// 封装函数（就是你这段代码）
-function getGeoByAddress(addressText) {
-  return new Promise((resolve) => {
-    AMap.plugin("AMap.Geocoder", function () {
-      const geocoder = new AMap.Geocoder({ city: "上海" });
-      geocoder.getLocation(addressText, function (status, result) {
-        if (status === "complete" && result.info === "OK") {
-          resolve(result);
-        } else {
-          resolve(null);
-        }
-      })
-    })
-  })
+async function doAsyncOperation() {
+  const success = true; // 设置为 false 来模拟失败的情况
+
+  console.log('开始执行异步操作');
+
+  const result = await new Promise(function (resolve, reject) {
+    console.log('~~',new Date().toLocaleTimeString());
+    setTimeout(function () {
+      console.log('异步操作ing');
+
+      if (success) {
+        console.log('异步尾声了');
+        console.log('异步尾声时间', new Date().toLocaleTimeString());
+        resolve('成功');
+      } else {
+        reject(new Error('失败'));
+      }
+    }, 1200);
+    console.log('time',new Date().toLocaleTimeString());
+    console.log('异步操作执行完毕', new Date().toLocaleTimeString());
+    
+  });
+
+  return result;
 }
 
-// 
-window.onload = function(){
-  //调用示例
-  getGeoByAddress("上海市南京东路").then(res=>{
-    console.log(res)
-    if(res){
-      //取出经纬度
-      const lnglat = res.geocodes[0].location;
-      console.log("经度",lnglat.lng,"纬度",lnglat.lat)
-    }else{
-      console.log("地址解析失败")
-    }
-  })
+async function main() {
+  console.log('开始执行 main 函数');
+  try {
+    console.log('开始计算...');
+    const result = await doAsyncOperation();
+    console.log('最终结果时间', new Date().toLocaleTimeString());
+    console.log('成功的回调');
+    console.log(result);
+  } catch (error) {
+    console.log('失败的回调');
+    console.error(error);
+  }
 }
+
+main();

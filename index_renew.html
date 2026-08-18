@@ -219,7 +219,7 @@
       <button class="route-start-btn" type="button" data-route-start>开始逛逛</button>
     </section>
 
-    <!-- 地图页：分类筛选、示意地图、底部点位卡片 -->
+    <!-- 地图页：分类筛选、真实高德地图、底部点位卡片 -->
     <section class="view" data-view="map">
       <div class="topbar">
         <button class="back-btn" id="mapBackBtn" type="button" aria-label="返回上一页">‹</button>
@@ -230,42 +230,18 @@
       <div class="pill-row" id="mapFilters"></div>
 
       <div class="map-shell">
-        <!-- <div class="map-canvas" id="mapCanvas">
-          <div class="river"></div>
-          <div class="park"></div>
-          <div class="park two"></div>
-          <span class="map-label" style="left:54%;top:10%;transform:rotate(-8deg);">小东门街区</span>
-          <span class="map-label" style="left:40%;top:22%;">东门小学</span>
-          <span class="map-label" style="left:66%;top:26%;transform:rotate(-20deg);">滨江步道</span>
-          <span class="map-label" style="left:63%;top:46%;">社区广场</span>
-          <span class="map-label" style="left:18%;top:56%;transform:rotate(76deg);">中山南路</span>
-          <span class="map-label" style="left:52%;top:62%;transform:rotate(64deg);">东新路</span>
-        </div> -->
-        <div class="real-design-map" id="duojiaMap" aria-label="多稼生活地图">
-          <img src="./assets/duojia-map-bg.webp" alt="稼享指南多稼生活地图">
+        <div class="real-design-map" aria-label="多稼生活高德地图">
+          <div class="amap-map-canvas" id="duojiaMap"></div>
+          <div class="amap-map-status" id="amapMapStatus" role="status">
+            <span class="amap-map-status-icon" aria-hidden="true">⌖</span>
+            <strong>正在准备生活地图</strong>
+            <small>地图将以多稼居民委员会为中心</small>
+          </div>
+          <button class="locate-btn" id="locateBtn" type="button" aria-label="回到多稼居民委员会" hidden>⌖</button>
         </div>
-        <button class="locate-btn" id="locateBtn" aria-label="回到中心" hidden>⌖</button>
         <div class="sheet" id="mapSheet"></div>
       </div>
 
-      <section class="map-calibrator" id="mapCalibrator" hidden aria-label="地图点位校准工具">
-        <h3>🛠 地图点位校准模式</h3>
-        <p>选择地点后直接拖动圆圈；也可以修改 X、Y 和点击范围。调整结果会暂存在本浏览器中。</p>
-        <select class="calibration-select" id="calibrationPointSelect" aria-label="选择需要校准的地点"></select>
-        <div class="calibration-fields">
-          <label>X（左右）<input id="calibrationX" type="number" min="0" max="100" step="0.1"></label>
-          <label>Y（上下）<input id="calibrationY" type="number" min="0" max="100" step="0.1"></label>
-          <label>范围 px<input id="calibrationSize" type="number" min="20" max="80" step="2"></label>
-        </div>
-        <div class="calibration-actions">
-          <button class="btn btn-ghost" id="calibrationPrevBtn" type="button">← 上一个</button>
-          <button class="btn btn-ghost" id="calibrationNextBtn" type="button">下一个 →</button>
-          <button class="btn btn-primary" id="copyCurrentPointBtn" type="button">复制当前点</button>
-          <button class="btn btn-primary" id="copyAllPointsBtn" type="button">复制全部点位</button>
-          <button class="btn btn-ghost" id="resetCalibrationBtn" type="button">恢复源文件坐标</button>
-        </div>
-        <textarea class="calibration-output" id="calibrationOutput" readonly aria-label="校准数据输出"></textarea>
-      </section>
     </section>
 
     <!-- 点位列表页：搜索框、分类筛选、点位卡片列表 -->
@@ -307,12 +283,12 @@
 
       <section class="activity-feature" id="activityFeature" aria-label="年度精选活动视频">
         <video class="activity-feature-video" id="activityFeatureVideo" playsinline controls preload="none" hidden></video>
-        <button class="activity-play-btn" type="button" data-activity-video="assets/activities/featured.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
+        <button class="activity-play-btn" type="button" data-activity-video="https://pub-5b68038effd440158246813da8ca7cec.r2.dev/video/20250516-%E5%A4%9A%E7%A8%BC%E5%8E%86%E5%8F%B2%E5%BB%BA%E7%AD%91%E6%A6%82%E8%A6%81.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
           <span aria-hidden="true">▶</span>
         </button>
         <div class="activity-feature-caption">
-          <small>03:26 · 年度精选</small>
-          <h3 id="activityFeatureTitle">多稼社区 2025 精彩瞬间</h3>
+          <small>年度精选</small>
+          <h3 id="activityFeatureTitle">多稼·社区活动精彩瞬间</h3>
         </div>
       </section>
 
@@ -321,20 +297,20 @@
           <h3 id="activityMomentsTitle">活动瞬间</h3>
           <span>社区精彩相册</span>
         </div>
-        <div class="activity-moments">
-          <button class="activity-moment activity-moment-main" type="button" data-activity-photo="assets/routes/binjiang/highlight-photo.jpg" data-activity-photo-title="邻里欢聚时刻" aria-label="查看邻里欢聚活动照片">
+        <div class="activity-moments" aria-label="活动相册分类">
+          <button class="activity-moment activity-moment-main" type="button" data-activity-album="neighbor-gathering" aria-label="打开邻里欢聚活动相册">
             <span>邻里欢聚</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-photo="assets/routes/binjiang/stop-park.jpg" data-activity-photo-title="亲子公益活动" aria-label="查看亲子公益活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-album="parent-child-charity" aria-label="打开亲子公益活动相册">
             <span>亲子公益</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-photo="assets/routes/binjiang/highlight-river.jpg" data-activity-photo-title="滨江健步活动" aria-label="查看滨江健步活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-album="riverside-walk" aria-label="打开滨江健步活动相册">
             <span>滨江健步</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-photo="assets/routes/binjiang/stop-ferry.jpg" data-activity-photo-title="传统文化活动" aria-label="查看传统文化活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-album="traditional-culture" aria-label="打开传统文化活动相册">
             <span>传统文化</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-photo="assets/routes/binjiang/hero.jpg" data-activity-photo-title="社区共建活动" aria-label="查看社区共建活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-album="community-building" aria-label="打开社区共建活动相册">
             <span>社区共建</span>
           </button>
         </div>
@@ -384,6 +360,22 @@
     <div class="toast" id="toast"></div>
   </main>
 
+  <div class="activity-album-lightbox" id="activityAlbumLightbox" role="dialog" aria-modal="true" aria-labelledby="activityAlbumTitle" hidden>
+    <button class="activity-album-backdrop" type="button" data-activity-album-close aria-label="关闭活动相册"></button>
+    <section class="activity-album-dialog">
+      <header class="activity-album-head">
+        <div>
+          <small>社区精彩相册</small>
+          <h2 id="activityAlbumTitle">活动瞬间</h2>
+          <p id="activityAlbumDescription"></p>
+        </div>
+        <button class="activity-album-close" type="button" data-activity-album-close aria-label="关闭活动相册">×</button>
+      </header>
+      <div class="activity-album-grid" id="activityAlbumGrid"></div>
+      <p class="activity-album-empty" id="activityAlbumEmpty" hidden>该相册尚未放入照片。</p>
+    </section>
+  </div>
+
   <div class="activity-photo-lightbox" id="activityPhotoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityPhotoTitle" hidden>
     <button class="activity-photo-backdrop" type="button" data-activity-photo-close aria-label="关闭活动照片"></button>
     <figure class="activity-photo-dialog">
@@ -415,6 +407,9 @@
     </div>
   </div>
 
+  <script src="amap.config.js"></script>
+  <script src="activity-album-files.js"></script>
+  <script src="activity-albums.js"></script>
   <script src="index_renew.js"></script>
 </body>
 </html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:,">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>高德地理编码 Promise 封装</title>
+
+  <!-- 必须在加载高德 Loader 之前设置 -->
+  <script>
+    window._AMapSecurityConfig = {
+      securityJsCode: "eb7df652d6b2978986205991c2ecadee"
+    };
+  </script>
+
+  <!-- 高德官方 Loader -->
+  <script src="https://webapi.amap.com/loader.js"></script>
+
+  <style>
+    #container {
+      width: 100%;
+      min-height: 120px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    #result {
+      width: 100%;
+      min-height: 220px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+
+    input {
+      width: 300px;
+      padding: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 4px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">正在加载高德地图 SDK……</div>
+
+  <br>
+  // 输入地址,输入框是提示词
+  <input
+    type="text"
+    id="address"
+    placeholder="请输入地址，例如：上海市南京东路"
+  >
+
+  <button id="btn" disabled>查询</button>
+
+  <div id="result">结果展示</div>
+
+  <script>
+    const addressInput = document.getElementById("address");
+    const btn = document.getElementById("btn");
+    const containerDom = document.getElementById("container");
+    const resultDom = document.getElementById("result");
+
+    let geocoder = null;
+
+    /**
+     * 地址转经纬度
+     * @param {string} addressText
+     * @returns {Promise<Object>}
+     */
+    function getGeoByAddress(addressText) {
+      return new Promise((resolve, reject) => {
+        if (!geocoder) {
+          reject(new Error("地理编码服务尚未初始化"));
+          return;
+        }
+
+        geocoder.getLocation(addressText, (status, result) => {
+          if (
+            status === "complete" &&
+            result.info === "OK" &&
+            Array.isArray(result.geocodes) &&
+            result.geocodes.length > 0
+          ) {
+            resolve(result.geocodes[0]);
+          } else {
+            reject(
+              new Error(
+                result?.info || "地址解析失败，未找到匹配地理信息"
+              )
+            );
+          }
+        });
+      });
+    }
+
+    /**
+     * 显示成功结果
+     * @param {string} address
+     * @param {Object} geoItem
+     */
+    function renderSuccess(address, geoItem) {
+      const location = geoItem.location;
+
+      resultDom.innerText =
+      `【原始输入地址】：${address}
+      【格式化地址】：${geoItem.formattedAddress || geoItem.formatted_address || ""}
+      【经度 lng】：${location.lng}
+      【纬度 lat】：${location.lat}
+      【省份】：${geoItem.province || ""}
+      【城市】：${geoItem.city || ""}
+      【行政区】：${geoItem.district || ""}
+      【级别】：${geoItem.level || ""}`;
+      }
+
+    /**
+     * 执行地址查询
+     * @param {string} address
+     */
+    async function queryAddress(address) {
+      containerDom.innerText = `🔍 正在解析地址：${address}`;
+      resultDom.innerText = "查询中……";
+
+      try {
+        const geoItem = await getGeoByAddress(address);
+        renderSuccess(address, geoItem);
+        containerDom.innerText = "✅ 查询完成";
+      } catch (error) {
+        containerDom.innerText = "❌ 查询失败";
+        resultDom.innerText =
+          `【地址】${address}\n👉 ${error.message}`;
+
+        console.error("地理编码失败：", error);
+      }
+    }
+
+    // 使用高德官方 Loader 加载 SDK 和地理编码插件
+    AMapLoader.load({
+      key: "c143056e5073b281c92ff409cd43605b",
+      version: "2.0",
+      plugins: ["AMap.Geocoder"]
+    })
+      .then((AMap) => {
+        geocoder = new AMap.Geocoder({
+          city: "上海"
+        });
+
+        containerDom.innerText =
+          "✅ 高德地图 SDK 加载完成，准备就绪";
+
+        btn.disabled = false;
+
+        btn.addEventListener("click", () => {
+          const address = addressInput.value.trim();
+
+          if (!address) {
+            resultDom.innerText = "⚠️ 请输入有效地址";
+            return;
+          }
+
+          queryAddress(address);
+        });
+
+        addressInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            btn.click();
+          }
+        });
+
+        // 页面初始化查询
+        queryAddress("上海市南京东路");
+      })
+      .catch((error) => {
+        btn.disabled = true;
+
+        containerDom.innerText =
+          "❌ 高德地图 SDK 加载失败";
+
+        resultDom.innerText =
+          `请检查 Key、安全密钥、域名白名单和网络环境。\n${error.message || error}`;
+
+        console.error("高德 SDK 加载失败：", error);
+      });
+  </script>
+</body>
+</html>

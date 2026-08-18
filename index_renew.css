@@ -1991,16 +1991,6 @@ body.guide-lightbox-open { overflow: hidden; }
   background: linear-gradient(180deg, transparent 50%, rgba(22, 34, 42, .72));
   pointer-events: none;
 }
-.activity-feature-video {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: #17232c;
-  object-fit: contain;
-}
 .activity-play-btn {
   position: absolute;
   left: 50%;
@@ -2034,9 +2024,6 @@ body.guide-lightbox-open { overflow: hidden; }
 }
 .activity-feature-caption small { color: #ffdc99; font-size: 11px; font-weight: 700; }
 .activity-feature-caption h3 { margin: 6px 0 0; font-size: 20px; line-height: 1.25; }
-.activity-feature.is-playing .activity-play-btn,
-.activity-feature.is-playing .activity-feature-caption,
-.activity-feature.is-playing::after { display: none; }
 
 .activity-section { margin-top: 24px; }
 .activity-section-head {
@@ -2176,8 +2163,81 @@ body.guide-lightbox-open { overflow: hidden; }
 .activity-note p { margin: 0; color: #795f4f; font-size: 10px; line-height: 1.55; }
 .activity-note strong { color: #473329; font-size: 12px; }
 
+body.activity-video-open,
 body.activity-album-open,
 body.activity-photo-open { overflow: hidden; }
+.activity-video-lightbox[hidden] { display: none; }
+.activity-video-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.activity-video-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(16, 13, 12, .88);
+  backdrop-filter: blur(10px);
+  cursor: zoom-out;
+}
+.activity-video-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(920px, 100%);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 24px;
+  background: #171412;
+  box-shadow: 0 26px 76px rgba(0,0,0,.48);
+}
+.activity-video-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  color: #fff;
+  background: #241f1c;
+}
+.activity-video-dialog-head small {
+  display: block;
+  margin-bottom: 2px;
+  color: #ffb181;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+.activity-video-dialog-head h2 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.activity-video-dialog-close {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  font: 300 27px/1 Arial, sans-serif;
+  cursor: pointer;
+}
+.activity-video-dialog video {
+  display: block;
+  width: 100%;
+  max-height: min(76vh, 680px);
+  aspect-ratio: 16 / 9;
+  border: 0;
+  background: #000;
+  object-fit: contain;
+}
 .activity-album-lightbox[hidden] { display: none; }
 .activity-album-lightbox {
   position: fixed;
@@ -2348,6 +2408,11 @@ body.activity-photo-open { overflow: hidden; }
 }
 
 @media (max-width: 640px) {
+  .activity-video-lightbox { padding: 10px; }
+  .activity-video-dialog { border-radius: 19px; }
+  .activity-video-dialog-head { padding: 11px 12px; }
+  .activity-video-dialog-head h2 { font-size: 14px; }
+  .activity-video-dialog video { max-height: 70vh; }
   .activity-album-lightbox { padding: 10px; }
   .activity-album-dialog {
     max-height: 92vh;

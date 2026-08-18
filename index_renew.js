@@ -62,69 +62,439 @@ const CATEGORIES = [
   x/y 与 hitSize 仅作为旧版图片地图的数据保留，不再控制真实地图的位置。
 */
 const POINTS = [
-  { id: "swimming-pool", name: "馨园健身游泳会所", address: "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 33.2, y: 47.3, hitSize: 26 },
-  { id: "employment", name: "小东门街道融创就业服务站", address: "上海市黄浦区中华路518弄16号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 24.6, y: 11.7, hitSize: 28 },
-  { id: "xiaonanmen-metro", name: "小南门地铁站 9号线", address: "上海市黄浦区中华路与王家码头路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 21.1, y: 17.9, hitSize: 34 },
-  { id: "jingzhonglou", name: "小南门警钟楼", address: "上海市黄浦区中华路581号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 16.8, y: 25.6, hitSize: 30 },
-  { id: "police", name: "上海市公安局黄浦分局小东门派出所", address: "上海市黄浦区新码头街66号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 6.3, hitSize: 34 },
-  { id: "sports-center", name: "外滩金融都市运动中心", address: "上海市黄浦区中山南路609号鑫景金融中心地下空间", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 71.3, y: 20.5, hitSize: 28 },
-  { id: "huangpu-riverside", name: "黄浦滨江南外滩段", address: "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 81.1, y: 17.5, hitSize: 30 },
-  { id: "shanghai-bank", name: "上海银行总行（上银金融大厦）", address: "上海市黄浦区中山南路688号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 59.2, y: 22.8, hitSize: 28 },
-  { id: "boc", name: "中国银行上海市南外滩支行", address: "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 65.7, y: 31.2, hitSize: 22 },
-  { id: "bund-trendy", name: "绿地·外滩潮方", address: "上海市黄浦区中山南路800弄1号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 70.4, y: 34.6, hitSize: 22 },
-  { id: "dongjiadu-ferry", name: "董家渡渡口（董家渡轮渡站）", address: "上海市黄浦区外马路737号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 84.3, y: 29.1, hitSize: 32 },
-  { id: "dongjiadu-flower-bridge", name: "董家渡路花桥", address: "上海市黄浦区董家渡路185号（中山南路至黄浦滨江）", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 78.8, y: 37.6, hitSize: 34 },
-  { id: "church", name: "董家渡天主堂", address: "上海市黄浦区董家渡路185号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 59.6, y: 34.4, hitSize: 26 },
   {
-    id: "duojia-committee",
-    name: "多稼居民委员会",
-    address: "上海市黄浦区会馆街66号（多稼居委会党群服务站）",
-    lng: null,
-    lat: null,
-    baiduLng: null,
-    baiduLat: null,
-    description: "社区咨询、活动报名、便民联系与党群服务。",
-    image: "assets/points/duojia-committee.jpg",
-    imageAlt: "多稼居民委员会实景",
-    imageCaption: "多稼居民委员会 · 会馆街66号",
-    category: "service",
-    x: 49.4,
-    y: 41.7,
-    hitSize: 24
+    "id": "swimming-pool",
+    "name": "XYGYM馨园健身(馨园健身游泳会所)",
+    "address": "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心",
+    "lng": 121.500093,
+    "lat": 31.212716,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 33.2,
+    "y": 47.3,
+    "hitSize": 26
   },
-  { id: "merchants-house", name: "商船会馆", address: "上海市黄浦区会馆街38号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "memory", x: 57, y: 43.9, hitSize: 28 },
   {
-    id: "ccb-cmb-donghao-cluster",
-    name: "中国建设银行、招商银行、东浩兰生",
-    address: "上海市黄浦区董家渡路182号至208号一带",
-    lng: null,
-    lat: null,
-    baiduLng: null,
-    baiduLat: null,
-    category: "shopping",
-    x: 53.2,
-    y: 38.4,
-    hitSize: 24,
-    locations: [
-      { name: "中国建设银行上海董家渡路支行", address: "上海市黄浦区董家渡路182号、184号、186号、188号1层", lng: null, lat: null, baiduLng: null, baiduLat: null },
-      { name: "招商银行上海董家渡支行", address: "上海市黄浦区董家渡路208号1层", lng: null, lat: null, baiduLng: null, baiduLat: null },
-      { name: "东浩兰生（集团）有限公司", address: "上海市黄浦区董家渡路200号47层", lng: null, lat: null, baiduLng: null, baiduLat: null }
-    ]
+    "id": "employment",
+    "name": "小东门街道就业服务站",
+    "address": "上海市黄浦区中华路518弄16号",
+    "lng": 121.498706,
+    "lat": 31.217481,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 24.6,
+    "y": 11.7,
+    "hitSize": 28
   },
-  { id: "guotai-haitong", name: "国泰海通外滩金融广场", address: "上海市黄浦区中山南路888号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 66.6, y: 40.7, hitSize: 26 },
-  { id: "guohai-sec", name: "国海证券上海中山南路证券营业部", address: "上海市黄浦区中山南路988号2层201室", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 63.3, y: 47, hitSize: 24 },
-  { id: "time-plastic", name: "上海时光整形外科医院（外滩总院）", address: "上海市黄浦区中山南路935号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 50.4, hitSize: 22 },
-  { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 75.8, y: 52.4, hitSize: 22 },
-  { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 19, y: 50.7, hitSize: 26 },
-  { id: "fabric-market", name: "上海南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
-  { id: "icbc", name: "中国工商银行上海市南市支行", address: "上海市黄浦区陆家浜路275号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },
-  { id: "gotterwell", name: "上海歌特维康门诊部", address: "上海市黄浦区中山南路1228号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 43, y: 64.3, hitSize: 28 },
-  { id: "nanpu-metro", name: "南浦大桥地铁站 4号线", address: "上海市黄浦区中山南路与国货路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 32.1, y: 68.5, hitSize: 34 },
-  { id: "sinopec", name: "中国石化齐爱加油站", address: "上海市黄浦区中山南路1133号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 53.5, y: 65, hitSize: 26 },
-  { id: "toilet", name: "南浦大桥附近公共厕所", address: "上海市黄浦区中山南路与陆家浜路交叉口附近", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 49.6, y: 70.8, hitSize: 30 },
-  { id: "workers-gym", name: "黄浦区工人体育馆", address: "上海市黄浦区外马路1288号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 54.2, y: 78.5, hitSize: 30 },
-  { id: "dongjiadu-road-ferry", name: "陆家浜路轮渡站", address: "上海市黄浦区外马路1279号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 62.1, y: 79.4, hitSize: 30 },
-  { id: "nanpu-bridge", name: "南浦大桥（浦西引桥）", address: "上海市黄浦区中山南路与陆家浜路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "leisure", x: 54.5, y: 91.4, hitSize: 34 },
+  {
+    "id": "xiaonanmen-metro",
+    "name": "小南门地铁站",
+    "address": "上海市黄浦区中华路/王家码头路",
+    "lng": 121.498421,
+    "lat": 31.216756,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 21.1,
+    "y": 17.9,
+    "hitSize": 34
+  },
+  {
+    "id": "jingzhonglou",
+    "name": "小南门警钟楼",
+    "address": "上海市黄浦区中华路579号(小南门地铁站2号口步行60米)",
+    "lng": 121.49804,
+    "lat": 31.215929,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "memory",
+    "x": 16.8,
+    "y": 25.6,
+    "hitSize": 30
+  },
+  {
+    "id": "police",
+    "name": "小东门派出所",
+    "address": "上海市黄浦区新码头街66号",
+    "lng": 121.506341,
+    "lat": 31.218662,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 70.3,
+    "y": 6.3,
+    "hitSize": 34
+  },
+  {
+    "id": "sports-center",
+    "name": "外滩金融都市运动中心(中山南路店)",
+    "address": "上海市黄浦区中山南路609号B1层",
+    "lng": 121.506148,
+    "lat": 31.216467,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 71.3,
+    "y": 20.5,
+    "hitSize": 28
+  },
+  {
+    "id": "huangpu-riverside",
+    "name": "黄浦滨江南外滩段",
+    "address": "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧",
+    "lng": 121.507671,
+    "lat": 31.217172,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 81.1,
+    "y": 17.5,
+    "hitSize": 30
+  },
+  {
+    "id": "shanghai-bank",
+    "name": "上海银行(营业部)",
+    "address": "上海市黄浦区中山南路688号",
+    "lng": 121.503654,
+    "lat": 31.215876,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 59.2,
+    "y": 22.8,
+    "hitSize": 28
+  },
+  {
+    "id": "boc",
+    "name": "中国银行(南外滩支行)",
+    "address": "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号",
+    "lng": 121.505378,
+    "lat": 31.214866,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 65.7,
+    "y": 31.2,
+    "hitSize": 22
+  },
+  {
+    "id": "bund-trendy",
+    "name": "绿地·外滩潮方",
+    "address": "上海市黄浦区中山南路800弄1号",
+    "lng": 121.505606,
+    "lat": 31.214584,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "shopping",
+    "x": 70.4,
+    "y": 34.6,
+    "hitSize": 22
+  },
+  {
+    "id": "dongjiadu-ferry",
+    "name": "董家渡渡口（轮渡站）",
+    "address": "上海市黄浦区外马路737号",
+    "lng": 121.508069,
+    "lat": 31.21487,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 84.3,
+    "y": 29.1,
+    "hitSize": 32
+  },
+  {
+    "id": "dongjiadu-flower-bridge",
+    "name": "董家渡路花桥",
+    "address": "上海市黄浦区外滩潮方至外马路沿江一侧",
+    "lng": 121.506944,
+    "lat": 31.214494,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 78.8,
+    "y": 37.6,
+    "hitSize": 34
+  },
+  {
+    "id": "church",
+    "name": "董家渡天主堂",
+    "address": "上海市黄浦区董家渡路185号",
+    "lng": 121.504369,
+    "lat": 31.214324,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "memory",
+    "x": 59.6,
+    "y": 34.4,
+    "hitSize": 26
+  },
+  {
+    "id": "duojia-committee",
+    "name": "多稼居民委员会",
+    "address": "上海市黄浦区会馆街66号(多稼居委会党群服务站）",
+    "lng": 121.50277,
+    "lat": 31.213552,
+    "baiduLng": null,
+    "baiduLat": null,
+    "description": "社区咨询、活动报名、便民联系与党群服务。",
+    "image": "assets/points/duojia-committee.jpg",
+    "imageAlt": "多稼居民委员会实景",
+    "imageCaption": "多稼居民委员会 · 会馆街66号",
+    "category": "service",
+    "x": 49.4,
+    "y": 41.7,
+    "hitSize": 24
+  },
+  {
+    "id": "merchants-house",
+    "name": "商船会馆",
+    "address": "上海市黄浦区会馆街38号",
+    "lng": 121.504401,
+    "lat": 31.212942,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "memory",
+    "x": 57,
+    "y": 43.9,
+    "hitSize": 28
+  },
+  {
+    "id": "ccb",
+    "name": "中国建设银行(上海董家渡路支行)",
+    "address": "上海市黄浦区董家渡路182号、184号、186号、188号1层",
+    "lng": 121.503825,
+    "lat": 31.214175,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 53.2,
+    "y": 38.4,
+    "hitSize": 24
+  },
+  {
+    "id": "cmb",
+    "name": "招商银行(董家渡支行)",
+    "address": "上海市黄浦区董家渡路208号1层",
+    "lng": 121.503057,
+    "lat": 31.214417,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 53.2,
+    "y": 38.4,
+    "hitSize": 24
+  },
+  {
+    "id": "spdb",
+    "name": "浦发银行(董家渡路支行)",
+    "address": "上海市黄浦区董家渡路208号1层",
+    "lng": 121.502667,
+    "lat": 31.214507,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 53.2,
+    "y": 38.4,
+    "hitSize": 24
+  },
+  {
+    "id": "donghao-lansheng",
+    "name": "东浩兰生会展集团股份有限公司",
+    "address": "上海市黄浦区董家渡路200号董家渡外滩中心T3栋47楼",
+    "lng": 121.502624,
+    "lat": 31.21416,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 53.2,
+    "y": 38.4,
+    "hitSize": 24
+  },
+  {
+    "id": "guotai-haitong",
+    "name": "国泰海通外滩金融广场",
+    "address": "上海市黄浦区中山南路888号",
+    "lng": 121.505166,
+    "lat": 31.213564,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 66.6,
+    "y": 40.7,
+    "hitSize": 26
+  },
+  {
+    "id": "guohai-sec",
+    "name": "国海证券(上海黄浦区中山南路营业部)",
+    "address": "上海市黄浦区中山南路988号",
+    "lng": 121.505454,
+    "lat": 31.211917,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "shopping",
+    "x": 63.3,
+    "y": 47,
+    "hitSize": 24
+  },
+  {
+    "id": "time-plastic",
+    "name": "上海时光整形外科医院（外滩旗舰院）",
+    "address": "上海市黄浦区中山南路935号",
+    "lng": 121.506064,
+    "lat": 31.2122,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 70.3,
+    "y": 50.4,
+    "hitSize": 22
+  },
+  {
+    "id": "qiangsheng",
+    "name": "上海市强生职工医院",
+    "address": "上海市黄浦区外马路984号",
+    "lng": 121.506814,
+    "lat": 31.211809,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 75.8,
+    "y": 52.4,
+    "hitSize": 22
+  },
+  {
+    "id": "health-center",
+    "name": "小东门街道社区卫生服务中心",
+    "address": "上海市黄浦区陆家浜路525号",
+    "lng": 121.497989,
+    "lat": 31.21231,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 19,
+    "y": 50.7,
+    "hitSize": 26
+  },
+  {
+    "id": "fabric-market",
+    "name": "南外滩轻纺面料市场",
+    "address": "上海市黄浦区陆家浜路399号",
+    "lng": 121.499716,
+    "lat": 31.211674,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "shopping",
+    "x": 30.2,
+    "y": 52.5,
+    "hitSize": 28
+  },
+  {
+    "id": "icbc",
+    "name": "中国工商银行(南市支行)",
+    "address": "上海市黄浦区陆家浜路275号",
+    "lng": 121.501099,
+    "lat": 31.210866,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "shopping",
+    "x": 38.4,
+    "y": 59.4,
+    "hitSize": 26
+  },
+  {
+    "id": "gotterwell",
+    "name": "上海歌特维康门诊部",
+    "address": "上海市黄浦区中山南路1228号",
+    "lng": 121.501767,
+    "lat": 31.210323,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 43,
+    "y": 64.3,
+    "hitSize": 28
+  },
+  {
+    "id": "nanpu-metro",
+    "name": "南浦大桥地铁站",
+    "address": "上海市黄浦区中山南路/国货路",
+    "lng": 121.499725,
+    "lat": 31.208504,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 32.1,
+    "y": 68.5,
+    "hitSize": 34
+  },
+  {
+    "id": "sinopec",
+    "name": "中国石化齐爱加油站",
+    "address": "上海市黄浦区中山南路1133号",
+    "lng": 121.503521,
+    "lat": 31.209978,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "shopping",
+    "x": 53.5,
+    "y": 65,
+    "hitSize": 26
+  },
+  {
+    "id": "toilet",
+    "name": "南浦大桥附近公共厕所",
+    "address": "上海市黄浦区南外滩环卫大楼油车码头街附近",
+    "lng": 121.503037,
+    "lat": 31.209229,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 49.6,
+    "y": 70.8,
+    "hitSize": 30
+  },
+  {
+    "id": "workers-gym",
+    "name": "上海市总工会黄浦区工人体育馆",
+    "address": "上海市黄浦区外马路1288号",
+    "lng": 121.503732,
+    "lat": 31.207728,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 54.2,
+    "y": 78.5,
+    "hitSize": 30
+  },
+  {
+    "id": "dongjiadu-road-ferry",
+    "name": "陆家浜渡口（轮渡站）",
+    "address": "上海市黄浦区外马路1279号",
+    "lng": 121.50427,
+    "lat": 31.207623,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "service",
+    "x": 62.1,
+    "y": 79.4,
+    "hitSize": 30
+  },
+  {
+    "id": "nanpu-bridge",
+    "name": "南浦大桥（浦西引桥）",
+    "address": "上海市黄浦区中山南路/陆家浜路",
+    "lng": 121.501071,
+    "lat": 31.209071,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": 54.5,
+    "y": 91.4,
+    "hitSize": 34
+  }
 ].map(point => ({
   icon: CATEGORIES.find(category => category.key === point.category)?.icon || '⌖',
   intro: '提供地点位置、地址与导航信息。',
@@ -631,11 +1001,19 @@ function setupActivityPage() {
   const feature = $('#activityFeature');
   const video = $('#activityFeatureVideo');
   const title = $('#activityFeatureTitle');
+  const albumLightbox = $('#activityAlbumLightbox');
+  const albumTitle = $('#activityAlbumTitle');
+  const albumDescription = $('#activityAlbumDescription');
+  const albumGrid = $('#activityAlbumGrid');
+  const albumEmpty = $('#activityAlbumEmpty');
   const lightbox = $('#activityPhotoLightbox');
   const lightboxImage = $('#activityPhotoImage');
   const lightboxTitle = $('#activityPhotoTitle');
-  if (!feature || !video || !title || !lightbox || !lightboxImage || !lightboxTitle) return;
+  if (!feature || !video || !title || !albumLightbox || !albumTitle || !albumDescription
+    || !albumGrid || !albumEmpty || !lightbox || !lightboxImage || !lightboxTitle) return;
 
+  const albums = window.ACTIVITY_ALBUMS || {};
+  let albumOpener = null;
   let photoOpener = null;
   let failedVideoSrc = '';
 
@@ -682,6 +1060,34 @@ function setupActivityPage() {
   });
   video.addEventListener('ended', resetFeatureVideo);
 
+  const getAlbumPhotos = album => {
+    const folder = String(album.folder || '').replace(/\/$/, '');
+    const configuredFiles = Array.isArray(album.files) ? album.files : [];
+    if (configuredFiles.length) {
+      return configuredFiles.map((item, index) => {
+        const photo = typeof item === 'string' ? { file: item } : item;
+        const filename = photo.file || '';
+        return {
+          src: photo.src || `${folder}/${filename}`,
+          alt: photo.alt || `${album.title || '活动相册'}第 ${index + 1} 张照片`,
+          caption: photo.caption || `${album.title || '活动相册'} · ${index + 1}`
+        };
+      }).filter(photo => photo.src && !photo.src.endsWith('/'));
+    }
+    return Array.isArray(album.previewPhotos) ? album.previewPhotos : [];
+  };
+
+  const openPhoto = (photo, opener) => {
+    if (!photo?.src) return;
+    photoOpener = opener || null;
+    lightboxImage.src = photo.src;
+    lightboxImage.alt = photo.alt || photo.caption || '社区活动照片';
+    lightboxTitle.textContent = photo.caption || photo.alt || '社区活动照片';
+    lightbox.hidden = false;
+    document.body.classList.add('activity-photo-open');
+    $('.activity-photo-close', lightbox)?.focus();
+  };
+
   const closePhoto = () => {
     if (lightbox.hidden) return;
     lightbox.hidden = true;
@@ -689,21 +1095,77 @@ function setupActivityPage() {
     if (photoOpener) photoOpener.focus();
   };
 
+  const renderAlbum = album => {
+    const photos = getAlbumPhotos(album);
+    albumGrid.replaceChildren();
+    albumEmpty.hidden = photos.length > 0;
+
+    photos.forEach((photo, index) => {
+      const button = document.createElement('button');
+      const image = document.createElement('img');
+      const caption = document.createElement('span');
+      button.type = 'button';
+      button.className = 'activity-album-photo';
+      button.setAttribute('aria-label', `查看${photo.caption || album.title || '活动'}照片`);
+      image.src = photo.src;
+      image.alt = photo.alt || photo.caption || `${album.title || '活动相册'}第 ${index + 1} 张照片`;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      caption.textContent = photo.caption || `${album.title || '活动相册'} · ${index + 1}`;
+      button.append(image, caption);
+      button.addEventListener('click', () => openPhoto(photo, button));
+      image.addEventListener('error', () => {
+        button.remove();
+        if (!albumGrid.children.length) albumEmpty.hidden = false;
+      });
+      albumGrid.append(button);
+    });
+  };
+
+  const openAlbum = button => {
+    const album = albums[button.dataset.activityAlbum];
+    if (!album) {
+      showToast(`尚未配置相册：${button.textContent.trim()}`);
+      return;
+    }
+    albumOpener = button;
+    albumTitle.textContent = album.title || button.textContent.trim();
+    albumDescription.textContent = album.description || '';
+    renderAlbum(album);
+    albumLightbox.hidden = false;
+    document.body.classList.add('activity-album-open');
+    $('.activity-album-close', albumLightbox)?.focus();
+  };
+
+  const closeAlbum = () => {
+    if (albumLightbox.hidden) return;
+    closePhoto();
+    albumLightbox.hidden = true;
+    albumGrid.replaceChildren();
+    document.body.classList.remove('activity-album-open');
+    if (albumOpener) albumOpener.focus();
+  };
+
+  $$('[data-activity-album]').forEach(button => {
+    button.addEventListener('click', () => openAlbum(button));
+  });
+
   $$('[data-activity-photo]').forEach(button => {
     button.addEventListener('click', () => {
-      photoOpener = button;
-      lightboxImage.src = button.dataset.activityPhoto;
-      lightboxImage.alt = button.dataset.activityPhotoTitle || '社区活动照片';
-      lightboxTitle.textContent = button.dataset.activityPhotoTitle || '社区活动照片';
-      lightbox.hidden = false;
-      document.body.classList.add('activity-photo-open');
-      $('[data-activity-photo-close]', lightbox).focus();
+      openPhoto({
+        src: button.dataset.activityPhoto,
+        alt: button.dataset.activityPhotoTitle,
+        caption: button.dataset.activityPhotoTitle
+      }, button);
     });
   });
 
+  $$('[data-activity-album-close]', albumLightbox).forEach(button => button.addEventListener('click', closeAlbum));
   $$('[data-activity-photo-close]', lightbox).forEach(button => button.addEventListener('click', closePhoto));
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !lightbox.hidden) closePhoto();
+    if (event.key !== 'Escape') return;
+    if (!lightbox.hidden) closePhoto();
+    else if (!albumLightbox.hidden) closeAlbum();
   });
 }
 

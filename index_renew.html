@@ -283,12 +283,12 @@
 
       <section class="activity-feature" id="activityFeature" aria-label="年度精选活动视频">
         <video class="activity-feature-video" id="activityFeatureVideo" playsinline controls preload="none" hidden></video>
-        <button class="activity-play-btn" type="button" data-activity-video="assets/activities/featured.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
+        <button class="activity-play-btn" type="button" data-activity-video="https://pub-5b68038effd440158246813da8ca7cec.r2.dev/video/20250516-%E5%A4%9A%E7%A8%BC%E5%8E%86%E5%8F%B2%E5%BB%BA%E7%AD%91%E6%A6%82%E8%A6%81.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
           <span aria-hidden="true">▶</span>
         </button>
         <div class="activity-feature-caption">
-          <small>03:26 · 年度精选</small>
-          <h3 id="activityFeatureTitle">多稼社区 2025 精彩瞬间</h3>
+          <small>年度精选</small>
+          <h3 id="activityFeatureTitle">多稼·社区活动精彩瞬间</h3>
         </div>
       </section>
 
@@ -297,20 +297,20 @@
           <h3 id="activityMomentsTitle">活动瞬间</h3>
           <span>社区精彩相册</span>
         </div>
-        <div class="activity-moments">
-          <button class="activity-moment activity-moment-main" type="button" data-activity-photo="assets/routes/binjiang/highlight-photo.jpg" data-activity-photo-title="邻里欢聚时刻" aria-label="查看邻里欢聚活动照片">
+        <div class="activity-moments" aria-label="活动相册分类">
+          <button class="activity-moment activity-moment-main" type="button" data-activity-album="neighbor-gathering" aria-label="打开邻里欢聚活动相册">
             <span>邻里欢聚</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-photo="assets/routes/binjiang/stop-park.jpg" data-activity-photo-title="亲子公益活动" aria-label="查看亲子公益活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-album="parent-child-charity" aria-label="打开亲子公益活动相册">
             <span>亲子公益</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-photo="assets/routes/binjiang/highlight-river.jpg" data-activity-photo-title="滨江健步活动" aria-label="查看滨江健步活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-album="riverside-walk" aria-label="打开滨江健步活动相册">
             <span>滨江健步</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-photo="assets/routes/binjiang/stop-ferry.jpg" data-activity-photo-title="传统文化活动" aria-label="查看传统文化活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-album="traditional-culture" aria-label="打开传统文化活动相册">
             <span>传统文化</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-photo="assets/routes/binjiang/hero.jpg" data-activity-photo-title="社区共建活动" aria-label="查看社区共建活动照片">
+          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-album="community-building" aria-label="打开社区共建活动相册">
             <span>社区共建</span>
           </button>
         </div>
@@ -360,6 +360,22 @@
     <div class="toast" id="toast"></div>
   </main>
 
+  <div class="activity-album-lightbox" id="activityAlbumLightbox" role="dialog" aria-modal="true" aria-labelledby="activityAlbumTitle" hidden>
+    <button class="activity-album-backdrop" type="button" data-activity-album-close aria-label="关闭活动相册"></button>
+    <section class="activity-album-dialog">
+      <header class="activity-album-head">
+        <div>
+          <small>社区精彩相册</small>
+          <h2 id="activityAlbumTitle">活动瞬间</h2>
+          <p id="activityAlbumDescription"></p>
+        </div>
+        <button class="activity-album-close" type="button" data-activity-album-close aria-label="关闭活动相册">×</button>
+      </header>
+      <div class="activity-album-grid" id="activityAlbumGrid"></div>
+      <p class="activity-album-empty" id="activityAlbumEmpty" hidden>该相册尚未放入照片。</p>
+    </section>
+  </div>
+
   <div class="activity-photo-lightbox" id="activityPhotoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityPhotoTitle" hidden>
     <button class="activity-photo-backdrop" type="button" data-activity-photo-close aria-label="关闭活动照片"></button>
     <figure class="activity-photo-dialog">
@@ -392,6 +408,8 @@
   </div>
 
   <script src="amap.config.js"></script>
+  <script src="activity-album-files.js"></script>
+  <script src="activity-albums.js"></script>
   <script src="index_renew.js"></script>
 </body>
 </html>

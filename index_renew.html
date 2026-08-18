@@ -282,7 +282,6 @@
       </header>
 
       <section class="activity-feature" id="activityFeature" aria-label="年度精选活动视频">
-        <video class="activity-feature-video" id="activityFeatureVideo" playsinline controls preload="none" hidden></video>
         <button class="activity-play-btn" type="button" data-activity-video="https://pub-5b68038effd440158246813da8ca7cec.r2.dev/video/20250516-%E5%A4%9A%E7%A8%BC%E5%8E%86%E5%8F%B2%E5%BB%BA%E7%AD%91%E6%A6%82%E8%A6%81.mp4" data-activity-title="多稼社区 2025 精彩瞬间" aria-label="播放年度精选活动视频">
           <span aria-hidden="true">▶</span>
         </button>
@@ -359,6 +358,20 @@
 
     <div class="toast" id="toast"></div>
   </main>
+
+  <div class="activity-video-lightbox" id="activityVideoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityVideoTitle" hidden>
+    <button class="activity-video-backdrop" type="button" data-activity-video-close aria-label="关闭活动视频"></button>
+    <section class="activity-video-dialog">
+      <header class="activity-video-dialog-head">
+        <div>
+          <small>活动视频</small>
+          <h2 id="activityVideoTitle">多稼社区活动回顾</h2>
+        </div>
+        <button class="activity-video-dialog-close" type="button" data-activity-video-close aria-label="关闭活动视频">×</button>
+      </header>
+      <video id="activityModalVideo" controls playsinline preload="metadata" poster="assets/routes/binjiang/hero.jpg"></video>
+    </section>
+  </div>
 
   <div class="activity-album-lightbox" id="activityAlbumLightbox" role="dialog" aria-modal="true" aria-labelledby="activityAlbumTitle" hidden>
     <button class="activity-album-backdrop" type="button" data-activity-album-close aria-label="关闭活动相册"></button>

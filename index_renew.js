@@ -998,9 +998,9 @@ function setupGuideGallery() {
 }
 
 function setupActivityPage() {
-  const feature = $('#activityFeature');
-  const video = $('#activityFeatureVideo');
-  const title = $('#activityFeatureTitle');
+  const videoLightbox = $('#activityVideoLightbox');
+  const video = $('#activityModalVideo');
+  const videoTitle = $('#activityVideoTitle');
   const albumLightbox = $('#activityAlbumLightbox');
   const albumTitle = $('#activityAlbumTitle');
   const albumDescription = $('#activityAlbumDescription');
@@ -1009,26 +1009,33 @@ function setupActivityPage() {
   const lightbox = $('#activityPhotoLightbox');
   const lightboxImage = $('#activityPhotoImage');
   const lightboxTitle = $('#activityPhotoTitle');
-  if (!feature || !video || !title || !albumLightbox || !albumTitle || !albumDescription
+  if (!videoLightbox || !video || !videoTitle || !albumLightbox || !albumTitle || !albumDescription
     || !albumGrid || !albumEmpty || !lightbox || !lightboxImage || !lightboxTitle) return;
 
   const albums = window.ACTIVITY_ALBUMS || {};
+  let videoOpener = null;
   let albumOpener = null;
   let photoOpener = null;
   let failedVideoSrc = '';
 
-  const resetFeatureVideo = () => {
+  const resetActivityVideo = () => {
     video.pause();
     video.removeAttribute('src');
     video.load();
-    video.hidden = true;
-    feature.classList.remove('is-playing');
+  };
+
+  const closeActivityVideo = (restoreFocus = true) => {
+    if (videoLightbox.hidden) return;
+    resetActivityVideo();
+    videoLightbox.hidden = true;
+    document.body.classList.remove('activity-video-open');
+    if (restoreFocus && videoOpener) videoOpener.focus();
   };
 
   const reportMissingVideo = src => {
     if (failedVideoSrc === src) return;
     failedVideoSrc = src;
-    resetFeatureVideo();
+    closeActivityVideo(false);
     showToast(`视频文件尚未放入：${src}`);
     setTimeout(() => { failedVideoSrc = ''; }, 1200);
   };
@@ -1038,16 +1045,14 @@ function setupActivityPage() {
     const nextTitle = button.dataset.activityTitle || '多稼社区活动回顾';
     if (!src) return;
 
-    title.textContent = nextTitle;
+    videoOpener = button;
+    videoTitle.textContent = nextTitle;
     video.src = src;
-    video.hidden = false;
-    feature.classList.add('is-playing');
+    videoLightbox.hidden = false;
+    document.body.classList.add('activity-video-open');
+    $('.activity-video-dialog-close', videoLightbox)?.focus();
     const playRequest = video.play();
-    if (playRequest) playRequest.catch(() => reportMissingVideo(src));
-
-    if (!button.classList.contains('activity-play-btn')) {
-      feature.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (playRequest) playRequest.catch(() => showToast('如未自动播放，请点击播放器中的播放按钮。'));
   };
 
   $$('[data-activity-video]').forEach(button => {
@@ -1058,7 +1063,9 @@ function setupActivityPage() {
     const src = video.getAttribute('src');
     if (src) reportMissingVideo(src);
   });
-  video.addEventListener('ended', resetFeatureVideo);
+  $$('[data-activity-video-close]', videoLightbox).forEach(button => {
+    button.addEventListener('click', () => closeActivityVideo());
+  });
 
   const getAlbumPhotos = album => {
     const folder = String(album.folder || '').replace(/\/$/, '');
@@ -1166,6 +1173,7 @@ function setupActivityPage() {
     if (event.key !== 'Escape') return;
     if (!lightbox.hidden) closePhoto();
     else if (!albumLightbox.hidden) closeAlbum();
+    else if (!videoLightbox.hidden) closeActivityVideo();
   });
 }
 

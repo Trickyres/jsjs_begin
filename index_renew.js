@@ -240,7 +240,7 @@ const POINTS = [
     "baiduLng": null,
     "baiduLat": null,
     "description": "社区咨询、活动报名、便民联系与党群服务。",
-    "image": "assets/points/duojia-committee.jpg",
+    "image": "assets/points/duojia-committee.webp",
     "imageAlt": "多稼居民委员会实景",
     "imageCaption": "多稼居民委员会 · 会馆街66号",
     "category": "service",
@@ -1057,6 +1057,17 @@ function setupActivityPage() {
 
   $$('[data-activity-video]').forEach(button => {
     button.addEventListener('click', () => playActivityVideo(button));
+  });
+
+  $$('[data-registration-url]').forEach(button => {
+    button.addEventListener('click', () => {
+      const registrationUrl = button.dataset.registrationUrl?.trim();
+      if (!registrationUrl) {
+        showToast('近期活动报名信息即将发布，请稍后关注。');
+        return;
+      }
+      window.open(registrationUrl, '_blank', 'noopener,noreferrer');
+    });
   });
 
   video.addEventListener('error', () => {

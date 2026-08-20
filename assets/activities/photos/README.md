@@ -4,7 +4,7 @@
 
 - `neighbor-gathering/`：邻里欢聚
 - `parent-child-charity/`：亲子公益
-- `riverside-walk/`：滨江健步
+- `riverside-walk/`：滨江漫步
 - `traditional-culture/`：传统文化
 - `community-building/`：社区共建
 

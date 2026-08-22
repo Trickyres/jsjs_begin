@@ -581,14 +581,6 @@ function setupFeedback() {
   let opener = null;
   const closeButton = $('.feedback-dialog-close', lightbox);
 
-  $$('[data-feedback-qr]', lightbox).forEach(image => {
-    const frame = image.closest('.feedback-qr-frame');
-    const updateState = () => frame?.classList.toggle('is-missing', !image.naturalWidth);
-    image.addEventListener('load', updateState);
-    image.addEventListener('error', updateState);
-    if (image.complete) updateState();
-  });
-
   const closeFeedback = () => {
     if (lightbox.hidden) return;
     lightbox.hidden = true;

@@ -51,6 +51,22 @@
 
       <div class="quick-card" id="quickEntries"></div>
 
+      <section class="activity-section activity-registration home-registration" aria-labelledby="activityRegistrationTitle">
+        <div class="activity-section-head">
+          <h3 id="activityRegistrationTitle">近期活动报名</h3>
+          <span>社区活动预告</span>
+        </div>
+        <div class="activity-registration-list">
+          <!-- 后续开放报名时，将 data-registration-url 填为实际报名链接，并同步更新活动名称、日期和说明。 -->
+          <button class="activity-video-item activity-registration-item" type="button" data-registration-url="">
+            <span class="activity-video-date activity-registration-date"><strong>近期</strong><small>报名</small></span>
+            <span class="activity-video-copy"><strong>近期活动报名信息即将更新</strong><small>活动时间、地点及报名方式将在此发布</small></span>
+            <span class="activity-registration-status">敬请期待</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
+      </section>
+
       <div class="section-head">
         <div class="section-title">稼园推荐</div>
         <button class="more-btn" data-go="list">更多路线 ›</button>
@@ -79,6 +95,25 @@
         </span>
         <img src="assets/guide/jiaxiang-guide-cover.png" alt="稼享指南纸质手册封面">
       </button>
+
+      <section class="activity-section activity-registration home-feedback" aria-labelledby="homeFeedbackTitle">
+        <div class="activity-section-head">
+          <h3 id="homeFeedbackTitle">意见反馈</h3>
+          <span>共建美好社区</span>
+        </div>
+        <div class="activity-registration-list">
+          <button class="activity-video-item activity-registration-item activity-feedback-item" type="button" data-feedback-open aria-label="打开意见反馈二维码">
+            <span class="activity-video-date activity-feedback-date"><strong>意见</strong><small>反馈</small></span>
+            <span class="activity-video-copy"><strong>告诉我们您的意见和建议</strong><small>点位补充、信息纠错及网页使用问题</small></span>
+            <span class="activity-registration-status">扫码填写</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="home-end-marker" role="separator" aria-label="已是底部">
+        <span>已是底部</span>
+      </div>
     </section>
 
     <!-- 纸质《稼享指南》电子版：封面、使用说明与四个章节入口 -->
@@ -303,8 +338,8 @@
           <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-album="parent-child-charity" aria-label="打开亲子公益活动相册">
             <span>亲子公益</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-album="riverside-walk" aria-label="打开滨江健步活动相册">
-            <span>滨江健步</span>
+          <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-album="riverside-walk" aria-label="打开滨江漫步活动相册">
+            <span>滨江漫步</span>
           </button>
           <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-album="traditional-culture" aria-label="打开传统文化活动相册">
             <span>传统文化</span>
@@ -327,9 +362,9 @@
             <span class="activity-video-duration">02:18</span>
             <span class="activity-video-arrow" aria-hidden="true">›</span>
           </button>
-          <button class="activity-video-item" type="button" data-activity-video="assets/activities/river-walk-2025.mp4" data-activity-title="春日滨江健步行">
+          <button class="activity-video-item" type="button" data-activity-video="assets/activities/river-walk-2025.mp4" data-activity-title="春日滨江漫步">
             <span class="activity-video-date"><strong>03.22</strong><small>2025</small></span>
-            <span class="activity-video-copy"><strong>春日滨江健步行</strong><small>健康生活 · 社区漫步</small></span>
+            <span class="activity-video-copy"><strong>春日滨江漫步行</strong><small>健康生活 · 社区漫步</small></span>
             <span class="activity-video-duration">04:05</span>
             <span class="activity-video-arrow" aria-hidden="true">›</span>
           </button>
@@ -359,6 +394,39 @@
     <div class="toast" id="toast"></div>
   </main>
 
+  <div class="feedback-lightbox" id="feedbackLightbox" role="dialog" aria-modal="true" aria-labelledby="feedbackDialogTitle" hidden>
+    <button class="feedback-backdrop" type="button" data-feedback-close aria-label="关闭意见反馈"></button>
+    <section class="feedback-dialog">
+      <header class="feedback-dialog-head">
+        <div>
+          <small>COMMUNITY FEEDBACK</small>
+          <h2 id="feedbackDialogTitle">意见反馈</h2>
+          <p>请选择一个渠道，用微信或相机扫描二维码提交问题和建议。</p>
+        </div>
+        <button class="feedback-dialog-close" type="button" data-feedback-close aria-label="关闭意见反馈">×</button>
+      </header>
+      <div class="feedback-qr-grid">
+        <article class="feedback-channel">
+          <div class="feedback-qr-frame">
+            <img data-feedback-qr src="assets/feedback/kingsoft-feedback-qr.png" alt="金山文档意见反馈二维码">
+            <span class="feedback-qr-placeholder">请放入金山文档<br>反馈二维码</span>
+          </div>
+          <strong>金山文档</strong>
+          <small>扫码填写反馈表</small>
+        </article>
+        <article class="feedback-channel">
+          <div class="feedback-qr-frame">
+            <img data-feedback-qr src="assets/feedback/tencent-feedback-qr.png" alt="腾讯文档意见反馈二维码">
+            <span class="feedback-qr-placeholder">请放入腾讯文档<br>反馈二维码</span>
+          </div>
+          <strong>腾讯文档</strong>
+          <small>扫码填写反馈表</small>
+        </article>
+      </div>
+      <p class="feedback-dialog-note">二维码图片放入 <code>assets/feedback/</code> 后即可自动显示。</p>
+    </section>
+  </div>
+
   <div class="activity-video-lightbox" id="activityVideoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityVideoTitle" hidden>
     <button class="activity-video-backdrop" type="button" data-activity-video-close aria-label="关闭活动视频"></button>
     <section class="activity-video-dialog">
@@ -369,7 +437,7 @@
         </div>
         <button class="activity-video-dialog-close" type="button" data-activity-video-close aria-label="关闭活动视频">×</button>
       </header>
-      <video id="activityModalVideo" controls playsinline preload="metadata" poster="assets/routes/binjiang/hero.jpg"></video>
+      <video id="activityModalVideo" controls playsinline preload="metadata" poster="assets/routes/binjiang/hero.webp"></video>
     </section>
   </div>
 
@@ -393,7 +461,7 @@
     <button class="activity-photo-backdrop" type="button" data-activity-photo-close aria-label="关闭活动照片"></button>
     <figure class="activity-photo-dialog">
       <button class="activity-photo-close" type="button" data-activity-photo-close aria-label="关闭活动照片">×</button>
-      <img id="activityPhotoImage" src="assets/routes/binjiang/highlight-photo.jpg" alt="活动照片">
+      <img id="activityPhotoImage" src="assets/routes/binjiang/highlight-photo.webp" alt="活动照片">
       <figcaption id="activityPhotoTitle">邻里欢聚时刻</figcaption>
     </figure>
   </div>
@@ -421,6 +489,7 @@
   </div>
 
   <script src="amap.config.js"></script>
+  <script src="points-data.js"></script>
   <script src="activity-album-files.js"></script>
   <script src="activity-albums.js"></script>
   <script src="index_renew.js"></script>

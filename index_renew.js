@@ -12,8 +12,8 @@
  *
  * 使用说明：
  * 1. 直接把本文件保存为 index.html，双击即可打开。
- * 2. 下方 POINTS 为点位数据，可按实际点位修改名称、地址、电话、经纬度等。
- * 3. 地图优先使用 POINTS 中的 lng/lat；没有坐标时会通过高德地址解析自动补齐。
+ * 2. 点位数据统一维护在 points-data.js，可按实际点位修改名称、地址、电话、经纬度等。
+ * 3. 地图优先使用 points-data.js 中的 lng/lat；没有坐标时会通过高德地址解析自动补齐。
  * 4. 高德 Key 与安全配置统一放在 amap.config.js 中。
  */
 
@@ -31,19 +31,20 @@ const CATEGORIES = [
   { key: 'service', label: '便民', full: '便民服务', icon: '👥', color: '#f2672a' },
   { key: 'shopping', label: '购物', full: '生活购物', icon: '🛒', color: '#f59d32' },
   { key: 'leisure', label: '休闲', full: '休闲游玩', icon: '🌳', color: '#78aa63' },
-  { key: 'memory', label: '记忆', full: '多稼记忆', icon: '🏛️', color: '#a85e48' }
+  { key: 'memory', label: '记忆', full: '多稼记忆', icon: '🏛️', color: '#a85e48' },
+  { key: 'bussiness', label: '商务', full: '商务办公', icon: '🏢', color: '#527da8' }
 ];
 
 /*
-  POINTS：最重要的点位数据。
+  POINTS：由 points-data.js 提供的全站点位数据。
 
-  后续你真正做“稼享指南”时，主要就是改这里。
+  后续维护“稼享指南”点位时，主要修改 points-data.js。
   每一个 { ... } 代表一个点位。
 
   字段说明：
   id       ：点位唯一编号，英文即可，不能重复。
   name     ：点位名称。
-  category ：点位分类，要对应 CATEGORIES 里的 key，例如 service / shopping / leisure / memory。
+  category ：点位分类，要对应 CATEGORIES 里的 key，例如 service / shopping / leisure / memory / bussiness。
   icon     ：点位图标，可以用 emoji，也可以后续换成图片图标。
   intro    ：一句话简介。
   address  ：地址。
@@ -55,447 +56,14 @@ const CATEGORIES = [
 */
 
 /*
-  POINTS：全站唯一的点位数据源。
-  地图热点、列表搜索、详情卡片和高德导航都从这里读取。
+  POINTS：由 points-data.js 中的 window.POINTS_DATA 生成。
+  地图热点、列表搜索、详情卡片和高德导航都读取这一份数据。
   lng/lat：高德 GCJ-02 坐标。人工确认后把 null 换成数字；没有时才按 address 自动解析并缓存。
   baiduLng/baiduLat：百度 BD-09 坐标预留字段，不可直接复制高德坐标。
   x/y 与 hitSize 仅作为旧版图片地图的数据保留，不再控制真实地图的位置。
 */
-const POINTS = [
-  {
-    "id": "swimming-pool",
-    "name": "XYGYM馨园健身(馨园健身游泳会所)",
-    "address": "上海市黄浦区南仓街118号馨园小区5号楼对面花园中心",
-    "lng": 121.500093,
-    "lat": 31.212716,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 33.2,
-    "y": 47.3,
-    "hitSize": 26
-  },
-  {
-    "id": "employment",
-    "name": "小东门街道就业服务站",
-    "address": "上海市黄浦区中华路518弄16号",
-    "lng": 121.498706,
-    "lat": 31.217481,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 24.6,
-    "y": 11.7,
-    "hitSize": 28
-  },
-  {
-    "id": "xiaonanmen-metro",
-    "name": "小南门地铁站",
-    "address": "上海市黄浦区中华路/王家码头路",
-    "lng": 121.498421,
-    "lat": 31.216756,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 21.1,
-    "y": 17.9,
-    "hitSize": 34
-  },
-  {
-    "id": "jingzhonglou",
-    "name": "小南门警钟楼",
-    "address": "上海市黄浦区中华路579号(小南门地铁站2号口步行60米)",
-    "lng": 121.49804,
-    "lat": 31.215929,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "memory",
-    "x": 16.8,
-    "y": 25.6,
-    "hitSize": 30
-  },
-  {
-    "id": "police",
-    "name": "小东门派出所",
-    "address": "上海市黄浦区新码头街66号",
-    "lng": 121.506341,
-    "lat": 31.218662,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 70.3,
-    "y": 6.3,
-    "hitSize": 34
-  },
-  {
-    "id": "sports-center",
-    "name": "外滩金融都市运动中心(中山南路店)",
-    "address": "上海市黄浦区中山南路609号B1层",
-    "lng": 121.506148,
-    "lat": 31.216467,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 71.3,
-    "y": 20.5,
-    "hitSize": 28
-  },
-  {
-    "id": "huangpu-riverside",
-    "name": "黄浦滨江南外滩段",
-    "address": "上海市黄浦区复兴东路至南浦大桥之间的外马路沿江一侧",
-    "lng": 121.507671,
-    "lat": 31.217172,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 81.1,
-    "y": 17.5,
-    "hitSize": 30
-  },
-  {
-    "id": "shanghai-bank",
-    "name": "上海银行(营业部)",
-    "address": "上海市黄浦区中山南路688号",
-    "lng": 121.503654,
-    "lat": 31.215876,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 59.2,
-    "y": 22.8,
-    "hitSize": 28
-  },
-  {
-    "id": "boc",
-    "name": "中国银行(南外滩支行)",
-    "address": "上海市黄浦区中山南路800弄20号2层L208a、L208b、L209号",
-    "lng": 121.505378,
-    "lat": 31.214866,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 65.7,
-    "y": 31.2,
-    "hitSize": 22
-  },
-  {
-    "id": "bund-trendy",
-    "name": "绿地·外滩潮方",
-    "address": "上海市黄浦区中山南路800弄1号",
-    "lng": 121.505606,
-    "lat": 31.214584,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "shopping",
-    "x": 70.4,
-    "y": 34.6,
-    "hitSize": 22
-  },
-  {
-    "id": "dongjiadu-ferry",
-    "name": "董家渡渡口（轮渡站）",
-    "address": "上海市黄浦区外马路737号",
-    "lng": 121.508069,
-    "lat": 31.21487,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 84.3,
-    "y": 29.1,
-    "hitSize": 32
-  },
-  {
-    "id": "dongjiadu-flower-bridge",
-    "name": "董家渡路花桥",
-    "address": "上海市黄浦区外滩潮方至外马路沿江一侧",
-    "lng": 121.506944,
-    "lat": 31.214494,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 78.8,
-    "y": 37.6,
-    "hitSize": 34
-  },
-  {
-    "id": "church",
-    "name": "董家渡天主堂",
-    "address": "上海市黄浦区董家渡路185号",
-    "lng": 121.504369,
-    "lat": 31.214324,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "memory",
-    "x": 59.6,
-    "y": 34.4,
-    "hitSize": 26
-  },
-  {
-    "id": "duojia-committee",
-    "name": "多稼居民委员会",
-    "address": "上海市黄浦区会馆街66号(多稼居委会党群服务站）",
-    "lng": 121.50277,
-    "lat": 31.213552,
-    "baiduLng": null,
-    "baiduLat": null,
-    "description": "社区咨询、活动报名、便民联系与党群服务。",
-    "image": "assets/points/duojia-committee.jpg",
-    "imageAlt": "多稼居民委员会实景",
-    "imageCaption": "多稼居民委员会 · 会馆街66号",
-    "category": "service",
-    "x": 49.4,
-    "y": 41.7,
-    "hitSize": 24
-  },
-  {
-    "id": "merchants-house",
-    "name": "商船会馆",
-    "address": "上海市黄浦区会馆街38号",
-    "lng": 121.504401,
-    "lat": 31.212942,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "memory",
-    "x": 57,
-    "y": 43.9,
-    "hitSize": 28
-  },
-  {
-    "id": "ccb",
-    "name": "中国建设银行(上海董家渡路支行)",
-    "address": "上海市黄浦区董家渡路182号、184号、186号、188号1层",
-    "lng": 121.503825,
-    "lat": 31.214175,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 53.2,
-    "y": 38.4,
-    "hitSize": 24
-  },
-  {
-    "id": "cmb",
-    "name": "招商银行(董家渡支行)",
-    "address": "上海市黄浦区董家渡路208号1层",
-    "lng": 121.503057,
-    "lat": 31.214417,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 53.2,
-    "y": 38.4,
-    "hitSize": 24
-  },
-  {
-    "id": "spdb",
-    "name": "浦发银行(董家渡路支行)",
-    "address": "上海市黄浦区董家渡路208号1层",
-    "lng": 121.502667,
-    "lat": 31.214507,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 53.2,
-    "y": 38.4,
-    "hitSize": 24
-  },
-  {
-    "id": "donghao-lansheng",
-    "name": "东浩兰生会展集团股份有限公司",
-    "address": "上海市黄浦区董家渡路200号董家渡外滩中心T3栋47楼",
-    "lng": 121.502624,
-    "lat": 31.21416,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 53.2,
-    "y": 38.4,
-    "hitSize": 24
-  },
-  {
-    "id": "guotai-haitong",
-    "name": "国泰海通外滩金融广场",
-    "address": "上海市黄浦区中山南路888号",
-    "lng": 121.505166,
-    "lat": 31.213564,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 66.6,
-    "y": 40.7,
-    "hitSize": 26
-  },
-  {
-    "id": "guohai-sec",
-    "name": "国海证券(上海黄浦区中山南路营业部)",
-    "address": "上海市黄浦区中山南路988号",
-    "lng": 121.505454,
-    "lat": 31.211917,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "shopping",
-    "x": 63.3,
-    "y": 47,
-    "hitSize": 24
-  },
-  {
-    "id": "time-plastic",
-    "name": "上海时光整形外科医院（外滩旗舰院）",
-    "address": "上海市黄浦区中山南路935号",
-    "lng": 121.506064,
-    "lat": 31.2122,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 70.3,
-    "y": 50.4,
-    "hitSize": 22
-  },
-  {
-    "id": "qiangsheng",
-    "name": "上海市强生职工医院",
-    "address": "上海市黄浦区外马路984号",
-    "lng": 121.506814,
-    "lat": 31.211809,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 75.8,
-    "y": 52.4,
-    "hitSize": 22
-  },
-  {
-    "id": "health-center",
-    "name": "小东门街道社区卫生服务中心",
-    "address": "上海市黄浦区陆家浜路525号",
-    "lng": 121.497989,
-    "lat": 31.21231,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 19,
-    "y": 50.7,
-    "hitSize": 26
-  },
-  {
-    "id": "fabric-market",
-    "name": "南外滩轻纺面料市场",
-    "address": "上海市黄浦区陆家浜路399号",
-    "lng": 121.499716,
-    "lat": 31.211674,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "shopping",
-    "x": 30.2,
-    "y": 52.5,
-    "hitSize": 28
-  },
-  {
-    "id": "icbc",
-    "name": "中国工商银行(南市支行)",
-    "address": "上海市黄浦区陆家浜路275号",
-    "lng": 121.501099,
-    "lat": 31.210866,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "shopping",
-    "x": 38.4,
-    "y": 59.4,
-    "hitSize": 26
-  },
-  {
-    "id": "gotterwell",
-    "name": "上海歌特维康门诊部",
-    "address": "上海市黄浦区中山南路1228号",
-    "lng": 121.501767,
-    "lat": 31.210323,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 43,
-    "y": 64.3,
-    "hitSize": 28
-  },
-  {
-    "id": "nanpu-metro",
-    "name": "南浦大桥地铁站",
-    "address": "上海市黄浦区中山南路/国货路",
-    "lng": 121.499725,
-    "lat": 31.208504,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 32.1,
-    "y": 68.5,
-    "hitSize": 34
-  },
-  {
-    "id": "sinopec",
-    "name": "中国石化齐爱加油站",
-    "address": "上海市黄浦区中山南路1133号",
-    "lng": 121.503521,
-    "lat": 31.209978,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "shopping",
-    "x": 53.5,
-    "y": 65,
-    "hitSize": 26
-  },
-  {
-    "id": "toilet",
-    "name": "南浦大桥附近公共厕所",
-    "address": "上海市黄浦区南外滩环卫大楼油车码头街附近",
-    "lng": 121.503037,
-    "lat": 31.209229,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 49.6,
-    "y": 70.8,
-    "hitSize": 30
-  },
-  {
-    "id": "workers-gym",
-    "name": "上海市总工会黄浦区工人体育馆",
-    "address": "上海市黄浦区外马路1288号",
-    "lng": 121.503732,
-    "lat": 31.207728,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 54.2,
-    "y": 78.5,
-    "hitSize": 30
-  },
-  {
-    "id": "dongjiadu-road-ferry",
-    "name": "陆家浜渡口（轮渡站）",
-    "address": "上海市黄浦区外马路1279号",
-    "lng": 121.50427,
-    "lat": 31.207623,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "service",
-    "x": 62.1,
-    "y": 79.4,
-    "hitSize": 30
-  },
-  {
-    "id": "nanpu-bridge",
-    "name": "南浦大桥（浦西引桥）",
-    "address": "上海市黄浦区中山南路/陆家浜路",
-    "lng": 121.501071,
-    "lat": 31.209071,
-    "baiduLng": null,
-    "baiduLat": null,
-    "category": "leisure",
-    "x": 54.5,
-    "y": 91.4,
-    "hitSize": 34
-  }
-].map(point => ({
+const POINTS_SOURCE = Array.isArray(window.POINTS_DATA) ? window.POINTS_DATA : [];
+const POINTS = POINTS_SOURCE.map(point => ({
   icon: CATEGORIES.find(category => category.key === point.category)?.icon || '⌖',
   intro: '提供地点位置、地址与导航信息。',
   phone: '无',
@@ -507,7 +75,7 @@ const POINTS = [
   旧版图片地图校准开关（真实高德地图不再使用）：
   true  = 显示拖动、坐标和点击范围工具；
   false = 恢复普通访客看到的地图。
-  校准完成并把数据复制回 POINTS 后，请改成 false。
+  校准完成并把数据复制回 points-data.js 后，请改成 false。
 */
 const MAP_CALIBRATION_MODE = false;
 const MAP_CALIBRATION_STORAGE_KEY = 'jiaxiang-map-calibration-v1';
@@ -515,7 +83,7 @@ let calibrationSelectedId = POINTS[0]?.id || null;
 
 /*
   真实高德地图配置与运行状态。
-  正式地图的 Key / 安全密钥请填写在 amap.config.js，不要写进 POINTS。
+  正式地图的 Key / 安全密钥请填写在 amap.config.js，不要写进 points-data.js。
 */
 const DUOJIA_CENTER_POINT_ID = 'duojia-committee';
 // 只控制“一键导航”打开哪家地图；页面内嵌底图仍使用高德。
@@ -579,6 +147,11 @@ function getCategory(key) {
   return CATEGORIES.find(c => c.key === key) || CATEGORIES[0];
 }
 
+// points-data.js 中设置 isNew: true 后，在列表、地图卡片和地图标记上显示“新增”。
+function renderNewPointBadge(point) {
+  return point?.isNew ? '<span class="new-point-badge">新增</span>' : '';
+}
+
 // 根据点位 id 找到对应点位信息，例如 duojia-jwh -> 多稼居民委员会。
 function getPoint(id) {
   return POINTS.find(p => p.id === id) || POINTS[0];
@@ -635,7 +208,7 @@ function setCategory(category, targetView = state.view) {
 }
 
 /*
-  渲染首页四个快捷入口。
+  渲染首页各类点位的快捷入口。
   这些入口根据 CATEGORIES 自动生成，所以你改 CATEGORIES 后，这里会自动跟着变。
 */
 function renderQuickEntries() {
@@ -675,12 +248,15 @@ function renderFilterRows() {
 */
 function filteredPoints() {
   const keyword = state.search.trim().toLowerCase();
-  return POINTS.filter(p => {
+  const matchedPoints = POINTS.filter(p => {
     const categoryOk = state.category === 'all' || p.category === state.category;
     const text = `${p.name} ${p.intro} ${p.address} ${getCategory(p.category).full}`.toLowerCase();
     const keywordOk = !keyword || text.includes(keyword);
     return categoryOk && keywordOk;
   });
+
+  // 新增点位始终优先显示；同为新增或非新增时保持 points-data.js 中的原始顺序。
+  return matchedPoints.sort((a, b) => Number(b.isNew === true) - Number(a.isNew === true));
 }
 
 /*
@@ -694,7 +270,8 @@ function renderList() {
     service: '便民服务',
     shopping: '生活购物',
     leisure: '休闲游玩',
-    memory: '多稼记忆'
+    memory: '多稼记忆',
+    bussiness: '商务办公'
   };
   $('#listTitle').textContent = titleMap[state.category] || '点位列表';
 
@@ -710,7 +287,7 @@ function renderList() {
       <article class="place-card">
         <div class="place-icon" style="background:${category.color}">${point.icon}</div>
         <div class="place-main">
-          <h3>${point.name}<span class="tag ${point.category}">${category.full || category.label}</span></h3>
+          <h3>${point.name}${renderNewPointBadge(point)}<span class="tag ${point.category}">${category.full || category.label}</span></h3>
           <p>${point.intro}</p>
           <div class="place-lines">
             <span>⌖ ${point.address}</span>
@@ -997,6 +574,42 @@ function setupGuideGallery() {
   image.addEventListener('load', () => renderGuideGallery(false));
 }
 
+function setupFeedback() {
+  const lightbox = $('#feedbackLightbox');
+  if (!lightbox) return;
+
+  let opener = null;
+  const closeButton = $('.feedback-dialog-close', lightbox);
+
+  $$('[data-feedback-qr]', lightbox).forEach(image => {
+    const frame = image.closest('.feedback-qr-frame');
+    const updateState = () => frame?.classList.toggle('is-missing', !image.naturalWidth);
+    image.addEventListener('load', updateState);
+    image.addEventListener('error', updateState);
+    if (image.complete) updateState();
+  });
+
+  const closeFeedback = () => {
+    if (lightbox.hidden) return;
+    lightbox.hidden = true;
+    document.body.classList.remove('feedback-open');
+    opener?.focus();
+  };
+
+  $$('[data-feedback-open]').forEach(button => {
+    button.addEventListener('click', () => {
+      opener = button;
+      lightbox.hidden = false;
+      document.body.classList.add('feedback-open');
+      closeButton?.focus();
+    });
+  });
+  $$('[data-feedback-close]', lightbox).forEach(button => button.addEventListener('click', closeFeedback));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !lightbox.hidden) closeFeedback();
+  });
+}
+
 function setupActivityPage() {
   const videoLightbox = $('#activityVideoLightbox');
   const video = $('#activityModalVideo');
@@ -1057,6 +670,17 @@ function setupActivityPage() {
 
   $$('[data-activity-video]').forEach(button => {
     button.addEventListener('click', () => playActivityVideo(button));
+  });
+
+  $$('[data-registration-url]').forEach(button => {
+    button.addEventListener('click', () => {
+      const registrationUrl = button.dataset.registrationUrl?.trim();
+      if (!registrationUrl) {
+        showToast('近期活动报名信息即将发布，请稍后关注。');
+        return;
+      }
+      window.open(registrationUrl, '_blank', 'noopener,noreferrer');
+    });
   });
 
   video.addEventListener('error', () => {
@@ -1288,11 +912,12 @@ const sourcePoint = {
   hitSize: Number(point.hitSize) || 34
 };
 if (Array.isArray(point.locations)) sourcePoint.locations = point.locations;
+if (point.isNew) sourcePoint.isNew = true;
 return `      ${JSON.stringify(sourcePoint)}`;
   }
 
    function allPointsToSource() {
-return `const POINTS = [\n${POINTS.map(point => `${pointToSource(point)},`).join('\n')}\n    ];`;
+return `window.POINTS_DATA = [\n${POINTS.map(point => `${pointToSource(point)},`).join('\n')}\n    ];`;
   }
 
    function saveMapCalibration() {
@@ -1673,6 +1298,12 @@ function createAmapMarkerElement(point) {
   label.className = 'amap-community-marker-label';
   label.textContent = point.name;
   element.append(core, label);
+  if (point.isNew) {
+    const newBadge = document.createElement('span');
+    newBadge.className = 'amap-community-marker-new';
+    newBadge.textContent = '新增';
+    element.append(newBadge);
+  }
   return element;
 }
 
@@ -1747,7 +1378,7 @@ async function ensureAmapMap({ resetCenter = false } = {}) {
     setAmapStatus('ready');
 
     if (amapRuntime.fallbackCount) {
-      showToast(`${POINTS.length} 个点位已显示，其中 ${amapRuntime.fallbackCount} 个使用备用位置，可在 POINTS 中补充 lng/lat。`);
+      showToast(`${POINTS.length} 个点位已显示，其中 ${amapRuntime.fallbackCount} 个使用备用位置，可在 points-data.js 中补充 lng/lat。`);
     }
   } catch (error) {
     const isMissingConfig = error?.message === 'AMAP_CONFIG_MISSING';
@@ -1808,6 +1439,7 @@ if (locations.length) {
     <div class="cluster-sheet-card">
       <div class="sheet-title-row">
         <h3>${point.name}</h3>
+        ${renderNewPointBadge(point)}
         <span class="tag ${point.category}">${locations.length}个地点</span>
       </div>
       <p class="cluster-sheet-intro">地图上合并为一个点位，请在下方选择具体目的地。</p>
@@ -1869,6 +1501,7 @@ sheet.innerHTML = `
     <div class="map-sheet-summary">
       <div class="sheet-title-row">
         <h3>${point.name}</h3>
+        ${renderNewPointBadge(point)}
         <span class="tag ${point.category}">${category.full || category.label}</span>
       </div>
       ${point.description ? `<p class="sheet-description">${point.description}</p>` : ''}
@@ -1925,6 +1558,7 @@ return sheet;
 */
 function init() {
   setupGuideGallery();
+  setupFeedback();
   setupActivityPage();
   renderQuickEntries();
   renderFilterRows();

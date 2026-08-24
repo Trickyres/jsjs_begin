@@ -1079,6 +1079,100 @@ class = 'view active' 这说明这个 HTML 元素有两个 class 名 view 和 ac
 .contact-card h3 { margin: 0 0 3px; font-size: 16px; }
 .contact-card p { margin: 0; color: var(--muted); font-size: 13px; }
 .contact-card a { margin-left: auto; color: #fff; text-decoration: none; }
+.contact-call-button { flex: 0 0 auto; margin-left: auto; }
+
+body.phone-choice-open { overflow: hidden; }
+.phone-choice-lightbox[hidden] { display: none; }
+.phone-choice-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: grid;
+  place-items: end center;
+  padding: 16px;
+}
+.phone-choice-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: rgba(44, 31, 23, .48);
+  backdrop-filter: blur(3px);
+}
+.phone-choice-dialog {
+  position: relative;
+  width: min(100%, 398px);
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 26px;
+  background: #fffaf3;
+  box-shadow: 0 24px 70px rgba(55, 38, 28, .3);
+}
+.phone-choice-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.phone-choice-head small {
+  color: var(--brand-2);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.phone-choice-head h2 { margin: 4px 0 0; color: var(--text); font-size: 20px; }
+.phone-choice-close {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 12px;
+  color: #765f50;
+  background: #f3e8dc;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.phone-choice-list { display: grid; gap: 10px; }
+.phone-choice-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0;
+  padding: 14px 15px;
+  border: 1px solid rgba(91, 145, 202, .2);
+  border-radius: 18px;
+  color: var(--text);
+  background: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(76, 55, 40, .06);
+}
+.phone-choice-option span:first-child { display: grid; gap: 4px; }
+.phone-choice-option strong { font-size: 15px; }
+.phone-choice-option small { color: var(--muted); font-size: 14px; }
+.phone-choice-dial {
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--brand-2);
+  font-size: 12px;
+  font-weight: 800;
+}
+.phone-choice-cancel {
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px;
+  border: 0;
+  border-radius: 14px;
+  color: #76675d;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
 
 .empty {
   padding: 42px 18px;

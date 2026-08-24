@@ -108,7 +108,17 @@ const amapRuntime = {
 const CONTACTS = [
   { name: '多稼居民委员会', desc: '社区咨询、活动报名、便民联系', phone: '021-3376 6298', icon: '👥', color: '#f2672a' },
   { name: '社区卫生服务中心', desc: '基础医疗、健康咨询、慢病随访', phone: '021-6377 0202', icon: '✚', color: '#5fae78' },
-  { name: '物业服务电话', desc: '报修、门禁、公共区域维护', phone: '021-8888 8888', icon: '🛠️', color: '#5b91ca' },
+  {
+    id: 'property-service',
+    name: '物业服务电话',
+    desc: '报修、门禁、公共区域维护',
+    phones: [
+      { name: '海珀外滩物业', displayPhone: '（021）63327768', phone: '02163327768' },
+      { name: '浦江公寓物业', displayPhone: '（021）63269067', phone: '02163269067' }
+    ],
+    icon: '🛠️',
+    color: '#5b91ca'
+  },
   { name: '街道服务热线', desc: '综合咨询与为民服务联系', phone: '021-6332 5638', icon: '☎', color: '#a85e48' }
 ];
 
@@ -315,16 +325,52 @@ function renderList() {
   根据 CONTACTS 数据生成电话卡片。
 */
 function renderContacts() {
-  $('#contactList').innerHTML = CONTACTS.map(c => `
+  const list = $('#contactList');
+  list.innerHTML = CONTACTS.map(c => `
     <article class="contact-card">
       <div class="contact-icon" style="background:${c.color}">${c.icon}</div>
       <div>
         <h3>${c.name}</h3>
         <p>${c.desc}</p>
       </div>
-      <a class="btn btn-primary btn-mini" href="tel:${c.phone.replace(/\s/g, '')}">拨打</a>
+      ${c.phones
+        ? `<button class="btn btn-primary btn-mini contact-call-button" type="button" data-contact-choices="${c.id}">拨打</button>`
+        : `<a class="btn btn-primary btn-mini" href="tel:${c.phone.replace(/\s/g, '')}">拨打</a>`}
     </article>
   `).join('');
+
+  $$('[data-contact-choices]', list).forEach(button => {
+    button.addEventListener('click', () => openPhoneChoices(button.dataset.contactChoices));
+  });
+}
+
+/* 打开物业电话选择面板，用户选择具体物业后再进入系统拨号。 */
+function openPhoneChoices(contactId) {
+  const contact = CONTACTS.find(item => item.id === contactId);
+  const lightbox = $('#phoneChoiceLightbox');
+  const options = $('#phoneChoiceList');
+  if (!contact?.phones?.length || !lightbox || !options) return;
+
+  options.innerHTML = contact.phones.map(item => `
+    <a class="phone-choice-option" href="tel:${item.phone}">
+      <span>
+        <strong>${item.name}</strong>
+        <small>${item.displayPhone}</small>
+      </span>
+      <span class="phone-choice-dial" aria-hidden="true">拨打</span>
+    </a>
+  `).join('');
+
+  lightbox.hidden = false;
+  document.body.classList.add('phone-choice-open');
+  lightbox.querySelector('.phone-choice-close')?.focus();
+}
+
+function closePhoneChoices() {
+  const lightbox = $('#phoneChoiceLightbox');
+  if (!lightbox || lightbox.hidden) return;
+  lightbox.hidden = true;
+  document.body.classList.remove('phone-choice-open');
 }
 
 /*
@@ -1552,6 +1598,10 @@ function init() {
   setupGuideGallery();
   setupFeedback();
   setupActivityPage();
+  $$('[data-phone-choice-close]').forEach(button => button.addEventListener('click', closePhoneChoices));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closePhoneChoices();
+  });
   renderQuickEntries();
   renderFilterRows();
   renderList();

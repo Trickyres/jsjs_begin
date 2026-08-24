@@ -451,6 +451,20 @@ window.POINTS_DATA = [
     "isNew": true
   },
   {
+    "id": "dangqunfuwuzhongxin",
+    "name": "董家渡党群服务中心",
+    "address": "上海市黄浦区会馆街51号绿地外滩中心T3楼25~29楼",
+    "lng": 121.502796,
+    "lat": 31.214084,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "bussiness",
+    "x": null,
+    "y": null,
+    "hitSize": 30,
+    "isNew": true
+  },
+  {
     "id": "nanpu-bridge",
     "name": "南浦大桥（浦西引桥）",
     "address": "上海市黄浦区中山南路/陆家浜路",

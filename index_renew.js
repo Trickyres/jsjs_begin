@@ -119,6 +119,7 @@ const CONTACTS = [
     icon: '🛠️',
     color: '#5b91ca'
   },
+  { name: '小东门派出所', desc: '报警求助、户籍咨询及社区安全服务', phone: '021-2303 4720', icon: '🛡️', color: '#416e9d' },
   { name: '街道服务热线', desc: '综合咨询与为民服务联系', phone: '021-6332 5638', icon: '☎', color: '#a85e48' }
 ];
 

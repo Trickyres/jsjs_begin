@@ -926,6 +926,7 @@ function bindEvents() {
   }));
   $('#searchInput').addEventListener('input', e => {
     state.search = e.target.value;
+    if (state.search.trim()) state.category = 'all';
     renderList();
   });
   $('#mapTipBtn').addEventListener('click', () => showToast(

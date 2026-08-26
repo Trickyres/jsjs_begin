@@ -268,10 +268,10 @@ window.POINTS_DATA = [
   },
   {
     "id": "guohai-sec",
-    "name": "国海证券(上海黄浦区中山南路营业部)",
+    "name": "国海证券(中山南路营业部)",
     "address": "上海市黄浦区中山南路988号",
-    "lng": 121.505454,
-    "lat": 31.211917,
+    "lng": 121.505066,
+    "lat": 31.212811,
     "baiduLng": null,
     "baiduLat": null,
     "category": "bussiness",
@@ -463,6 +463,20 @@ window.POINTS_DATA = [
     "y": null,
     "hitSize": 30,
     "isNew": true
+  },
+  {
+    "id": "ferry-space",
+    "name": "渡口空间",
+    "address": "上海市黄浦区陆家浜路18号",
+    "lng": 121.502862,
+    "lat": 31.20669,
+    "baiduLng": null,
+    "baiduLat": null,
+    "category": "leisure",
+    "x": null,
+    "y": null,
+    "hitSize": 30,
+    "isNew": false
   },
   {
     "id": "nanpu-bridge",

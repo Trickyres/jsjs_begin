@@ -69,7 +69,7 @@
 
       <div class="section-head">
         <div class="section-title">稼园推荐</div>
-        <button class="more-btn" data-go="list">更多路线 ›</button>
+        <button class="more-btn" type="button" data-more-routes>更多路线 ›</button>
       </div>
 
       <button class="recommend-card" type="button" data-route-detail="binjiang" aria-label="查看滨江散步路线详情">
@@ -225,13 +225,13 @@
           <button type="button" class="route-text-btn" data-route-map>查看地图 ›</button>
         </div>
         <div class="route-stops" aria-label="滨江散步路线站点">
-          <article class="route-stop"><button class="route-stop-photo ferry" type="button" aria-label="放大查看董家渡渡口照片" data-activity-photo="assets/routes/binjiang/stop-ferry.webp" data-activity-photo-title="董家渡渡口"></button><strong>董家渡渡口</strong></article>
-          <span class="route-arrow" aria-hidden="true">→</span>
           <article class="route-stop"><button class="route-stop-photo walkway" type="button" aria-label="放大查看滨江步道照片" data-activity-photo="assets/routes/binjiang/stop-walkway.webp" data-activity-photo-title="滨江步道"></button><strong>滨江步道</strong></article>
           <span class="route-arrow" aria-hidden="true">→</span>
-          <article class="route-stop"><button class="route-stop-photo platform" type="button" aria-label="放大查看观景平台照片" data-activity-photo="assets/routes/binjiang/stop-platform.webp" data-activity-photo-title="观景平台"></button><strong>观景平台</strong></article>
+          <article class="route-stop"><button class="route-stop-photo flower-bridge" type="button" aria-label="放大查看董家渡路花桥照片" data-activity-photo="assets/routes/binjiang/highlight-photo.webp" data-activity-photo-title="董家渡路花桥"></button><strong>董家渡路花桥</strong></article>
           <span class="route-arrow" aria-hidden="true">→</span>
-          <article class="route-stop"><button class="route-stop-photo stop-park" type="button" aria-label="放大查看南园公园照片" data-activity-photo="assets/routes/binjiang/stop-park.webp" data-activity-photo-title="南园公园"></button><strong>南园公园</strong></article>
+          <article class="route-stop"><button class="route-stop-photo lujiabang-ferry" type="button" aria-label="放大查看陆家浜路渡口照片" data-activity-photo="assets/routes/binjiang/stop-platform.webp" data-activity-photo-title="陆家浜路渡口"></button><strong>陆家浜路渡口</strong></article>
+          <span class="route-arrow" aria-hidden="true">→</span>
+          <article class="route-stop"><button class="route-stop-photo ferry-space" type="button" aria-label="放大查看渡口空间照片" data-activity-photo="assets/routes/binjiang/ferry-space.webp" data-activity-photo-title="渡口空间"></button><strong>渡口空间</strong></article>
         </div>
       </section>
 
@@ -239,7 +239,7 @@
         <div class="route-section-head"><h3>沿途亮点</h3></div>
         <div class="route-highlights">
           <article class="route-highlight"><button class="route-highlight-photo river-view" type="button" aria-label="放大查看开阔江景照片" data-activity-photo="assets/routes/binjiang/highlight-river.webp" data-activity-photo-title="江景开阔"></button><h4>江景开阔</h4><p>江面宽阔，视野开阔，心旷神怡。</p></article>
-          <article class="route-highlight"><button class="route-highlight-photo photo-spot" type="button" aria-label="放大查看滨江拍照点照片" data-activity-photo="assets/routes/binjiang/highlight-photo.webp" data-activity-photo-title="适合拍照"></button><h4>适合拍照</h4><p>城市天际线与江边景色很出片。</p></article>
+          <article class="route-highlight"><button class="route-highlight-photo photo-spot" type="button" aria-label="放大查看滨江拍照点照片" data-activity-photo="assets/routes/binjiang/stop-park.webp" data-activity-photo-title="适合拍照"></button><h4>适合拍照</h4><p>城市天际线与江边景色很出片。</p></article>
           <article class="route-highlight"><button class="route-highlight-photo night-view" type="button" aria-label="放大查看滨江夜景照片" data-activity-photo="assets/routes/binjiang/highlight-night.webp" data-activity-photo-title="夜景迷人"></button><h4>夜景迷人</h4><p>夜晚灯光璀璨，散步氛围舒适惬意。</p></article>
         </div>
       </section>
@@ -258,7 +258,7 @@
     <section class="view" data-view="map">
       <div class="topbar">
         <button class="back-btn" id="mapBackBtn" type="button" aria-label="返回上一页">‹</button>
-        <div class="topbar-title">生活地图</div>
+        <div class="topbar-title" id="mapTitle">生活地图</div>
         <button class="icon-btn" id="mapTipBtn" aria-label="说明">•••</button>
       </div>
 
@@ -393,6 +393,16 @@
 
     <div class="toast" id="toast"></div>
   </main>
+
+  <div class="more-routes-lightbox" id="moreRoutesLightbox" role="dialog" aria-modal="true" aria-labelledby="moreRoutesTitle" hidden>
+    <button class="more-routes-backdrop" type="button" data-more-routes-close aria-label="关闭更多路线提示"></button>
+    <section class="more-routes-dialog">
+      <span class="more-routes-icon" aria-hidden="true">⌖</span>
+      <h2 id="moreRoutesTitle">更多路线</h2>
+      <p>更多路线敬请期待</p>
+      <button class="btn btn-primary" type="button" data-more-routes-close>知道了</button>
+    </section>
+  </div>
 
   <div class="phone-choice-lightbox" id="phoneChoiceLightbox" role="dialog" aria-modal="true" aria-labelledby="phoneChoiceTitle" hidden>
     <button class="phone-choice-backdrop" type="button" data-phone-choice-close aria-label="关闭物业电话选择"></button>

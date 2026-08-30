@@ -92,10 +92,18 @@ const AMAP_FALLBACK_CENTER = [121.5004, 31.2111];
 // v3 会忽略此前可能已经错位的 v2 地址解析缓存。
 const AMAP_GEOCODE_STORAGE_KEY = 'jiaxiang-amap-geocodes-v3';
 const AMAP_LOADER_URL = 'https://webapi.amap.com/loader.js';
+const BINJIANG_ROUTE_MODE = 'binjiang-route';
+const BINJIANG_ROUTE_POINT_IDS = [
+  'huangpu-riverside',
+  'dongjiadu-flower-bridge',
+  'dongjiadu-road-ferry',
+  'ferry-space'
+];
 const amapRuntime = {
   api: null,
   map: null,
   markers: new Map(),
+  routeLine: null,
   loadPromise: null,
   coordinatesReady: false,
   fallbackCount: 0
@@ -119,6 +127,7 @@ const CONTACTS = [
     icon: '🛠️',
     color: '#5b91ca'
   },
+  { name: '小东门派出所', desc: '报警求助、户籍咨询及社区安全服务', phone: '021-2303 4720', icon: '👮', color: '#416e9d' },
   { name: '街道服务热线', desc: '综合咨询与为民服务联系', phone: '021-6332 5638', icon: '☎', color: '#a85e48' }
 ];
 
@@ -137,6 +146,7 @@ const state = {
   category: 'all',
   selectedId: 'duojia-committee',
   search: '',
+  mapMode: null,
   mapReturnView: 'home',
   listReturnView: 'home'
 };
@@ -167,6 +177,15 @@ function getPoint(id) {
   return POINTS.find(p => p.id === id) || POINTS[0];
 }
 
+function getVisibleMapPoints() {
+  if (state.mapMode === BINJIANG_ROUTE_MODE) {
+    return BINJIANG_ROUTE_POINT_IDS
+      .map(id => POINTS.find(point => point.id === id))
+      .filter(Boolean);
+  }
+  return POINTS.filter(point => state.category === 'all' || point.category === state.category);
+}
+
 /*
   一键导航函数。
   点击“导航前往”后，根据 NAVIGATION_MAP_PROVIDER 拼接高德或百度地图 URI。
@@ -187,6 +206,31 @@ function showToast(text) {
   toast.classList.add('show');
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(() => toast.classList.remove('show'), 2400);
+}
+
+function setupMoreRoutesDialog() {
+  const lightbox = $('#moreRoutesLightbox');
+  const openButton = $('[data-more-routes]');
+  if (!lightbox || !openButton) return;
+  let opener = null;
+
+  const closeDialog = () => {
+    if (lightbox.hidden) return;
+    lightbox.hidden = true;
+    document.body.classList.remove('more-routes-open');
+    opener?.focus();
+  };
+
+  openButton.addEventListener('click', () => {
+    opener = openButton;
+    lightbox.hidden = false;
+    document.body.classList.add('more-routes-open');
+    $('[data-more-routes-close]:last-child', lightbox)?.focus();
+  });
+  $$('[data-more-routes-close]', lightbox).forEach(button => button.addEventListener('click', closeDialog));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !lightbox.hidden) closeDialog();
+  });
 }
 
 /*
@@ -213,6 +257,7 @@ function setView(view) {
 */
 function setCategory(category, targetView = state.view) {
   state.category = category;
+  if (targetView === 'map') state.mapMode = null;
   if (targetView === 'map') renderRealMap();
   if (targetView === 'list') renderList();
 }
@@ -244,11 +289,27 @@ function renderQuickEntries() {
   地图页和列表页各有一组筛选按钮，这个函数会同时更新两处。
 */
 function renderFilterRows() {
-  const html = CATEGORIES.map(c => `<button class="pill ${state.category === c.key ? 'active' : ''}" data-category="${c.key}">${c.label}</button>`).join('');
-  $('#mapFilters').innerHTML = html;
-  $('#listFilters').innerHTML = html;
+  const isBinjiangRoute = state.mapMode === BINJIANG_ROUTE_MODE;
+  const mapCategoryHtml = CATEGORIES.map(c => `<button class="pill ${!isBinjiangRoute && state.category === c.key ? 'active' : ''}" data-category="${c.key}">${c.label}</button>`).join('');
+  const listCategoryHtml = CATEGORIES.map(c => `<button class="pill ${state.category === c.key ? 'active' : ''}" data-category="${c.key}">${c.label}</button>`).join('');
+  const strollHtml = `<button class="pill ${isBinjiangRoute ? 'active' : ''}" type="button" data-map-route="${BINJIANG_ROUTE_MODE}">漫步</button>`;
+  $('#mapFilters').innerHTML = `${mapCategoryHtml}${strollHtml}`;
+  $('#mapFilters').hidden = false;
+  $('#listFilters').innerHTML = listCategoryHtml;
 
-  $$('#mapFilters .pill').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.category, 'map')));
+  const activeMapPill = $('#mapFilters .pill.active');
+  if (activeMapPill) {
+    const mapFilters = $('#mapFilters');
+    mapFilters.scrollLeft = Math.max(0, activeMapPill.offsetLeft - (mapFilters.clientWidth - activeMapPill.clientWidth) / 2);
+  }
+
+  $$('#mapFilters [data-category]').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.category, 'map')));
+  $('#mapFilters [data-map-route]')?.addEventListener('click', () => {
+    state.mapMode = BINJIANG_ROUTE_MODE;
+    state.category = 'all';
+    state.selectedId = 'huangpu-riverside';
+    renderRealMap({ resetCenter: true });
+  });
   $$('#listFilters .pill').forEach(btn => btn.addEventListener('click', () => setCategory(btn.dataset.category, 'list')));
 }
 
@@ -315,6 +376,7 @@ function renderList() {
   $$('[data-nav]', list).forEach(btn => btn.addEventListener('click', () => navigateToPoint(getPoint(btn.dataset.nav))));
   $$('[data-view-map]', list).forEach(btn => btn.addEventListener('click', () => {
     state.mapReturnView = 'list';
+    state.mapMode = null;
     state.selectedId = btn.dataset.viewMap;
     setView('map');
   }));
@@ -390,7 +452,8 @@ function openBinjiangRoute() {
 
 function openBinjiangMap(shouldAnnounce = false) {
   state.mapReturnView = 'route';
-  state.category = 'leisure';
+  state.mapMode = BINJIANG_ROUTE_MODE;
+  state.category = 'all';
   state.selectedId = 'huangpu-riverside';
   setView('map');
   if (shouldAnnounce) showToast('已打开滨江散步路线起点，可继续点击一键导航。');
@@ -841,7 +904,10 @@ function setupActivityPage() {
 
 function bindEvents() {
   $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
-    if (btn.dataset.go === 'map') state.mapReturnView = state.view === 'route' ? 'route' : 'home';
+    if (btn.dataset.go === 'map') {
+      state.mapReturnView = state.view === 'route' ? 'route' : 'home';
+      state.mapMode = null;
+    }
     if (btn.dataset.go === 'list') state.listReturnView = state.view === 'guide' ? 'guide' : 'home';
     setView(btn.dataset.go);
   }));
@@ -854,14 +920,20 @@ function bindEvents() {
   $('#mapBackBtn').addEventListener('click', () => setView(state.mapReturnView || 'home'));
   $$('[data-select-point]').forEach(card => card.addEventListener('click', () => {
     state.mapReturnView = 'home';
+    state.mapMode = null;
     state.selectedId = card.dataset.selectPoint;
     setView('map');
   }));
   $('#searchInput').addEventListener('input', e => {
     state.search = e.target.value;
+    if (state.search.trim()) state.category = 'all';
     renderList();
   });
-  $('#mapTipBtn').addEventListener('click', () => showToast(`当前为真实高德地图，共载入 ${POINTS.length} 个社区点位；可按上方分类筛选。`));
+  $('#mapTipBtn').addEventListener('click', () => showToast(
+    state.mapMode === BINJIANG_ROUTE_MODE
+      ? '当前显示滨江散步路线及沿途 4 个点位。'
+      : `当前为真实高德地图，共载入 ${POINTS.length} 个社区点位；可按上方分类筛选。`
+  ));
   $('#listTipBtn').addEventListener('click', () => showToast('列表支持分类筛选和关键词搜索。后续可接入真实点位库或后台管理。'));
   $('#locateBtn').addEventListener('click', () => {
     resetAmapToCommittee(true);
@@ -1168,7 +1240,7 @@ function setAmapStatus(type, title, detail) {
   status.innerHTML = `
     <span class="amap-map-status-icon" aria-hidden="true">${type === 'error' ? '!' : '⌖'}</span>
     <strong>${title}</strong>
-    <small>${detail}</small>
+    ${detail ? `<small>${detail}</small>` : ''}
   `;
 }
 
@@ -1321,9 +1393,12 @@ function getAmapCenterCoordinate() {
 
 function createAmapMarkerElement(point) {
   const category = getCategory(point.category);
+  const routeIndex = state.mapMode === BINJIANG_ROUTE_MODE
+    ? BINJIANG_ROUTE_POINT_IDS.indexOf(point.id)
+    : -1;
   const element = document.createElement('div');
-  element.className = `amap-community-marker${point.id === DUOJIA_CENTER_POINT_ID ? ' is-center' : ''}`;
-  element.style.setProperty('--marker-color', category.color);
+  element.className = `amap-community-marker${point.id === DUOJIA_CENTER_POINT_ID ? ' is-center' : ''}${routeIndex >= 0 ? ' is-route-stop' : ''}`;
+  element.style.setProperty('--marker-color', routeIndex >= 0 ? '#ef5b2a' : category.color);
   element.dataset.id = point.id;
   element.setAttribute('role', 'button');
   element.setAttribute('aria-label', point.name);
@@ -1331,7 +1406,7 @@ function createAmapMarkerElement(point) {
 
   const core = document.createElement('span');
   core.className = 'amap-community-marker-core';
-  core.textContent = point.icon;
+  core.textContent = routeIndex >= 0 ? String(routeIndex + 1) : point.icon;
   const label = document.createElement('span');
   label.className = 'amap-community-marker-label';
   label.textContent = point.name;
@@ -1359,7 +1434,7 @@ function renderAmapMarkers() {
   amapRuntime.markers.forEach(({ marker }) => marker.setMap(null));
   amapRuntime.markers.clear();
 
-  const visiblePoints = POINTS.filter(point => state.category === 'all' || point.category === state.category);
+  const visiblePoints = getVisibleMapPoints();
   visiblePoints.forEach(point => {
     const element = createAmapMarkerElement(point);
     const marker = new amapRuntime.api.Marker({
@@ -1378,6 +1453,45 @@ function renderAmapMarkers() {
   updateAmapMarkerSelection();
 }
 
+function renderAmapRoute() {
+  if (amapRuntime.routeLine) {
+    amapRuntime.routeLine.setMap(null);
+    amapRuntime.routeLine = null;
+  }
+  if (!amapRuntime.map || !amapRuntime.api || state.mapMode !== BINJIANG_ROUTE_MODE) return;
+
+  const path = getVisibleMapPoints()
+    .filter(hasAmapCoordinate)
+    .map(point => [Number(point.lng), Number(point.lat)]);
+  if (path.length < 2) return;
+
+  amapRuntime.routeLine = new amapRuntime.api.Polyline({
+    map: amapRuntime.map,
+    path,
+    zIndex: 60,
+    strokeColor: '#ef5b2a',
+    strokeOpacity: 0.96,
+    strokeWeight: 7,
+    isOutline: true,
+    outlineColor: '#fff7ea',
+    borderWeight: 3,
+    lineJoin: 'round',
+    lineCap: 'round',
+    strokeStyle: 'dashed',
+    strokeDasharray: [12, 10],
+    showDir: false
+  });
+}
+
+function fitAmapToBinjiangRoute() {
+  if (!amapRuntime.map || state.mapMode !== BINJIANG_ROUTE_MODE) return;
+  const overlays = [
+    ...Array.from(amapRuntime.markers.values(), item => item.marker),
+    amapRuntime.routeLine
+  ].filter(Boolean);
+  if (overlays.length) amapRuntime.map.setFitView(overlays, false, [70, 44, 180, 44], 16);
+}
+
 function resetAmapToCommittee(selectPoint = false) {
   const centerPoint = getPoint(DUOJIA_CENTER_POINT_ID);
   if (amapRuntime.map) {
@@ -1387,7 +1501,7 @@ function resetAmapToCommittee(selectPoint = false) {
 }
 
 async function ensureAmapMap({ resetCenter = false } = {}) {
-  setAmapStatus('loading', '正在加载高德地图', '首次加载会自动解析 30 个社区地址，请稍候。');
+  setAmapStatus('loading', '正在加载稼享地图');
 
   try {
     const AMap = await loadAmapApi();
@@ -1410,12 +1524,14 @@ async function ensureAmapMap({ resetCenter = false } = {}) {
     }
 
     renderAmapMarkers();
-    if (resetCenter) resetAmapToCommittee(false);
+    renderAmapRoute();
+    if (state.mapMode === BINJIANG_ROUTE_MODE) fitAmapToBinjiangRoute();
+    else if (resetCenter) resetAmapToCommittee(false);
     requestAnimationFrame(() => amapRuntime.map?.resize());
-    document.querySelector('#locateBtn').hidden = false;
+    document.querySelector('#locateBtn').hidden = state.mapMode === BINJIANG_ROUTE_MODE;
     setAmapStatus('ready');
 
-    if (amapRuntime.fallbackCount) {
+    if (amapRuntime.fallbackCount && state.mapMode !== BINJIANG_ROUTE_MODE) {
       showToast(`${POINTS.length} 个点位已显示，其中 ${amapRuntime.fallbackCount} 个使用备用位置，可在 points-data.js 中补充 lng/lat。`);
     }
   } catch (error) {
@@ -1436,7 +1552,8 @@ function renderRealMap(options = {}) {
   renderFilterRows();
   closeRealMapSheet();
 
-  const visiblePoints = POINTS.filter(point => state.category === 'all' || point.category === state.category);
+  $('#mapTitle').textContent = '生活地图';
+  const visiblePoints = getVisibleMapPoints();
   if (!visiblePoints.some(point => point.id === state.selectedId)) {
     state.selectedId = visiblePoints[0]?.id || DUOJIA_CENTER_POINT_ID;
   }
@@ -1595,6 +1712,7 @@ return sheet;
   它会把所有数据渲染到页面上，并绑定各种点击事件。
 */
 function init() {
+  setupMoreRoutesDialog();
   setupGuideGallery();
   setupFeedback();
   setupActivityPage();

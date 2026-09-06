@@ -902,7 +902,223 @@ function setupActivityPage() {
   });
 }
 
+function setupActivityUpload() {
+  const lightbox = $('#activityUploadLightbox');
+  const dialog = $('.activity-upload-dialog', lightbox);
+  const form = $('#activityUploadForm');
+  const fileInput = $('#activityUploadFiles');
+  const picker = $('#activityUploadPicker');
+  const previews = $('#activityUploadPreviews');
+  const category = $('#activityUploadCategory');
+  const activityName = $('#activityUploadName');
+  const description = $('#activityUploadDescription');
+  const descriptionCount = $('#activityUploadDescriptionCount');
+  const consent = $('#activityUploadConsent');
+  const status = $('#activityUploadStatus');
+  const submit = $('#activityUploadSubmit');
+  if (!lightbox || !dialog || !form || !fileInput || !picker || !previews || !category || !activityName
+    || !description || !descriptionCount || !consent || !status || !submit) return;
+
+  const config = window.DUOJIA_ACTIVITY_UPLOAD_CONFIG || {};
+  const maxFiles = Number(config.maxFiles) || 6;
+  const maxFileSize = (Number(config.maxFileSizeMB) || 10) * 1024 * 1024;
+  const supportedExtensions = /\.(jpe?g|png|webp|heic|heif)$/i;
+  let selectedFiles = [];
+  let previewUrls = [];
+  let opener = null;
+  let submitting = false;
+
+  const setStatus = (message = '', type = '') => {
+    status.textContent = message;
+    status.hidden = !message;
+    status.classList.toggle('is-error', type === 'error');
+    status.classList.toggle('is-success', type === 'success');
+  };
+
+  const isReady = () => Boolean(category.value && selectedFiles.length && consent.checked && !submitting);
+  const updateSubmit = () => {
+    submit.disabled = !isReady();
+    submit.querySelector('span').textContent = submitting ? '正在提交…' : '提交照片';
+  };
+
+  const clearPreviewUrls = () => {
+    previewUrls.forEach(url => URL.revokeObjectURL(url));
+    previewUrls = [];
+  };
+
+  const renderPreviews = () => {
+    clearPreviewUrls();
+    previews.replaceChildren();
+    selectedFiles.forEach((file, index) => {
+      const item = document.createElement('div');
+      const image = document.createElement('img');
+      const remove = document.createElement('button');
+      const url = URL.createObjectURL(file);
+      previewUrls.push(url);
+      item.className = 'activity-upload-preview';
+      image.src = url;
+      image.alt = `待上传照片 ${index + 1}`;
+      remove.type = 'button';
+      remove.textContent = '×';
+      remove.setAttribute('aria-label', `移除照片 ${file.name}`);
+      remove.addEventListener('click', () => {
+        selectedFiles.splice(index, 1);
+        renderPreviews();
+        setStatus('');
+        updateSubmit();
+      });
+      image.addEventListener('error', () => item.classList.add('is-unpreviewable'));
+      item.append(image, remove);
+      previews.append(item);
+    });
+  };
+
+  const addFiles = fileList => {
+    const incoming = Array.from(fileList || []);
+    let invalidCount = 0;
+    let oversizedCount = 0;
+    incoming.forEach(file => {
+      const isImage = file.type.startsWith('image/') || supportedExtensions.test(file.name);
+      if (!isImage) {
+        invalidCount += 1;
+        return;
+      }
+      if (file.size > maxFileSize) {
+        oversizedCount += 1;
+        return;
+      }
+      const duplicate = selectedFiles.some(item => item.name === file.name && item.size === file.size && item.lastModified === file.lastModified);
+      if (!duplicate && selectedFiles.length < maxFiles) selectedFiles.push(file);
+    });
+
+    renderPreviews();
+    updateSubmit();
+    if (oversizedCount) setStatus(`有 ${oversizedCount} 张照片超过 10MB，未加入上传列表。`, 'error');
+    else if (invalidCount) setStatus(`有 ${invalidCount} 个文件不是支持的图片格式，已忽略。`, 'error');
+    else if (incoming.length && selectedFiles.length >= maxFiles) setStatus(`最多可选择 ${maxFiles} 张照片。`);
+    else setStatus('');
+  };
+
+  const resetUpload = () => {
+    submitting = false;
+    selectedFiles = [];
+    clearPreviewUrls();
+    previews.replaceChildren();
+    form.reset();
+    descriptionCount.textContent = '0';
+    setStatus('');
+    updateSubmit();
+  };
+
+  const completeSubmission = message => {
+    selectedFiles = [];
+    clearPreviewUrls();
+    previews.replaceChildren();
+    form.reset();
+    descriptionCount.textContent = '0';
+    setStatus(message, 'success');
+  };
+
+  const openUpload = button => {
+    opener = button;
+    resetUpload();
+    lightbox.hidden = false;
+    document.body.classList.add('activity-upload-open');
+    dialog.scrollTop = 0;
+    $('.activity-upload-close', lightbox)?.focus();
+  };
+
+  const closeUpload = () => {
+    if (lightbox.hidden) return;
+    resetUpload();
+    lightbox.hidden = true;
+    document.body.classList.remove('activity-upload-open');
+    opener?.focus();
+  };
+
+  $$('[data-activity-upload-open]').forEach(button => button.addEventListener('click', () => openUpload(button)));
+  $$('[data-activity-upload-close]', lightbox).forEach(button => button.addEventListener('click', closeUpload));
+  fileInput.addEventListener('change', event => {
+    addFiles(event.target.files);
+    fileInput.value = '';
+  });
+  category.addEventListener('change', updateSubmit);
+  consent.addEventListener('change', updateSubmit);
+  description.addEventListener('input', () => { descriptionCount.textContent = String(description.value.length); });
+
+  ['dragenter', 'dragover'].forEach(type => picker.addEventListener(type, event => {
+    event.preventDefault();
+    picker.classList.add('is-dragging');
+  }));
+  ['dragleave', 'drop'].forEach(type => picker.addEventListener(type, event => {
+    event.preventDefault();
+    picker.classList.remove('is-dragging');
+  }));
+  picker.addEventListener('drop', event => addFiles(event.dataTransfer?.files));
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!category.value) return setStatus('请先选择活动分类。', 'error');
+    if (!selectedFiles.length) return setStatus('请至少选择一张活动照片。', 'error');
+    if (!consent.checked) return setStatus('请确认照片授权说明后再提交。', 'error');
+
+    submitting = true;
+    setStatus('');
+    updateSubmit();
+    const payload = new FormData();
+    payload.append('category', category.value);
+    payload.append('activityName', activityName.value.trim());
+    payload.append('description', description.value.trim());
+    payload.append('consent', 'true');
+    selectedFiles.forEach(file => payload.append('photos', file, file.name));
+
+    try {
+      const endpoint = String(config.endpoint || '').trim();
+      if (endpoint) {
+        const response = await fetch(endpoint, { method: 'POST', body: payload });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        completeSubmission('照片已提交，感谢你一起记录社区的精彩瞬间。');
+      } else if (navigator.share && navigator.canShare?.({ files: selectedFiles })) {
+        const categoryLabel = category.options[category.selectedIndex]?.text || '社区活动';
+        const shareText = [categoryLabel, activityName.value.trim(), description.value.trim()].filter(Boolean).join(' · ');
+        await navigator.share({
+          title: activityName.value.trim() || `${categoryLabel}活动照片`,
+          text: `${shareText}\n自愿投稿至多稼社区活动相册，请工作人员审核。`,
+          files: selectedFiles
+        });
+        completeSubmission('系统分享已完成，请确认照片已发送给社区工作人员。');
+      } else {
+        setStatus('当前浏览器暂不支持照片发送，请使用手机浏览器打开本页后重试。', 'error');
+      }
+    } catch (error) {
+      if (error?.name !== 'AbortError') setStatus('照片提交没有完成，请检查网络后重试。', 'error');
+    } finally {
+      submitting = false;
+      updateSubmit();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !lightbox.hidden) closeUpload();
+  });
+}
+
 function bindEvents() {
+  const newsTrack = $('#homeNewsTrack');
+  const newsMessage = $('#homeNewsMessage');
+  const newsToggle = $('#homeNewsToggle');
+  if (newsTrack && newsMessage && newsToggle) {
+    const copy = newsMessage.cloneNode(true);
+    copy.removeAttribute('id');
+    copy.setAttribute('aria-hidden', 'true');
+    newsTrack.append(copy);
+    newsTrack.classList.add('is-ready');
+    newsToggle.addEventListener('click', () => {
+      const paused = newsToggle.closest('.home-news').classList.toggle('is-paused');
+      newsToggle.setAttribute('aria-pressed', String(paused));
+      newsToggle.setAttribute('aria-label', paused ? '继续社区动态滚动' : '暂停社区动态滚动');
+    });
+  }
   $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
     if (btn.dataset.go === 'map') {
       state.mapReturnView = state.view === 'route' ? 'route' : 'home';
@@ -1716,6 +1932,7 @@ function init() {
   setupGuideGallery();
   setupFeedback();
   setupActivityPage();
+  setupActivityUpload();
   $$('[data-phone-choice-close]').forEach(button => button.addEventListener('click', closePhoneChoices));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closePhoneChoices();

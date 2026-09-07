@@ -2465,6 +2465,7 @@ body.guide-lightbox-open { overflow: hidden; }
   background: rgba(255,255,255,.88);
   box-shadow: var(--shadow-soft);
   font: inherit;
+  text-decoration: none;
   text-align: left;
   cursor: pointer;
   transition: transform .16s ease, box-shadow .16s ease;
@@ -2492,6 +2493,7 @@ body.guide-lightbox-open { overflow: hidden; }
   background: linear-gradient(110deg, rgba(255,255,255,.96), rgba(255,247,232,.96));
 }
 .activity-registration-date { color: #4e8a55; background: #edf7e9; }
+.activity-registration-date strong { font-size: 12px; white-space: nowrap; }
 .activity-registration-status {
   padding: 5px 8px;
   border-radius: 999px;
@@ -2710,6 +2712,41 @@ body.activity-photo-open { overflow: hidden; }
   font-size: 10px;
   line-height: 1.5;
 }
+.activity-upload-kingsoft {
+  display: grid;
+  justify-items: center;
+  gap: 11px;
+}
+.activity-upload-qr-card {
+  width: min(220px, 62vw);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #eee4dc;
+  border-radius: 19px;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(75, 48, 32, .11);
+}
+.activity-upload-qr-card img {
+  display: block;
+  width: 170%;
+  max-width: none;
+  height: auto;
+  transform: translate(-20.5%, -24.5%);
+}
+.activity-upload-guide {
+  display: grid;
+  gap: 3px;
+  color: #816b5e;
+  text-align: center;
+}
+.activity-upload-guide strong {
+  color: #4a352a;
+  font-size: 13px;
+}
+.activity-upload-guide span {
+  font-size: 9px;
+  line-height: 1.5;
+}
 .activity-upload-close {
   display: grid;
   flex: 0 0 auto;
@@ -2877,6 +2914,7 @@ body.activity-photo-open { overflow: hidden; }
   background: linear-gradient(135deg, #f47d3d, #e95425);
   box-shadow: 0 9px 20px rgba(214, 86, 35, .2);
   font: 800 13px/1 var(--font);
+  text-decoration: none;
   cursor: pointer;
 }
 .activity-upload-submit span:last-child { font-size: 20px; }

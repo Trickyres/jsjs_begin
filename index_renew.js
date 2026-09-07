@@ -906,6 +906,34 @@ function setupActivityUpload() {
   const lightbox = $('#activityUploadLightbox');
   const dialog = $('.activity-upload-dialog', lightbox);
   const form = $('#activityUploadForm');
+  if (!lightbox || !dialog) return;
+  if (!form) {
+    const config = window.DUOJIA_ACTIVITY_UPLOAD_CONFIG || {};
+    const formLink = $('#activityUploadLink', lightbox);
+    const qrImage = $('#activityUploadQr', lightbox);
+    if (formLink && config.formUrl) formLink.href = String(config.formUrl);
+    if (qrImage && config.qrImage) qrImage.src = String(config.qrImage);
+    let opener = null;
+    const openUpload = button => {
+      opener = button;
+      lightbox.hidden = false;
+      document.body.classList.add('activity-upload-open');
+      dialog.scrollTop = 0;
+      $('.activity-upload-close', lightbox)?.focus();
+    };
+    const closeUpload = () => {
+      if (lightbox.hidden) return;
+      lightbox.hidden = true;
+      document.body.classList.remove('activity-upload-open');
+      opener?.focus();
+    };
+    $$('[data-activity-upload-open]').forEach(button => button.addEventListener('click', () => openUpload(button)));
+    $$('[data-activity-upload-close]', lightbox).forEach(button => button.addEventListener('click', closeUpload));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !lightbox.hidden) closeUpload();
+    });
+    return;
+  }
   const fileInput = $('#activityUploadFiles');
   const picker = $('#activityUploadPicker');
   const previews = $('#activityUploadPreviews');

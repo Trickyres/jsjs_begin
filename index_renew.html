@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>稼享指南｜多稼十分钟生活圈</title>
-  <link rel="stylesheet" href="index_renew.css">
+  <link rel="stylesheet" href="index_renew.css?v=20260907-registration">
 </head>
 <body>
   <!--
@@ -58,7 +58,7 @@
         </span>
         <div class="home-news-window">
           <!-- 更新动态时只需修改此处文字，JS 会自动生成滚动副本。 -->
-          <div class="home-news-track" id="homeNewsTrack"><span class="home-news-item" id="homeNewsMessage">蓬莱路二小开学啦！</span></div>
+          <div class="home-news-track" id="homeNewsTrack"><span class="home-news-item" id="homeNewsMessage">蓬莱路第二小学开学啦！</span></div>
         </div>
         <button class="home-news-toggle" id="homeNewsToggle" type="button" aria-label="暂停社区动态滚动" aria-pressed="false">
           <svg class="home-news-pause-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="3" height="12" rx="1"/><rect x="12" y="4" width="3" height="12" rx="1"/></svg>
@@ -68,17 +68,16 @@
 
       <section class="activity-section activity-registration home-registration" aria-labelledby="activityRegistrationTitle">
         <div class="activity-section-head">
-          <h3 id="activityRegistrationTitle">近期活动报名</h3>
-          <span>社区活动预告</span>
+          <h3 id="activityRegistrationTitle">活动报名</h3>
+          <span>社区公益活动</span>
         </div>
         <div class="activity-registration-list">
-          <!-- 后续开放报名时，将 data-registration-url 填为实际报名链接，并同步更新活动名称、日期和说明。 -->
-          <button class="activity-video-item activity-registration-item" type="button" data-registration-url="">
-            <span class="activity-video-date activity-registration-date"><strong>近期</strong><small>报名</small></span>
-            <span class="activity-video-copy"><strong>近期活动报名信息即将更新</strong><small>活动时间、地点及报名方式将在此发布</small></span>
-            <span class="activity-registration-status">敬请期待</span>
+          <a class="activity-video-item activity-registration-item" href="https://f.wps.cn/g/C2Ym0gjE" target="_blank" rel="noopener noreferrer" aria-label="报名参加手脑同乐关爱长者公益活动">
+            <span class="activity-video-date activity-registration-date"><strong>9月22日</strong></span>
+            <span class="activity-video-copy"><strong>手脑同乐关爱长者公益活动报名</strong><small>15:00–16:00 · 公益免费 · 社区长者</small></span>
+            <span class="activity-registration-status">立即报名</span>
             <span class="activity-video-arrow" aria-hidden="true">›</span>
-          </button>
+          </a>
         </div>
       </section>
 
@@ -347,20 +346,20 @@
           <span>社区精彩相册</span>
         </div>
         <div class="activity-moments" aria-label="活动相册分类">
-          <button class="activity-moment activity-moment-main" type="button" data-activity-album="neighbor-gathering" aria-label="打开邻里欢聚活动相册">
-            <span>邻里欢聚</span>
+          <button class="activity-moment activity-moment-main" type="button" data-activity-album="community-co-governance" aria-label="打开社区共治活动相册">
+            <span>社区共治</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-album="parent-child-charity" aria-label="打开亲子公益活动相册">
-            <span>亲子公益</span>
+          <button class="activity-moment activity-moment-small activity-moment-green" type="button" data-activity-album="parent-child-vitality" aria-label="打开亲子活力活动相册">
+            <span>亲子活力</span>
           </button>
           <button class="activity-moment activity-moment-small activity-moment-blue" type="button" data-activity-album="riverside-walk" aria-label="打开滨江漫步活动相册">
             <span>滨江漫步</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-album="traditional-culture" aria-label="打开传统文化活动相册">
-            <span>传统文化</span>
+          <button class="activity-moment activity-moment-small activity-moment-gold" type="button" data-activity-album="white-collar-stress-relief" aria-label="打开白领解压活动相册">
+            <span>白领解压</span>
           </button>
-          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-album="community-building" aria-label="打开社区共建活动相册">
-            <span>社区共建</span>
+          <button class="activity-moment activity-moment-small activity-moment-coral" type="button" data-activity-album="golden-years-radiance" aria-label="打开夕照芳华活动相册">
+            <span>夕照芳华</span>
           </button>
         </div>
       </section>
@@ -409,13 +408,13 @@
         </div>
         <div class="activity-contribute-copy">
           <span class="activity-contribute-kicker">居民共创 · 自愿参与</span>
-          <h3 id="activityContributeTitle">把你的活动照片<br>分享给邻里</h3>
-          <p>记录身边的欢聚时刻，经工作人员审核后，有机会收录进社区活动相册。</p>
+          <h3 id="activityContributeTitle">把你的活动精彩瞬间<br>分享给邻里伙伴</h3>
+          <p>通过金山文档提交照片或视频，经工作人员审核后，有机会收录进社区活动相册。</p>
           <button class="activity-contribute-button" type="button" data-activity-upload-open>
-            <span>上传活动照片</span><span aria-hidden="true">›</span>
+            <span>上传活动照片或视频</span><span aria-hidden="true">›</span>
           </button>
         </div>
-        <p class="activity-contribute-note"><span aria-hidden="true">✓</span> 仅用于社区活动展示，上传前请确认已获得照片中人物同意</p>
+        <p class="activity-contribute-note"><span aria-hidden="true">✓</span> 仅用于社区活动展示，上传前请确认已获得影像中人物同意</p>
       </section>
     </section>
 
@@ -479,66 +478,29 @@
   </div>
 
   <div class="activity-upload-lightbox" id="activityUploadLightbox" role="dialog" aria-modal="true" aria-labelledby="activityUploadTitle" hidden>
-    <button class="activity-upload-backdrop" type="button" data-activity-upload-close aria-label="关闭照片上传"></button>
+    <button class="activity-upload-backdrop" type="button" data-activity-upload-close aria-label="关闭活动照片或视频上传"></button>
     <section class="activity-upload-dialog">
       <header class="activity-upload-head">
         <div>
           <small>居民共创 · 自愿参与</small>
-          <h2 id="activityUploadTitle">上传活动照片</h2>
-          <p>照片经工作人员审核后，可能收录进社区活动相册。</p>
+          <h2 id="activityUploadTitle">上传活动照片或视频</h2>
+          <p>把你的活动精彩瞬间分享给邻里伙伴</p>
         </div>
-        <button class="activity-upload-close" type="button" data-activity-upload-close aria-label="关闭照片上传">×</button>
+        <button class="activity-upload-close" type="button" data-activity-upload-close aria-label="关闭活动照片或视频上传">×</button>
       </header>
-
-      <form class="activity-upload-form" id="activityUploadForm" novalidate>
-        <label class="activity-upload-field">
-          <span>活动分类 <em>必填</em></span>
-          <select id="activityUploadCategory" name="category" required>
-            <option value="">请选择活动分类</option>
-            <option value="neighbor-gathering">邻里欢聚</option>
-            <option value="parent-child-charity">亲子公益</option>
-            <option value="riverside-walk">滨江漫步</option>
-            <option value="traditional-culture">传统文化</option>
-            <option value="community-building">社区共建</option>
-            <option value="other">其他活动</option>
-          </select>
-        </label>
-
-        <label class="activity-upload-field">
-          <span>活动名称 <small>选填</small></span>
-          <input id="activityUploadName" name="activityName" type="text" maxlength="40" placeholder="例如：春日滨江漫步">
-        </label>
-
-        <div class="activity-upload-field">
-          <span>选择照片 <em>必填</em><small>最多 6 张，单张不超过 10MB</small></span>
-          <label class="activity-upload-picker" id="activityUploadPicker" for="activityUploadFiles">
-            <input id="activityUploadFiles" name="photos" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple>
-            <span class="activity-upload-picker-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" role="presentation"><path d="M8.2 5.2 9.5 3.5h5l1.3 1.7h2.7A2.5 2.5 0 0 1 21 7.7v9.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5V7.7a2.5 2.5 0 0 1 2.5-2.5h2.7Zm3.8 3a4.3 4.3 0 1 0 0 8.6 4.3 4.3 0 0 0 0-8.6Zm0 2a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6Z"/></svg>
-            </span>
-            <strong>点击选择照片</strong>
-            <small>支持 JPG、PNG、WebP、HEIC</small>
-          </label>
-          <div class="activity-upload-previews" id="activityUploadPreviews" aria-live="polite"></div>
+      <div class="activity-upload-kingsoft">
+        <div class="activity-upload-qr-card">
+          <img id="activityUploadQr" src="assets/activity-upload/kingsoft-photo-video-qr.png" alt="金山文档上传活动照片与视频二维码">
         </div>
-
-        <label class="activity-upload-field">
-          <span>照片说明 <small>选填</small></span>
-          <textarea id="activityUploadDescription" name="description" maxlength="160" rows="3" placeholder="说说活动时间、地点或照片里的温暖瞬间"></textarea>
-          <small class="activity-upload-counter"><span id="activityUploadDescriptionCount">0</span>/160</small>
-        </label>
-
-        <label class="activity-upload-consent">
-          <input id="activityUploadConsent" name="consent" type="checkbox" required>
-          <span>我确认照片为本人自愿上传，已获得照片中人物同意，并同意用于社区公益宣传及活动展示。</span>
-        </label>
-
-        <p class="activity-upload-status" id="activityUploadStatus" role="status" hidden></p>
-        <button class="activity-upload-submit" id="activityUploadSubmit" type="submit" disabled>
-          <span>提交照片</span><span aria-hidden="true">›</span>
-        </button>
-        <p class="activity-upload-privacy">网页不会在本机长期保存所选照片；若出现系统分享面板，请选择社区工作人员作为接收人。</p>
-      </form>
+        <div class="activity-upload-guide">
+          <strong>微信扫码或长按识别</strong>
+          <span>填写金山文档收集表单，即可上传活动照片或视频</span>
+        </div>
+        <a class="activity-upload-submit" id="activityUploadLink" href="https://f.wps.cn/g/hPhzC1Lx" target="_blank" rel="noopener noreferrer">
+          <span>打开金山收集表单</span><span aria-hidden="true">›</span>
+        </a>
+        <p class="activity-upload-privacy">提交内容将进入社区金山文档收集表，请确认已获得影像中人物同意。</p>
+      </div>
     </section>
   </div>
 
@@ -577,7 +539,7 @@
     <figure class="activity-photo-dialog">
       <button class="activity-photo-close" type="button" data-activity-photo-close aria-label="关闭活动照片">×</button>
       <img id="activityPhotoImage" src="assets/routes/binjiang/highlight-photo.webp" alt="活动照片">
-      <figcaption id="activityPhotoTitle">邻里欢聚时刻</figcaption>
+      <figcaption id="activityPhotoTitle">活动精彩瞬间</figcaption>
     </figure>
   </div>
 
@@ -605,9 +567,9 @@
 
   <script src="amap.config.js"></script>
   <script src="points-data.js"></script>
-  <script src="activity-album-files.js"></script>
-  <script src="activity-albums.js"></script>
-  <script src="activity-upload.config.js"></script>
-  <script src="index_renew.js"></script>
+  <script src="activity-album-files.js?v=20260907-albums"></script>
+  <script src="activity-albums.js?v=20260907-albums"></script>
+  <script src="activity-upload.config.js?v=20260907-activity-upload"></script>
+  <script src="index_renew.js?v=20260907-activity-upload"></script>
 </body>
 </html>

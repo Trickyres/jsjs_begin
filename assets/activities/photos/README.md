@@ -2,11 +2,11 @@
 
 请按分类建立以下文件夹并放入照片：
 
-- `neighbor-gathering/`：邻里欢聚
-- `parent-child-charity/`：亲子公益
-- `riverside-walk/`：滨江漫步
-- `traditional-culture/`：传统文化
-- `community-building/`：社区共建
+- `01_community co-governance/`：社区共治
+- `02_golden years radiance/`：夕照芳华
+- `03_parent-child vitality/`：亲子活力
+- `04_white-collar stress relief/`：白领解压
+- `05_riverside-walk/`：滨江漫步
 
 放入或删除照片后，双击项目根目录的：
 

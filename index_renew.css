@@ -2442,12 +2442,12 @@ body.guide-lightbox-open { overflow: hidden; }
 }
 .activity-moment-main {
   grid-row: 1 / 3;
-  background-image: url("assets/routes/binjiang/highlight-photo.webp"), linear-gradient(145deg, #ee9355, #ce6040);
+  background-image: linear-gradient(145deg, #ee9355, #ce6040);
 }
-.activity-moment-green { background-image: url("assets/routes/binjiang/stop-park.webp"), linear-gradient(145deg, #a8c47f, #6e9b6c); }
-.activity-moment-blue { background-image: url("assets/routes/binjiang/highlight-river.webp"), linear-gradient(145deg, #9fcbd2, #587f9a); }
-.activity-moment-gold { background-image: url("assets/routes/binjiang/stop-ferry.webp"), linear-gradient(145deg, #ebbd62, #b47242); }
-.activity-moment-coral { background-image: url("assets/routes/binjiang/hero.webp"), linear-gradient(145deg, #f19a61, #cd5c3c); }
+.activity-moment-green { background-image: linear-gradient(145deg, #a8c47f, #6e9b6c); }
+.activity-moment-blue { background-image: linear-gradient(145deg, #9fcbd2, #587f9a); }
+.activity-moment-gold { background-image: linear-gradient(145deg, #ebbd62, #b47242); }
+.activity-moment-coral { background-image: linear-gradient(145deg, #f19a61, #cd5c3c); }
 
 .activity-video-list { display: grid; gap: 10px; }
 .activity-registration-list { display: grid; gap: 10px; }

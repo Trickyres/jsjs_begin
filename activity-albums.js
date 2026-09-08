@@ -6,6 +6,8 @@ window.ACTIVITY_ALBUMS = {
     title: "社区共治",
     description: "记录居民议事、志愿参与与协商共治的行动瞬间。",
     folder: "assets/activities/photos/01_community co-governance",
+    cover: "清洁家园_01.webp",
+    coverPosition: "50% 55%",
     files: generatedActivityAlbumFiles["community-co-governance"] || [],
     previewPhotos: [
       { src: "assets/routes/binjiang/highlight-photo.webp", alt: "居民参与社区议事活动", caption: "居民共商社区事务" },
@@ -18,6 +20,8 @@ window.ACTIVITY_ALBUMS = {
     title: "亲子活力",
     description: "记录亲子互动、运动体验与共同成长的活力时刻。",
     folder: "assets/activities/photos/03_parent-child vitality",
+    cover: "迎春派对_01.webp",
+    coverPosition: "50% 50%",
     files: generatedActivityAlbumFiles["parent-child-vitality"] || [],
     previewPhotos: [
       { src: "assets/routes/binjiang/stop-park.webp", alt: "亲子家庭参加户外活力活动", caption: "亲子携手出发" },
@@ -41,6 +45,8 @@ window.ACTIVITY_ALBUMS = {
     title: "白领解压",
     description: "在轻松互动与兴趣体验中，为社区白领释放压力、补充能量。",
     folder: "assets/activities/photos/04_white-collar stress relief",
+    cover: "瑜伽解压_05.webp",
+    coverPosition: "50% 70%",
     files: generatedActivityAlbumFiles["white-collar-stress-relief"] || [],
     previewPhotos: [
       { src: "assets/routes/binjiang/stop-ferry.webp", alt: "社区白领参加解压活动", caption: "忙里偷闲放松身心" },
@@ -52,6 +58,8 @@ window.ACTIVITY_ALBUMS = {
     title: "夕照芳华",
     description: "记录长者乐享生活、相互陪伴与绽放风采的温暖时刻。",
     folder: "assets/activities/photos/02_golden years radiance",
+    cover: "春节福_01.webp",
+    coverPosition: "50% 40%",
     files: generatedActivityAlbumFiles["golden-years-radiance"] || [],
     previewPhotos: [
       { src: "assets/routes/binjiang/hero.webp", alt: "社区长者参加集体活动", caption: "乐享温暖社区生活" },

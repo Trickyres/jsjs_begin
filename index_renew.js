@@ -879,6 +879,25 @@ function setupActivityPage() {
   };
 
   $$('[data-activity-album]').forEach(button => {
+    const album = albums[button.dataset.activityAlbum];
+    if (album) {
+      const fallback = getAlbumPhotos(album)[0]?.src;
+      const cover = album.cover
+        ? `${String(album.folder || '').replace(/\/$/, '')}/${album.cover}`
+        : fallback;
+      if (cover) {
+        const image = new Image();
+        image.onload = () => {
+          button.style.backgroundImage = `url(${JSON.stringify(image.src)})`;
+          button.style.backgroundPosition = album.coverPosition || 'center';
+        };
+        image.onerror = () => {
+          image.onerror = null;
+          if (fallback && fallback !== cover) image.src = fallback;
+        };
+        image.src = cover;
+      }
+    }
     button.addEventListener('click', () => openAlbum(button));
   });
 

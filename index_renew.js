@@ -761,6 +761,8 @@ function setupActivityPage() {
 
     videoOpener = button;
     videoTitle.textContent = nextTitle;
+    if (button.dataset.activityPoster) video.poster = button.dataset.activityPoster;
+    else video.removeAttribute('poster');
     video.src = src;
     videoLightbox.hidden = false;
     document.body.classList.add('activity-video-open');

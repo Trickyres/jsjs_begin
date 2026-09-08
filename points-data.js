@@ -425,6 +425,9 @@ window.POINTS_DATA = [
   {
     "id": "penglailu-second-primary-school",
     "name": "蓬莱路第二小学",
+    "image": "assets/points/pllex.webp",
+    "imageAlt": "蓬莱路第二小学实景",
+    "imageCaption": "蓬莱路第二小学 · 多稼路199号",
     "address": "上海市黄浦区多稼路199号",
     "lng": 121.502141,
     "lat": 31.212504,
@@ -453,6 +456,9 @@ window.POINTS_DATA = [
   {
     "id": "dangqunfuwuzhongxin",
     "name": "小东门街道董家渡党群服务中心",
+    "image": "assets/points/xdmdqfw.webp",
+    "imageAlt": "小东门街道董家渡党群服务中心实景",
+    "imageCaption": "小东门街道董家渡党群服务中心 · 青龙桥街66弄6号",
     "address": "上海市黄浦区青龙桥街66弄6号",
     "lng": 121.502427,
     "lat": 31.212966,
@@ -691,6 +697,9 @@ window.POINTS_DATA = [
   {
     "id": "panguoxianhuntun",
     "name": "潘国仙耳光馄饨",
+    "image": "assets/points/eght.webp",
+    "imageAlt": "潘国仙耳光馄饨门店实景",
+    "imageCaption": "潘国仙耳光馄饨 · 薛家浜路236号",
     "address": "上海市黄浦区薛家浜路236号",
     "lng": 121.502069,
     "lat": 31.210994,

@@ -903,14 +903,15 @@ function setupActivityPage() {
     button.addEventListener('click', () => openAlbum(button));
   });
 
-  $$('[data-activity-photo]').forEach(button => {
-    button.addEventListener('click', () => {
-      openPhoto({
-        src: button.dataset.activityPhoto,
-        alt: button.dataset.activityPhotoTitle,
-        caption: button.dataset.activityPhotoTitle
-      }, button);
-    });
+  // 点位卡片会随地图选择重新渲染，统一代理点击以支持动态照片。
+  document.addEventListener('click', event => {
+    const button = event.target.closest('[data-activity-photo]');
+    if (!button || button.disabled) return;
+    openPhoto({
+      src: button.dataset.activityPhoto,
+      alt: button.dataset.activityPhotoAlt || button.dataset.activityPhotoTitle,
+      caption: button.dataset.activityPhotoTitle
+    }, button);
   });
 
   $$('[data-activity-album-close]', albumLightbox).forEach(button => button.addEventListener('click', closeAlbum));
@@ -1910,6 +1911,7 @@ sheet.innerHTML = `
     ${point.image ? `
       <figure class="map-place-photo">
         <img src="${point.image}" alt="${point.imageAlt || point.name}">
+        <button class="map-place-photo-zoom" type="button"></button>
         <div class="map-place-photo-fallback" hidden>
           <span aria-hidden="true">▣</span>
           <strong>${point.name}</strong>
@@ -1942,10 +1944,19 @@ const navButton = sheet.querySelector("#navBtn");
 const detailsButton = sheet.querySelector("#detailsBtn");
 const detailExtra = sheet.querySelector("#sheetDetailExtra");
 const placePhoto = sheet.querySelector(".map-place-photo img");
+const photoZoom = sheet.querySelector(".map-place-photo-zoom");
+
+if (photoZoom) {
+  photoZoom.setAttribute('aria-label', `放大查看${point.name}照片`);
+  photoZoom.dataset.activityPhoto = point.image;
+  photoZoom.dataset.activityPhotoAlt = point.imageAlt || point.name;
+  photoZoom.dataset.activityPhotoTitle = point.imageCaption || point.name;
+}
 
 if (placePhoto) {
   placePhoto.addEventListener("error", () => {
     placePhoto.hidden = true;
+    if (photoZoom) photoZoom.disabled = true;
     const fallback = sheet.querySelector(".map-place-photo-fallback");
     if (fallback) fallback.hidden = false;
   });

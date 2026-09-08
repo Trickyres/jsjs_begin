@@ -2324,7 +2324,7 @@ body.guide-lightbox-open { overflow: hidden; }
   background-image:
     linear-gradient(0deg, rgba(24, 39, 48, .78) 0%, rgba(24, 39, 48, .06) 62%),
     linear-gradient(180deg, rgba(150, 199, 205, .05), rgba(103, 143, 104, .22)),
-    url("assets/routes/binjiang/hero.jpg"),
+    url("assets/activities/sports-meet-poster.webp"),
     linear-gradient(145deg, #8ebbc8 0 52%, #88a976 53% 70%, #d3ad75 71%);
   background-size: cover;
   background-position: center, center, center 58%, center;
@@ -2471,6 +2471,44 @@ body.guide-lightbox-open { overflow: hidden; }
   transition: transform .16s ease, box-shadow .16s ease;
 }
 .activity-video-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.activity-history .activity-video-item {
+  grid-template-columns: 88px minmax(0, 1fr) 16px;
+  min-height: 70px;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: linear-gradient(110deg, #fff, #fff9f2);
+  box-shadow: 0 3px 12px rgba(76, 62, 46, .05);
+}
+.activity-history-thumb {
+  position: relative;
+  display: block;
+  width: 88px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #eee4d8;
+}
+.activity-history-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.activity-history-thumb > span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding-left: 2px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(32,27,22,.5);
+  font-size: 10px;
+}
+.activity-history .activity-video-copy strong { white-space: normal; line-height: 1.4; }
+.activity-history .activity-video-copy small { margin-top: 3px; font-size: 10px; }
+.activity-history .activity-video-item:focus-visible { outline: 3px solid #e77c43; outline-offset: 3px; }
 .activity-video-date {
   display: grid;
   place-items: center;

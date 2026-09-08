@@ -879,6 +879,25 @@ function setupActivityPage() {
   };
 
   $$('[data-activity-album]').forEach(button => {
+    const album = albums[button.dataset.activityAlbum];
+    if (album) {
+      const fallback = getAlbumPhotos(album)[0]?.src;
+      const cover = album.cover
+        ? `${String(album.folder || '').replace(/\/$/, '')}/${album.cover}`
+        : fallback;
+      if (cover) {
+        const image = new Image();
+        image.onload = () => {
+          button.style.backgroundImage = `url(${JSON.stringify(image.src)})`;
+          button.style.backgroundPosition = album.coverPosition || 'center';
+        };
+        image.onerror = () => {
+          image.onerror = null;
+          if (fallback && fallback !== cover) image.src = fallback;
+        };
+        image.src = cover;
+      }
+    }
     button.addEventListener('click', () => openAlbum(button));
   });
 
@@ -906,6 +925,34 @@ function setupActivityUpload() {
   const lightbox = $('#activityUploadLightbox');
   const dialog = $('.activity-upload-dialog', lightbox);
   const form = $('#activityUploadForm');
+  if (!lightbox || !dialog) return;
+  if (!form) {
+    const config = window.DUOJIA_ACTIVITY_UPLOAD_CONFIG || {};
+    const formLink = $('#activityUploadLink', lightbox);
+    const qrImage = $('#activityUploadQr', lightbox);
+    if (formLink && config.formUrl) formLink.href = String(config.formUrl);
+    if (qrImage && config.qrImage) qrImage.src = String(config.qrImage);
+    let opener = null;
+    const openUpload = button => {
+      opener = button;
+      lightbox.hidden = false;
+      document.body.classList.add('activity-upload-open');
+      dialog.scrollTop = 0;
+      $('.activity-upload-close', lightbox)?.focus();
+    };
+    const closeUpload = () => {
+      if (lightbox.hidden) return;
+      lightbox.hidden = true;
+      document.body.classList.remove('activity-upload-open');
+      opener?.focus();
+    };
+    $$('[data-activity-upload-open]').forEach(button => button.addEventListener('click', () => openUpload(button)));
+    $$('[data-activity-upload-close]', lightbox).forEach(button => button.addEventListener('click', closeUpload));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !lightbox.hidden) closeUpload();
+    });
+    return;
+  }
   const fileInput = $('#activityUploadFiles');
   const picker = $('#activityUploadPicker');
   const previews = $('#activityUploadPreviews');

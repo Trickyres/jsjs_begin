@@ -9,11 +9,11 @@ $photosRoot = Join-Path $projectRoot "assets\activities\photos"
 $outputPath = Join-Path $projectRoot "activity-album-files.js"
 
 $albumFolders = [ordered]@{
-  "neighbor-gathering" = "Neighbor gathering"
-  "parent-child-charity" = "Parent-child charity"
-  "riverside-walk" = "Riverside walk"
-  "traditional-culture" = "Traditional culture"
-  "community-building" = "Community building"
+  "community-co-governance" = "01_community co-governance"
+  "golden-years-radiance" = "02_golden years radiance"
+  "parent-child-vitality" = "03_parent-child vitality"
+  "white-collar-stress-relief" = "04_white-collar stress relief"
+  "riverside-walk" = "05_riverside-walk"
 }
 
 $supportedExtensions = @(
@@ -29,7 +29,7 @@ $albumFiles = [ordered]@{}
 $totalCount = 0
 
 foreach ($album in $albumFolders.GetEnumerator()) {
-  $folderPath = Join-Path $photosRoot $album.Key
+  $folderPath = Join-Path $photosRoot $album.Value
   if (-not (Test-Path -LiteralPath $folderPath)) {
     New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
   }

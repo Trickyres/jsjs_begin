@@ -2,33 +2,37 @@
 // 正式照片文件名由 update-activity-albums.cmd 扫描生成到 activity-album-files.js。
 const generatedActivityAlbumFiles = window.ACTIVITY_ALBUM_FILES || {};
 window.ACTIVITY_ALBUMS = {
-  "neighbor-gathering": {
-    title: "邻里欢聚",
-    description: "记录邻里相识、相聚与彼此陪伴的温暖时刻。",
-    folder: "assets/activities/photos/neighbor-gathering",
-    files: generatedActivityAlbumFiles["neighbor-gathering"] || [],
+  "community-co-governance": {
+    title: "社区共治",
+    description: "记录居民议事、志愿参与与协商共治的行动瞬间。",
+    folder: "assets/activities/photos/01_community co-governance",
+    cover: "清洁家园_01.webp",
+    coverPosition: "50% 55%",
+    files: generatedActivityAlbumFiles["community-co-governance"] || [],
     previewPhotos: [
-      { src: "assets/routes/binjiang/highlight-photo.webp", alt: "居民在社区活动中欢聚", caption: "邻里欢聚时刻" },
-      { src: "assets/routes/binjiang/stop-park.webp", alt: "居民在社区公园交流", caption: "公园里的邻里时光" },
-      { src: "assets/routes/binjiang/highlight-night.webp", alt: "社区夜间活动", caption: "夜色中的社区相聚" },
-      { src: "assets/routes/binjiang/hero.webp", alt: "社区居民共同参与活动", caption: "一起留下社区记忆" }
+      { src: "assets/routes/binjiang/highlight-photo.webp", alt: "居民参与社区议事活动", caption: "居民共商社区事务" },
+      { src: "assets/routes/binjiang/stop-park.webp", alt: "居民参与社区志愿活动", caption: "志愿行动在身边" },
+      { src: "assets/routes/binjiang/highlight-night.webp", alt: "社区夜间共治活动", caption: "多方携手参与共治" },
+      { src: "assets/routes/binjiang/hero.webp", alt: "居民共同参与社区建设", caption: "一起建设美好家园" }
     ]
   },
-  "parent-child-charity": {
-    title: "亲子公益",
-    description: "在共同参与中学习关爱、分享与责任。",
-    folder: "assets/activities/photos/parent-child-charity",
-    files: generatedActivityAlbumFiles["parent-child-charity"] || [],
+  "parent-child-vitality": {
+    title: "亲子活力",
+    description: "记录亲子互动、运动体验与共同成长的活力时刻。",
+    folder: "assets/activities/photos/03_parent-child vitality",
+    cover: "迎春派对_01.webp",
+    coverPosition: "50% 50%",
+    files: generatedActivityAlbumFiles["parent-child-vitality"] || [],
     previewPhotos: [
-      { src: "assets/routes/binjiang/stop-park.webp", alt: "亲子家庭参加户外公益活动", caption: "亲子携手参与" },
-      { src: "assets/routes/binjiang/stop-walkway.webp", alt: "亲子家庭沿步道开展活动", caption: "边走边学的公益课堂" },
+      { src: "assets/routes/binjiang/stop-park.webp", alt: "亲子家庭参加户外活力活动", caption: "亲子携手出发" },
+      { src: "assets/routes/binjiang/stop-walkway.webp", alt: "亲子家庭沿步道开展活动", caption: "活力满满的亲子时光" },
       { src: "assets/routes/binjiang/highlight-photo.webp", alt: "亲子家庭合影", caption: "共同成长的纪念" }
     ]
   },
   "riverside-walk": {
     title: "滨江漫步",
     description: "沿着黄浦江畔，在行走中感受健康与社区活力。",
-    folder: "assets/activities/photos/riverside-walk",
+    folder: "assets/activities/photos/05_riverside-walk",
     files: generatedActivityAlbumFiles["riverside-walk"] || [],
     previewPhotos: [
       { src: "assets/routes/binjiang/highlight-river.webp", alt: "黄浦滨江漫步活动", caption: "迎着江风出发" },
@@ -37,27 +41,31 @@ window.ACTIVITY_ALBUMS = {
       { src: "assets/routes/binjiang/highlight-night.webp", alt: "滨江夜间健步", caption: "华灯初上的滨江" }
     ]
   },
-  "traditional-culture": {
-    title: "传统文化",
-    description: "在节庆、手作与故事里延续社区文化记忆。",
-    folder: "assets/activities/photos/traditional-culture",
-    files: generatedActivityAlbumFiles["traditional-culture"] || [],
+  "white-collar-stress-relief": {
+    title: "白领解压",
+    description: "在轻松互动与兴趣体验中，为社区白领释放压力、补充能量。",
+    folder: "assets/activities/photos/04_white-collar stress relief",
+    cover: "瑜伽解压_05.webp",
+    coverPosition: "50% 70%",
+    files: generatedActivityAlbumFiles["white-collar-stress-relief"] || [],
     previewPhotos: [
-      { src: "assets/routes/binjiang/stop-ferry.webp", alt: "与渡口历史有关的文化活动", caption: "城市记忆分享" },
-      { src: "assets/routes/binjiang/stop-ferry_01.webp", alt: "社区传统文化参访", caption: "寻访老城故事" },
-      { src: "assets/routes/binjiang/highlight-photo.webp", alt: "居民参加传统文化活动", caption: "邻里共度传统佳节" }
+      { src: "assets/routes/binjiang/stop-ferry.webp", alt: "社区白领参加解压活动", caption: "忙里偷闲放松身心" },
+      { src: "assets/routes/binjiang/stop-ferry_01.webp", alt: "白领参与社区兴趣体验", caption: "兴趣体验补充能量" },
+      { src: "assets/routes/binjiang/highlight-photo.webp", alt: "白领参加轻松互动活动", caption: "轻松相聚释放压力" }
     ]
   },
-  "community-building": {
-    title: "社区共建",
-    description: "居民、社区与共建单位一起，让家园变得更美好。",
-    folder: "assets/activities/photos/community-building",
-    files: generatedActivityAlbumFiles["community-building"] || [],
+  "golden-years-radiance": {
+    title: "夕照芳华",
+    description: "记录长者乐享生活、相互陪伴与绽放风采的温暖时刻。",
+    folder: "assets/activities/photos/02_golden years radiance",
+    cover: "春节福_01.webp",
+    coverPosition: "50% 40%",
+    files: generatedActivityAlbumFiles["golden-years-radiance"] || [],
     previewPhotos: [
-      { src: "assets/routes/binjiang/hero.webp", alt: "社区共建活动现场", caption: "共建美好家园" },
-      { src: "assets/routes/binjiang/stop-platform.webp", alt: "居民参与公共空间共建", caption: "一起关注公共空间" },
-      { src: "assets/routes/binjiang/stop-park.webp", alt: "社区志愿服务活动", caption: "志愿服务在身边" },
-      { src: "assets/routes/binjiang/highlight-river.webp", alt: "滨江社区共建活动", caption: "连接社区与滨江" }
+      { src: "assets/routes/binjiang/hero.webp", alt: "社区长者参加集体活动", caption: "乐享温暖社区生活" },
+      { src: "assets/routes/binjiang/stop-platform.webp", alt: "长者在户外交流互动", caption: "相聚相伴的好时光" },
+      { src: "assets/routes/binjiang/stop-park.webp", alt: "长者参加社区休闲活动", caption: "夕阳正好芳华依旧" },
+      { src: "assets/routes/binjiang/highlight-river.webp", alt: "长者参与滨江社区活动", caption: "记录幸福晚年时刻" }
     ]
   }
 };

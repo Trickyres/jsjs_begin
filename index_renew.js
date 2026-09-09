@@ -731,7 +731,7 @@ function setupActivityPage() {
     const src = button.dataset.activityVideo;
     const nextTitle = button.dataset.activityTitle || '多稼社区活动回顾';
     if (!src) {
-      if (button.hasAttribute('data-route-video')) showToast('滨江散步路线视频即将上线，敬请期待。');
+      showToast('视频暂时无法播放，请稍后重试。');
       return;
     }
 
@@ -746,16 +746,6 @@ function setupActivityPage() {
     const playRequest = video.play();
     if (playRequest) playRequest.catch(() => showToast('如未自动播放，请点击播放器中的播放按钮。'));
   };
-
-  // 收到滨江散步路线视频链接后，只需填写此处；入口会自动切换为可播放状态。
-  const binjiangRouteVideoUrl = '';
-  $$('[data-route-video]').forEach(button => {
-    button.dataset.activityVideo = binjiangRouteVideoUrl;
-    if (binjiangRouteVideoUrl) {
-      button.setAttribute('aria-label', '播放滨江散步路线视频');
-      button.querySelector('[data-route-video-status]').textContent = '观看路线视频';
-    }
-  });
 
   $$('[data-activity-video]').forEach(button => {
     button.addEventListener('click', () => playActivityVideo(button));

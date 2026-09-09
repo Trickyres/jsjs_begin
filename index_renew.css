@@ -451,6 +451,8 @@ class = 'view active' 这说明这个 HTML 元素有两个 class 名 view 和 ac
   cursor: pointer;
   color: var(--text);
   scroll-snap-align: start;
+  border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
 }
 .quick-icon {
   width: min(58px, 100%);
@@ -463,12 +465,35 @@ class = 'view active' 这说明这个 HTML 元素有两个 class 名 view 和 ac
   color: #fff;
   font-size: 25px;
   box-shadow: 0 10px 18px rgba(113, 68, 31, .12);
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
 }
 .quick-label {
   display: block;
   font-size: clamp(11px, 3vw, 13px);
   font-weight: 700;
   white-space: nowrap;
+  transition: color .12s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quick-item:hover .quick-icon {
+    transform: translateY(-3px);
+    filter: brightness(1.08);
+    box-shadow: 0 13px 22px rgba(113, 68, 31, .22);
+  }
+  .quick-item:hover .quick-label { color: #c95120; }
+}
+.quick-item:focus-visible { outline: 3px solid #ed8d50; outline-offset: 5px; }
+.quick-item:active .quick-icon {
+  transform: translateY(2px) scale(.92);
+  filter: brightness(.86) saturate(1.12);
+  box-shadow: 0 3px 7px rgba(113, 68, 31, .18);
+  transition-duration: .06s;
+}
+.quick-item:active .quick-label { color: #bc471b; }
+@media (prefers-reduced-motion: reduce) {
+  .quick-item .quick-icon, .quick-item .quick-label { transition: none; }
+  .quick-item:hover .quick-icon, .quick-item:active .quick-icon { transform: none; }
 }
 
 .section-head {
@@ -2463,6 +2488,42 @@ body.guide-lightbox-open { overflow: hidden; }
 .activity-moment-gold { background-image: linear-gradient(145deg, #ebbd62, #b47242); }
 .activity-moment-coral { background-image: linear-gradient(145deg, #f19a61, #cd5c3c); }
 
+.route-video-entry {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 12px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid #e5e9dc;
+  border-radius: 20px;
+  background: linear-gradient(110deg, #f4f8ee, #fffaf1);
+  color: #384b3a;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.route-video-entry:hover { border-color: #9bb694; }
+.route-video-entry:focus-visible { outline: 3px solid #65916c; outline-offset: 3px; }
+.route-video-thumb { position: relative; overflow: hidden; border-radius: 13px; height: 94px; }
+.route-video-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.route-video-play {
+  position: absolute; inset: 0; margin: auto; display: grid; place-items: center;
+  width: 34px; height: 34px; padding-left: 2px; border-radius: 50%;
+  background: rgba(255,255,255,.93); color: #528269; font-size: 14px;
+}
+.route-video-copy { display: grid; justify-items: start; gap: 4px; min-width: 0; }
+.route-video-kicker { color: #69836a; font-size: 10px; }
+.route-video-copy strong { font-size: 15px; line-height: 1.4; }
+.route-video-description { color: #7a8272; font-size: 11px; line-height: 1.4; }
+.route-video-status { margin-top: 2px; padding: 3px 8px; border-radius: 999px; background: #e5eedf; color: #577153; font-size: 10px; }
+.route-video-arrow { color: #8a9b82; font-size: 22px; }
+@media (max-width: 374px) {
+  .route-video-entry { grid-template-columns: 88px minmax(0, 1fr) 10px; gap: 9px; padding: 10px; }
+  .route-video-copy strong { font-size: 14px; }
+}
+
 .activity-video-list { display: grid; gap: 10px; }
 .activity-registration-list { display: grid; gap: 10px; }
 .activity-video-item {
@@ -2674,6 +2735,7 @@ body.guide-lightbox-open { overflow: hidden; }
   line-height: 1.55;
 }
 .activity-contribute-button {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 18px;

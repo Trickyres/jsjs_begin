@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>稼享指南｜多稼十分钟生活圈</title>
-  <link rel="stylesheet" href="index_renew.css?v=20260908-point-photo-zoom">
+  <link rel="stylesheet" href="index_renew.css?v=20260909-quick-feedback">
 </head>
 <body>
   <!--
@@ -116,12 +116,12 @@
           <span>共建美好社区</span>
         </div>
         <div class="activity-registration-list">
-          <button class="activity-video-item activity-registration-item activity-feedback-item" type="button" data-feedback-open aria-label="打开意见反馈二维码">
+          <a class="activity-video-item activity-registration-item activity-feedback-item" href="https://f.wps.cn/g/WKjzvgpn" target="_blank" rel="noopener noreferrer" aria-label="填写意见反馈表">
             <span class="activity-video-date activity-feedback-date"><strong>意见</strong><small>反馈</small></span>
             <span class="activity-video-copy"><strong>告诉我们您的意见和建议</strong><small>点位补充、信息纠错及网页使用问题</small></span>
-            <span class="activity-registration-status">扫码填写</span>
+            <span class="activity-registration-status">填写反馈</span>
             <span class="activity-video-arrow" aria-hidden="true">›</span>
-          </button>
+          </a>
         </div>
       </section>
 
@@ -257,6 +257,20 @@
           <article class="route-highlight"><button class="route-highlight-photo night-view" type="button" aria-label="放大查看滨江夜景照片" data-activity-photo="assets/routes/binjiang/highlight-night.webp" data-activity-photo-title="夜景迷人"></button><h4>夜景迷人</h4><p>夜晚灯光璀璨，散步氛围舒适惬意。</p></article>
         </div>
       </section>
+
+      <button class="route-video-entry" type="button" data-route-video data-activity-video="" data-activity-title="滨江散步路线" data-activity-poster="assets/routes/binjiang/highlight-river.webp" aria-label="滨江散步路线视频，即将上线">
+        <span class="route-video-thumb" aria-hidden="true">
+          <img src="assets/routes/binjiang/highlight-river.webp" alt="" loading="lazy">
+          <span class="route-video-play">▶</span>
+        </span>
+        <span class="route-video-copy">
+          <span class="route-video-kicker">跟着镜头逛滨江</span>
+          <strong>滨江散步路线视频</strong>
+          <span class="route-video-description">先看看沿途风景，再出发</span>
+          <span class="route-video-status" data-route-video-status>视频即将上线</span>
+        </span>
+        <span class="route-video-arrow" aria-hidden="true">›</span>
+      </button>
 
       <aside class="route-tips" aria-label="温馨提示">
         <div class="route-tip-title"><span>💡</span><strong>温馨提示</strong></div>
@@ -412,9 +426,9 @@
           <span class="activity-contribute-kicker">居民共创 · 自愿参与</span>
           <h3 id="activityContributeTitle">把你的活动精彩瞬间<br>分享给邻里伙伴</h3>
           <p>通过金山文档提交照片或视频，经工作人员审核后，有机会收录进社区活动相册。</p>
-          <button class="activity-contribute-button" type="button" data-activity-upload-open>
+          <a class="activity-contribute-button" data-activity-upload-link href="https://f.wps.cn/g/hPhzC1Lx" target="_blank" rel="noopener noreferrer" aria-label="打开活动照片或视频收集表">
             <span>上传活动照片或视频</span><span aria-hidden="true">›</span>
-          </button>
+          </a>
         </div>
         <p class="activity-contribute-note"><span aria-hidden="true">✓</span> 仅用于社区活动展示，上传前请确认已获得影像中人物同意</p>
       </section>
@@ -456,55 +470,7 @@
     </section>
   </div>
 
-  <div class="feedback-lightbox" id="feedbackLightbox" role="dialog" aria-modal="true" aria-labelledby="feedbackDialogTitle" hidden>
-    <button class="feedback-backdrop" type="button" data-feedback-close aria-label="关闭意见反馈"></button>
-    <section class="feedback-dialog">
-      <header class="feedback-dialog-head">
-        <div>
-          <small>COMMUNITY FEEDBACK</small>
-          <h2 id="feedbackDialogTitle">意见反馈</h2>
-          <p>请使用微信或相机扫描下方二维码，提交问题和建议。</p>
-        </div>
-        <button class="feedback-dialog-close" type="button" data-feedback-close aria-label="关闭意见反馈">×</button>
-      </header>
-      <div class="feedback-qr-grid">
-        <article class="feedback-channel">
-          <div class="feedback-qr-frame">
-            <img src="assets/feedback/kingsoft-feedback-qr.png" alt="金山文档意见反馈二维码">
-          </div>
-          <strong>金山文档反馈表</strong>
-          <small>微信或相机扫码填写</small>
-        </article>
-      </div>
-    </section>
-  </div>
 
-  <div class="activity-upload-lightbox" id="activityUploadLightbox" role="dialog" aria-modal="true" aria-labelledby="activityUploadTitle" hidden>
-    <button class="activity-upload-backdrop" type="button" data-activity-upload-close aria-label="关闭活动照片或视频上传"></button>
-    <section class="activity-upload-dialog">
-      <header class="activity-upload-head">
-        <div>
-          <small>居民共创 · 自愿参与</small>
-          <h2 id="activityUploadTitle">上传活动照片或视频</h2>
-          <p>把你的活动精彩瞬间分享给邻里伙伴</p>
-        </div>
-        <button class="activity-upload-close" type="button" data-activity-upload-close aria-label="关闭活动照片或视频上传">×</button>
-      </header>
-      <div class="activity-upload-kingsoft">
-        <div class="activity-upload-qr-card">
-          <img id="activityUploadQr" src="assets/activity-upload/kingsoft-photo-video-qr.png" alt="金山文档上传活动照片与视频二维码">
-        </div>
-        <div class="activity-upload-guide">
-          <strong>微信扫码或长按识别</strong>
-          <span>填写金山文档收集表单，即可上传活动照片或视频</span>
-        </div>
-        <a class="activity-upload-submit" id="activityUploadLink" href="https://f.wps.cn/g/hPhzC1Lx" target="_blank" rel="noopener noreferrer">
-          <span>打开金山收集表单</span><span aria-hidden="true">›</span>
-        </a>
-        <p class="activity-upload-privacy">提交内容将进入社区金山文档收集表，请确认已获得影像中人物同意。</p>
-      </div>
-    </section>
-  </div>
 
   <div class="activity-video-lightbox" id="activityVideoLightbox" role="dialog" aria-modal="true" aria-labelledby="activityVideoTitle" hidden>
     <button class="activity-video-backdrop" type="button" data-activity-video-close aria-label="关闭活动视频"></button>
@@ -572,6 +538,6 @@
   <script src="activity-album-files.js?v=20260907-albums"></script>
   <script src="activity-albums.js?v=20260908-album-covers"></script>
   <script src="activity-upload.config.js?v=20260907-activity-upload"></script>
-  <script src="index_renew.js?v=20260908-point-photo-zoom"></script>
+  <script src="index_renew.js?v=20260909-upload-direct"></script>
 </body>
 </html>

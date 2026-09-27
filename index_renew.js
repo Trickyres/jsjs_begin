@@ -909,6 +909,59 @@ function setupActivityUpload() {
   }
 }
 
+function setupHomeRegistration() {
+  const section = $('.home-registration');
+  const list = section?.querySelector('.activity-registration-list');
+  if (!list) return;
+  const emptyState = list.querySelector('.activity-registration-empty');
+
+  let expiryTimer;
+  const closingTime = item => {
+    const value = item.dataset.registrationCloses || '';
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+08:00$/.test(value)) return NaN;
+    return Date.parse(value);
+  };
+  const refresh = () => {
+    clearTimeout(expiryTimer);
+    const now = Date.now();
+    let nextClose = Infinity;
+    let lastClosed = -Infinity;
+    list.querySelectorAll('a.activity-registration-item').forEach(item => {
+      const closesAt = closingTime(item);
+      if (!Number.isFinite(closesAt) || closesAt <= now) {
+        if (Number.isFinite(closesAt)) lastClosed = Math.max(lastClosed, closesAt);
+        item.remove();
+      } else nextClose = Math.min(nextClose, closesAt);
+    });
+    if (lastClosed > -Infinity) {
+      const month = new Date(lastClosed + 8 * 60 * 60 * 1000).getUTCMonth() + 1;
+      const monthLabel = emptyState?.querySelector('[data-registration-empty-month]');
+      const message = emptyState?.querySelector('[data-registration-empty-message]');
+      if (monthLabel) monthLabel.textContent = `${month}月`;
+      if (message) message.textContent = `${month}月活动报名已结束，后续敬请期待。`;
+    }
+    if (emptyState) emptyState.hidden = !!list.querySelector('a.activity-registration-item');
+    if (nextClose < Infinity) {
+      expiryTimer = setTimeout(refresh, Math.min(nextClose - now, 2147483647));
+    }
+  };
+
+  // 浏览器暂停后台计时器时，恢复页面后再核对一次截止时间。
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refresh();
+  });
+  window.addEventListener('pageshow', refresh);
+  list.addEventListener('click', event => {
+    const item = event.target.closest('a.activity-registration-item');
+    const closesAt = item && closingTime(item);
+    if (item && (!Number.isFinite(closesAt) || closesAt <= Date.now())) {
+      event.preventDefault();
+      refresh();
+    }
+  });
+  refresh();
+}
+
 
 function bindEvents() {
   const newsTrack = $('#homeNewsTrack');
@@ -1045,6 +1098,9 @@ const sourcePoint = {
 };
 if (Array.isArray(point.locations)) sourcePoint.locations = point.locations;
 if (point.isNew) sourcePoint.isNew = true;
+for (const key of ['description', 'image', 'imageAlt', 'imageCaption', 'imageCredit', 'imageSource', 'imageLicense', 'imageLicenseUrl']) {
+  if (point[key] != null) sourcePoint[key] = point[key];
+}
 return `      ${JSON.stringify(sourcePoint)}`;
   }
 
@@ -1684,6 +1740,7 @@ sheet.innerHTML = `
       </div>
       ${point.description ? `<p class="sheet-description">${point.description}</p>` : ''}
       <p class="sheet-address"><span aria-hidden="true">⌖</span> ${point.address || "暂无详细地址，可后续补充。"}</p>
+      ${point.imageCredit ? `<p class="map-photo-credit">照片：<a href="${point.imageSource}" target="_blank" rel="noopener noreferrer">${point.imageCredit}</a> · <a href="${point.imageLicenseUrl}" target="_blank" rel="noopener noreferrer">${point.imageLicense}</a> · 已缩放</p>` : ''}
       <div class="map-sheet-compact-actions">
         <button class="sheet-details-btn" id="detailsBtn" type="button" aria-expanded="false">查看详情 <span aria-hidden="true">›</span></button>
         <button class="btn btn-primary" id="navBtn"><span aria-hidden="true">➤</span> 一键导航</button>
@@ -1748,6 +1805,7 @@ function init() {
   setupGuideGallery();
   setupActivityPage();
   setupActivityUpload();
+  setupHomeRegistration();
   $$('[data-phone-choice-close]').forEach(button => button.addEventListener('click', closePhoneChoices));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closePhoneChoices();

@@ -93,17 +93,34 @@ const AMAP_FALLBACK_CENTER = [121.5004, 31.2111];
 const AMAP_GEOCODE_STORAGE_KEY = 'jiaxiang-amap-geocodes-v3';
 const AMAP_LOADER_URL = 'https://webapi.amap.com/loader.js';
 const BINJIANG_ROUTE_MODE = 'binjiang-route';
+const BINJIANG_ROUTE_COLOR = '#64ac5e';
 const BINJIANG_ROUTE_POINT_IDS = [
   'huangpu-riverside',
   'dongjiadu-flower-bridge',
   'dongjiadu-road-ferry',
   'ferry-space'
 ];
+// 北段沿江边步道经过花桥东侧；2 号点以示意虚线接入，不让主线折回内侧。
+const BINJIANG_WATERFRONT_PATH = [
+  [121.50782, 31.21637],
+  [121.50793, 31.21576],
+  [121.50808, 31.21472],
+  [121.50814, 31.21385],
+  [121.50799, 31.21291],
+  [121.50755, 31.21203]
+];
+const BINJIANG_FLOWER_BRIDGE_SPUR = [
+  [121.5070, 31.21389],
+  BINJIANG_WATERFRONT_PATH[3]
+];
 const amapRuntime = {
   api: null,
   map: null,
   markers: new Map(),
   routeLine: null,
+  routeSpur: [],
+  routeRequestId: 0,
+  routePath: null,
   loadPromise: null,
   coordinatesReady: false,
   fallbackCount: 0
@@ -1007,7 +1024,7 @@ function bindEvents() {
   });
   $('#mapTipBtn').addEventListener('click', () => showToast(
     state.mapMode === BINJIANG_ROUTE_MODE
-      ? '当前显示滨江散步路线及沿途 4 个点位。'
+      ? '绿色实线沿江边走，2 号点旁的圆点为前往花桥的连接方向示意；请以现场通行为准。'
       : `当前为真实高德地图，共载入 ${POINTS.length} 个社区点位；可按上方分类筛选。`
   ));
   $('#listTipBtn').addEventListener('click', () => showToast('列表支持分类筛选和关键词搜索。后续可接入真实点位库或后台管理。'));
@@ -1362,7 +1379,7 @@ function loadAmapApi() {
     .then(loader => loader.load({
       key: config.key,
       version: '2.0',
-      plugins: ['AMap.Geocoder']
+      plugins: ['AMap.Geocoder', 'AMap.Walking']
     }))
     .then(AMap => {
       amapRuntime.api = AMap;
@@ -1531,41 +1548,139 @@ function renderAmapMarkers() {
   updateAmapMarkerSelection();
 }
 
-function renderAmapRoute() {
+function drawAmapRoute(path, isWalkingRoute = true) {
+  if (!amapRuntime.map || !amapRuntime.api || path.length < 2) return;
   if (amapRuntime.routeLine) {
     amapRuntime.routeLine.setMap(null);
     amapRuntime.routeLine = null;
   }
-  if (!amapRuntime.map || !amapRuntime.api || state.mapMode !== BINJIANG_ROUTE_MODE) return;
-
-  const path = getVisibleMapPoints()
-    .filter(hasAmapCoordinate)
-    .map(point => [Number(point.lng), Number(point.lat)]);
-  if (path.length < 2) return;
-
   amapRuntime.routeLine = new amapRuntime.api.Polyline({
     map: amapRuntime.map,
     path,
     zIndex: 60,
-    strokeColor: '#ef5b2a',
-    strokeOpacity: 0.96,
-    strokeWeight: 7,
+    strokeColor: isWalkingRoute ? BINJIANG_ROUTE_COLOR : '#a6b9a0',
+    strokeOpacity: isWalkingRoute ? 0.98 : 0.85,
+    strokeWeight: isWalkingRoute ? 8 : 6,
     isOutline: true,
-    outlineColor: '#fff7ea',
-    borderWeight: 3,
+    outlineColor: '#ffffff',
+    borderWeight: 4,
     lineJoin: 'round',
     lineCap: 'round',
-    strokeStyle: 'dashed',
-    strokeDasharray: [12, 10],
+    strokeStyle: isWalkingRoute ? 'solid' : 'dashed',
+    strokeDasharray: isWalkingRoute ? undefined : [8, 8],
     showDir: false
   });
+}
+
+function drawAmapRouteSpur(flowerBridgeCoordinate) {
+  if (!amapRuntime.map || !amapRuntime.api) return;
+  if (amapRuntime.routeSpur.length) amapRuntime.map.remove(amapRuntime.routeSpur);
+
+  const path = [flowerBridgeCoordinate, ...BINJIANG_FLOWER_BRIDGE_SPUR];
+  const metersPerLng = 111320 * Math.cos(flowerBridgeCoordinate[1] * Math.PI / 180);
+  const lengths = path.slice(1).map(([lng, lat], index) => Math.hypot(
+    (lng - path[index][0]) * metersPerLng,
+    (lat - path[index][1]) * 111320
+  ));
+  const totalLength = lengths.reduce((sum, length) => sum + length, 0);
+  const dotCount = Math.max(2, Math.round(totalLength / 30));
+  amapRuntime.routeSpur = Array.from({ length: dotCount - 1 }, (_, index) => {
+    let distance = totalLength * (index + 1) / dotCount;
+    let segment = 0;
+    while (segment < lengths.length - 1 && distance > lengths[segment]) {
+      distance -= lengths[segment];
+      segment += 1;
+    }
+    const progress = distance / lengths[segment];
+    return new amapRuntime.api.CircleMarker({
+      center: [
+        path[segment][0] + (path[segment + 1][0] - path[segment][0]) * progress,
+        path[segment][1] + (path[segment + 1][1] - path[segment][1]) * progress
+      ],
+      radius: 3.5,
+      zIndex: 61,
+      strokeColor: '#ffffff',
+      strokeOpacity: 0.95,
+      strokeWeight: 1.2,
+      fillColor: BINJIANG_ROUTE_COLOR,
+      fillOpacity: 1,
+      bubble: true,
+      clickable: false
+    });
+  });
+  amapRuntime.map.add(amapRuntime.routeSpur);
+}
+
+function getAmapWalkingSegment(start, end) {
+  return new Promise((resolve, reject) => {
+    const walking = new amapRuntime.api.Walking({});
+    walking.search(start, end, (status, result) => {
+      const steps = result?.routes?.[0]?.steps;
+      if (status !== 'complete' || !Array.isArray(steps) || !steps.length) {
+        reject(new Error('步行路线规划未返回有效路径'));
+        return;
+      }
+      const path = steps.flatMap(step => (Array.isArray(step.path) ? step.path : []).map(location => [
+        Number(typeof location.getLng === 'function' ? location.getLng() : location[0]),
+        Number(typeof location.getLat === 'function' ? location.getLat() : location[1])
+      ])).filter(([lng, lat]) => hasCoordinatePair(lng, lat));
+      if (path.length < 2) {
+        reject(new Error('步行路线缺少有效坐标'));
+        return;
+      }
+      resolve([start, ...path, end]);
+    });
+  });
+}
+
+async function renderAmapRoute() {
+  const requestId = ++amapRuntime.routeRequestId;
+  if (amapRuntime.routeLine) {
+    amapRuntime.routeLine.setMap(null);
+    amapRuntime.routeLine = null;
+  }
+  if (amapRuntime.routeSpur.length) amapRuntime.map?.remove(amapRuntime.routeSpur);
+  amapRuntime.routeSpur = [];
+  if (!amapRuntime.map || !amapRuntime.api || state.mapMode !== BINJIANG_ROUTE_MODE) return;
+
+  const stops = getVisibleMapPoints();
+  if (stops.length !== BINJIANG_ROUTE_POINT_IDS.length || !stops.every(hasAmapCoordinate)) return;
+  const coordinates = stops.map(point => [Number(point.lng), Number(point.lat)]);
+  drawAmapRouteSpur(coordinates[1]);
+  if (amapRuntime.routePath) {
+    drawAmapRoute(amapRuntime.routePath);
+    return;
+  }
+
+  try {
+    const waterfrontEnd = BINJIANG_WATERFRONT_PATH.at(-1);
+    const segments = await Promise.all([
+      getAmapWalkingSegment(waterfrontEnd, coordinates[2]),
+      getAmapWalkingSegment(coordinates[2], coordinates[3])
+    ]);
+    if (requestId !== amapRuntime.routeRequestId || state.mapMode !== BINJIANG_ROUTE_MODE) return;
+    amapRuntime.routePath = [
+      coordinates[0],
+      ...BINJIANG_WATERFRONT_PATH,
+      ...segments[0].slice(1),
+      ...segments[1].slice(1)
+    ];
+    drawAmapRoute(amapRuntime.routePath);
+    fitAmapToBinjiangRoute();
+  } catch (error) {
+    if (requestId !== amapRuntime.routeRequestId || state.mapMode !== BINJIANG_ROUTE_MODE) return;
+    drawAmapRoute([coordinates[0], ...BINJIANG_WATERFRONT_PATH, coordinates[2], coordinates[3]], false);
+    showToast('步行规划暂不可用，当前主线为路线示意；请点击站点使用一键导航。');
+    console.warn('滨江步行路线规划失败：', error);
+  }
 }
 
 function fitAmapToBinjiangRoute() {
   if (!amapRuntime.map || state.mapMode !== BINJIANG_ROUTE_MODE) return;
   const overlays = [
     ...Array.from(amapRuntime.markers.values(), item => item.marker),
-    amapRuntime.routeLine
+    amapRuntime.routeLine,
+    ...amapRuntime.routeSpur
   ].filter(Boolean);
   if (overlays.length) amapRuntime.map.setFitView(overlays, false, [70, 44, 180, 44], 16);
 }

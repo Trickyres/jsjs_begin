@@ -304,7 +304,7 @@ const POINTS = [
   },
   {
     "id": "fabric-market",
-    "name": "南外滩轻纺面料市场",
+    "name": "南外滩量身定制中心",
     "address": "上海市黄浦区陆家浜路399号",
     "lng": 121.499716,
     "lat": 31.211674,
@@ -480,7 +480,7 @@ const POINTS = [
 //   { id: "time-plastic", name: "上海时光整形外科医院（外滩旗舰院）", address: "上海市黄浦区中山南路935号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 50.4, hitSize: 22 },
 //   { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 75.8, y: 52.4, hitSize: 22 },
 //   { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 19, y: 50.7, hitSize: 26 },
-//   { id: "fabric-market", name: "南外滩轻纺面料市场", address: "上海市黄浦区陆家浜路399号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
+//   { id: "fabric-market", name: "南外滩量身定制中心", address: "上海市黄浦区陆家浜路399号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
 //   { id: "icbc", name: "中国工商银行(南市支行)", address: "上海市黄浦区陆家浜路275号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },
 //   { id: "gotterwell", name: "上海歌特维康门诊部", address: "上海市黄浦区中山南路1228号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 43, y: 64.3, hitSize: 28 },
 //   { id: "nanpu-metro", name: "南浦大桥地铁站", address: "上海市黄浦区中山南路与国货路交叉口", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 32.1, y: 68.5, hitSize: 34 },

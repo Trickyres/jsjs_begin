@@ -1021,6 +1021,15 @@ body.more-routes-open { overflow: hidden; }
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.sheet .map-photo-credit {
+  margin: 0 0 5px;
+  color: #7c695c;
+  font-size: 10px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.map-photo-credit a { color: #a05029; text-decoration: underline; text-underline-offset: 2px; }
+.map-photo-credit a:focus-visible { outline: 2px solid #f2672a; outline-offset: 2px; }
 .map-sheet-compact-actions {
   display: flex;
   align-items: center;
@@ -2605,6 +2614,11 @@ body.guide-lightbox-open { overflow: hidden; }
   border-color: rgba(236, 145, 54, .2);
   background: linear-gradient(110deg, rgba(255,255,255,.96), rgba(255,247,232,.96));
 }
+.home-registration .activity-registration-empty { grid-template-columns: 62px minmax(0, 1fr) auto; cursor: default; }
+.activity-registration-empty[hidden] { display: none; }
+.activity-registration-empty:hover { transform: none; box-shadow: var(--shadow-soft); }
+.activity-registration-empty .activity-video-copy strong { white-space: normal; line-height: 1.45; }
+.activity-registration-empty .activity-registration-status { color: #887a6f; background: #f1ebe4; }
 .activity-registration-date { color: #4e8a55; background: #edf7e9; }
 .activity-registration-date strong { font-size: 12px; white-space: nowrap; }
 .activity-registration-status {
@@ -3311,6 +3325,7 @@ body.activity-photo-open { overflow: hidden; }
   .activity-feature { min-height: 224px; }
   .activity-moments { grid-template-rows: repeat(2, 68px); gap: 7px; }
   .activity-video-item { grid-template-columns: 56px minmax(0, 1fr) auto 12px; gap: 8px; padding: 9px; }
+  .home-registration .activity-registration-empty { grid-template-columns: 56px minmax(0, 1fr) auto; }
   .activity-video-duration { display: none; }
   .activity-contribute { grid-template-columns: 98px minmax(0, 1fr); gap: 11px; padding: 14px 14px 10px; }
   .activity-contribute-visual { min-height: 118px; }

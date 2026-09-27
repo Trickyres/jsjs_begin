@@ -352,7 +352,7 @@ window.POINTS_DATA = [
     "id": "fabric-market",
     "name": "南外滩轻纺面料市场",
     "address": "上海市黄浦区陆家浜路399号",
-    "image": "assets/points/fabric-market.webp",
+    "image": "assets/points/south-bund-tailoring-center.webp",
     "imageAlt": "南外滩轻纺面料市场（南外滩量身定制中心）外观",
     "imageCaption": "南外滩轻纺面料市场 · 陆家浜路399号",
     "lng": 121.499716,

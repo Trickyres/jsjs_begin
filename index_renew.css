@@ -2631,6 +2631,50 @@ body.guide-lightbox-open { overflow: hidden; }
   white-space: nowrap;
 }
 
+.home-registration-picker { display: flex; gap: 8px; margin-bottom: 9px; }
+.home-registration-day {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 4px;
+  border: 1px solid #efdfcf;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: #493529;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .16s ease, color .16s ease, transform .16s ease;
+}
+.home-registration-day[aria-pressed="true"] {
+  border-color: #d55327;
+  background: linear-gradient(145deg, #e97130, #c7431f);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(199, 67, 31, .13);
+}
+.home-registration-day:active { transform: translateY(1px); }
+.home-registration-day:focus-visible, .home-registration-link:focus-visible { outline: 3px solid #e77c43; outline-offset: 3px; }
+.home-registration .home-registration-link {
+  grid-template-columns: minmax(0, 1fr) auto 12px;
+  min-height: 62px;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 19px;
+}
+.home-registration-link .activity-video-copy strong { font-size: 16px; }
+.home-registration-link .activity-registration-status { font-size: 10px; }
+.home-registration [hidden] { display: none; }
+@media (max-width: 374px) {
+  .home-registration .home-registration-link { gap: 6px; padding: 12px 11px; }
+  .home-registration-link .activity-video-copy strong { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-registration-day, .home-registration .home-registration-link { transition: none; }
+  .home-registration-day:active, .home-registration .home-registration-link:hover { transform: none; }
+}
+
 .activity-note {
   display: flex;
   align-items: center;

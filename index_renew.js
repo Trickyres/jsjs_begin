@@ -931,6 +931,12 @@ function setupHomeRegistration() {
   const list = section?.querySelector('.activity-registration-list');
   if (!list) return;
   const emptyState = list.querySelector('.activity-registration-empty');
+  const picker = section.querySelector('.home-registration-picker');
+  const summary = section.querySelector('[data-registration-summary]');
+  const items = Array.from(list.querySelectorAll('a[data-registration-id]'));
+  const buttons = Array.from(section.querySelectorAll('[data-registration-select]'));
+  const registrationUrls = new Map(items.map(item => [item.dataset.registrationId, item.getAttribute('href')]));
+  let selectedId = buttons.find(button => button.getAttribute('aria-pressed') === 'true')?.dataset.registrationSelect;
 
   let expiryTimer;
   const closingTime = item => {
@@ -942,22 +948,39 @@ function setupHomeRegistration() {
     clearTimeout(expiryTimer);
     const now = Date.now();
     let nextClose = Infinity;
-    let lastClosed = -Infinity;
-    list.querySelectorAll('a.activity-registration-item').forEach(item => {
+    let latestClose = -Infinity;
+    const available = [];
+    items.forEach(item => {
       const closesAt = closingTime(item);
+      if (Number.isFinite(closesAt)) latestClose = Math.max(latestClose, closesAt);
       if (!Number.isFinite(closesAt) || closesAt <= now) {
-        if (Number.isFinite(closesAt)) lastClosed = Math.max(lastClosed, closesAt);
-        item.remove();
-      } else nextClose = Math.min(nextClose, closesAt);
+        item.hidden = true;
+        item.removeAttribute('href');
+      } else {
+        available.push(item);
+        item.setAttribute('href', registrationUrls.get(item.dataset.registrationId));
+        nextClose = Math.min(nextClose, closesAt);
+      }
     });
-    if (lastClosed > -Infinity) {
-      const month = new Date(lastClosed + 8 * 60 * 60 * 1000).getUTCMonth() + 1;
+    const availableIds = new Set(available.map(item => item.dataset.registrationId));
+    if (!availableIds.has(selectedId)) selectedId = available[0]?.dataset.registrationId;
+    items.forEach(item => { item.hidden = !availableIds.has(item.dataset.registrationId) || item.dataset.registrationId !== selectedId; });
+    buttons.forEach(button => {
+      const available = availableIds.has(button.dataset.registrationSelect);
+      button.hidden = !available;
+      button.disabled = !available;
+      button.setAttribute('aria-pressed', String(available && button.dataset.registrationSelect === selectedId));
+    });
+    if (picker) picker.hidden = available.length === 0;
+    if (emptyState) emptyState.hidden = available.length > 0;
+    if (latestClose > -Infinity) {
+      const month = new Date(latestClose + 8 * 60 * 60 * 1000).getUTCMonth() + 1;
       const monthLabel = emptyState?.querySelector('[data-registration-empty-month]');
       const message = emptyState?.querySelector('[data-registration-empty-message]');
       if (monthLabel) monthLabel.textContent = `${month}月`;
       if (message) message.textContent = `${month}月活动报名已结束，后续敬请期待。`;
+      if (summary) summary.textContent = available.length ? `${month}月 · ${available.length}场活动` : `${month}月活动报名`;
     }
-    if (emptyState) emptyState.hidden = !!list.querySelector('a.activity-registration-item');
     if (nextClose < Infinity) {
       expiryTimer = setTimeout(refresh, Math.min(nextClose - now, 2147483647));
     }
@@ -968,6 +991,10 @@ function setupHomeRegistration() {
     if (!document.hidden) refresh();
   });
   window.addEventListener('pageshow', refresh);
+  buttons.forEach(button => button.addEventListener('click', () => {
+    selectedId = button.dataset.registrationSelect;
+    refresh();
+  }));
   list.addEventListener('click', event => {
     const item = event.target.closest('a.activity-registration-item');
     const closesAt = item && closingTime(item);

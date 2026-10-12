@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>稼享指南｜多稼十分钟生活圈</title>
-  <link rel="stylesheet" href="index_renew.css?v=20260926-point-photos">
+  <link rel="stylesheet" href="index_renew.css?v=20261012-registration">
 </head>
 <body>
   <!--
@@ -69,13 +69,33 @@
       <section class="activity-section activity-registration home-registration" aria-labelledby="activityRegistrationTitle">
         <div class="activity-section-head">
           <h3 id="activityRegistrationTitle">活动报名</h3>
-          <span>社区公益活动</span>
+          <span data-registration-summary>10月 · 3场活动</span>
         </div>
-        <div class="activity-registration-list">
-          <!-- 新报名卡片须设置 data-registration-closes="YYYY-MM-DDTHH:mm:ss+08:00"，到时自动下架。 -->
-          <div class="activity-video-item activity-registration-item activity-registration-empty" role="status">
-            <span class="activity-video-date activity-registration-date" aria-hidden="true"><strong data-registration-empty-month>9月</strong></span>
-            <span class="activity-video-copy"><strong data-registration-empty-message>9月活动报名已结束，后续敬请期待。</strong></span>
+        <div class="home-registration-picker" aria-label="选择报名活动日期">
+          <button type="button" class="home-registration-day" data-registration-select="plant" aria-pressed="true" aria-controls="homeRegistrationPlant" aria-label="10月14日，白领绿植手工活动">14日</button>
+          <button type="button" class="home-registration-day" data-registration-select="chongyang" aria-pressed="false" aria-controls="homeRegistrationChongyang" aria-label="10月16日，重阳敬老主题活动">16日</button>
+          <button type="button" class="home-registration-day" data-registration-select="osmanthus" aria-pressed="false" aria-controls="homeRegistrationOsmanthus" aria-label="10月27日，金桂节主题活动">27日</button>
+        </div>
+        <div class="activity-registration-list" aria-live="polite" aria-atomic="true">
+          <!-- 未单独指定报名截止时间时，以活动开始时间关闭网站报名入口。 -->
+          <a id="homeRegistrationPlant" class="activity-video-item activity-registration-item home-registration-link" href="https://f.wps.cn/g/XqX8hSU4/" target="_blank" rel="noopener noreferrer" data-registration-id="plant" data-registration-closes="2026-10-14T12:00:00+08:00" aria-label="报名白领绿植手工活动">
+            <span class="activity-video-copy"><strong>白领绿植手工活动</strong></span>
+            <span class="activity-registration-status">立即报名</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </a>
+          <a id="homeRegistrationChongyang" class="activity-video-item activity-registration-item home-registration-link" href="https://f.wps.cn/g/9kanmwuG/" target="_blank" rel="noopener noreferrer" data-registration-id="chongyang" data-registration-closes="2026-10-16T10:00:00+08:00" aria-label="报名重阳敬老主题活动" hidden>
+            <span class="activity-video-copy"><strong>重阳敬老主题活动</strong></span>
+            <span class="activity-registration-status">立即报名</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </a>
+          <a id="homeRegistrationOsmanthus" class="activity-video-item activity-registration-item home-registration-link" href="https://f.wps.cn/g/JPJ5677T/" target="_blank" rel="noopener noreferrer" data-registration-id="osmanthus" data-registration-closes="2026-10-27T11:00:00+08:00" aria-label="报名金桂节主题活动" hidden>
+            <span class="activity-video-copy"><strong>金桂节主题活动</strong></span>
+            <span class="activity-registration-status">立即报名</span>
+            <span class="activity-video-arrow" aria-hidden="true">›</span>
+          </a>
+          <div class="activity-video-item activity-registration-item activity-registration-empty" role="status" hidden>
+            <span class="activity-video-date activity-registration-date" aria-hidden="true"><strong data-registration-empty-month>10月</strong></span>
+            <span class="activity-video-copy"><strong data-registration-empty-message>10月活动报名已结束，后续敬请期待。</strong></span>
             <span class="activity-registration-status">已结束</span>
           </div>
         </div>
@@ -538,6 +558,6 @@
   <script src="activity-album-files.js?v=20260907-albums"></script>
   <script src="activity-albums.js?v=20260908-album-covers"></script>
   <script src="activity-upload.config.js?v=20260907-activity-upload"></script>
-  <script src="index_renew.js?v=20260927-waterfront-green-dots"></script>
+  <script src="index_renew.js?v=20261012-registration"></script>
 </body>
 </html>

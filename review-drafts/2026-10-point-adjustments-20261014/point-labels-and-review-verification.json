@@ -1,0 +1,83 @@
+{
+  "localOnly": true,
+  "deployed": false,
+  "checks": [
+    {
+      "page": "/",
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/",
+      "id": "traditional-beef-noodles",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/",
+      "id": "zhongtai-securities",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/",
+      "id": "guaniu-convenience",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "traditional-beef-noodles",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "zhongtai-securities",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "guaniu-convenience",
+      "mapMarker": "no-new-tag",
+      "mapCard": "no-new-tag",
+      "list": "no-new-tag",
+      "coordinates": "unchanged"
+    }
+  ],
+  "newName": "牛肉面羊肉汤",
+  "newReview": "牛肉面吃下来感觉还可以，店面不大。想在附近吃碗面时可以列入备选，具体口味还是看个人喜好。",
+  "rating": 3,
+  "originalReviewsPreserved": 8,
+  "activeReviews": 9,
+  "fivePointPositionsPreserved": true,
+  "photoZoom": "passed",
+  "phoneWidths": [
+    320,
+    375,
+    430
+  ],
+  "errors": []
+}

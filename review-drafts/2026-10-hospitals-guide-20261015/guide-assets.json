@@ -1,0 +1,44 @@
+{
+  "localOnly": true,
+  "deployed": false,
+  "date": "2026-10-15",
+  "originalFilesPreserved": true,
+  "oldWebsiteAssetsPreserved": true,
+  "fullImageResolutionPreserved": true,
+  "entries": [
+    {
+      "label": "正面",
+      "source": "E:\\OneDrive\\03_W\\00_tongbu_file\\63_2026年工作\\07_2026选调生汇报\\20260927_稼享指南纸质版_更新\\20261012_稼享指南纸质版_更新_01.png",
+      "sourceSha256": "cb0b22050bfc4cd5438e69a8adaab571f34ea3e62f2dab1c02c36f029d9b948a",
+      "sourceWidth": 8976,
+      "sourceHeight": 4960,
+      "full": "assets/guide/guide-page-01-20261012.webp",
+      "fullSha256": "07ba7e638a474d79477649e160943738842f5da41544dcd8e2b12557407b506d",
+      "fullWidth": 8976,
+      "fullHeight": 4960,
+      "fullBytes": 4255270,
+      "thumbnail": "assets/guide/guide-page-01-20261012-thumb.webp",
+      "thumbnailSha256": "bb8afeb825e166b828a8e3bf18073d27e7455bf331e73ecfe3b6ca9d8922f325",
+      "thumbnailWidth": 1200,
+      "thumbnailHeight": 663,
+      "thumbnailBytes": 193024
+    },
+    {
+      "label": "反面",
+      "source": "E:\\OneDrive\\03_W\\00_tongbu_file\\63_2026年工作\\07_2026选调生汇报\\20260927_稼享指南纸质版_更新\\20261012_稼享指南纸质版_更新_02.png",
+      "sourceSha256": "49e6255cc99869054f60eecbbf79c0c00e390a1e5d092f6dab20277a81904b6f",
+      "sourceWidth": 8976,
+      "sourceHeight": 4960,
+      "full": "assets/guide/guide-page-02-20261012.webp",
+      "fullSha256": "fc76d72a2120733312df38b2b7e55522721740c50c8f2b5ea450bbf3441864fc",
+      "fullWidth": 8976,
+      "fullHeight": 4960,
+      "fullBytes": 3951754,
+      "thumbnail": "assets/guide/guide-page-02-20261012-thumb.webp",
+      "thumbnailSha256": "67b7054d2c129898c6d8038e750315dcd489e2f297b15a33f7d8cb9bb3003891",
+      "thumbnailWidth": 1200,
+      "thumbnailHeight": 663,
+      "thumbnailBytes": 191204
+    }
+  ]
+}

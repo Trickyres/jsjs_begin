@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-15",
+  "localOnly": true,
+  "deployed": false,
+  "pointId": "time-plastic",
+  "action": "核实并保留本地待审版中已关联的用户实拍照片",
+  "source": "E:/OneDrive/Desktop/稼享指南网页版本/稼享指南网页/20261013_重命名图片/webp照片文件/上海时光整形外科医院.webp",
+  "sourceSha256": "4cbf761991c4ebb94b465414b4521e39e15a8859a7ea6d00c476dfa21e626e49",
+  "sourceSize": [4080, 2296],
+  "asset": "assets/points/time-plastic-20261013.webp",
+  "assetSha256": "c2ba7d6397b53f1e6fdfb6de77d269217b1c01379678db6ecf28580fad462e6a",
+  "assetSize": [1600, 900],
+  "visualMatch": "同一医院建筑、入口与招牌，已分别查看源图和网页图确认",
+  "sourcePreserved": true,
+  "coordinatesUnchanged": true
+}

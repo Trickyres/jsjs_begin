@@ -1,0 +1,302 @@
+{
+  "reviewDate": "2026-10-13",
+  "coordinateSystem": "GCJ-02",
+  "coordinatePolicy": "五个新增点位逐字使用用户提供坐标；恢复点位沿用原坐标，不以照片GPS替换。",
+  "localOnly": true,
+  "deployed": false,
+  "addedPoints": 5,
+  "restoredPoints": 1,
+  "disabledPoints": 1,
+  "changedPoints": 7,
+  "createdPhotoAssets": 6,
+  "activePointCount": 57,
+  "photographedPointCount": 54,
+  "previousPhotoReview": {
+    "path": "review-drafts/2026-10-point-photos/update-records.json",
+    "pointCount": 52,
+    "photosAfter": 48,
+    "unchanged": true
+  },
+  "entries": [
+    {
+      "id": "traditional-beef-noodles",
+      "action": "新增点位并补图",
+      "source": "传统牛肉面.webp",
+      "asset": "assets/points/traditional-beef-noodles-20261013.webp",
+      "lng": 121.50125,
+      "lat": 31.21243,
+      "visualEvidence": "店铺门头与入口均可读传统牛肉面；照片位于多稼路沿街，原JPG定位距用户点位约19.8米。",
+      "uncertainty": "照片未见可读的本店门牌，具体门牌待核实。",
+      "name": "传统牛肉面",
+      "address": "上海市黄浦区多稼路（具体门牌待核实）",
+      "category": "shopping",
+      "isNew": true,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\传统牛肉面.webp",
+      "sourceSha256": "02c152c466b9ee5e9b77d5b6f8812109247cfc61af9d2d7f559712cfa5195ef5",
+      "sourceBytes": 526492,
+      "sourceWidth": 4096,
+      "sourceHeight": 2304,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\传统牛肉面.jpg",
+        "pointId": "traditional-beef-noodles",
+        "pointGcj02": {
+          "lng": 121.50125,
+          "lat": 31.21243
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.497017,
+          "lat": 31.214457
+        },
+        "gcj02": {
+          "lng": 121.50145766057251,
+          "lat": 31.212439628685722
+        },
+        "distanceM": 19.8
+      },
+      "imageAlt": "传统牛肉面店铺招牌和入口",
+      "imageCaption": "传统牛肉面 · 门面实景",
+      "outputSha256": "62345416743548d469d6b8a4185b8150c47d269298605f6bd0ebf840d67eee2b",
+      "outputBytes": 301248,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "guaniu-convenience",
+      "action": "新增点位并补图",
+      "source": "瓜牛便利店.webp",
+      "asset": "assets/points/guaniu-convenience-20261013.webp",
+      "lng": 121.50622,
+      "lat": 31.212472,
+      "visualEvidence": "门头可读瓜牛便利店、中山南路店；右侧绿色门牌可读917及中山南路。",
+      "uncertainty": null,
+      "name": "瓜牛便利店",
+      "address": "上海市黄浦区中山南路917号",
+      "category": "shopping",
+      "isNew": true,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\瓜牛便利店.webp",
+      "sourceSha256": "1f4bb6d893570f31a616b847ab666cd03bb8a5fa8e45372816f368e7ef7eae97",
+      "sourceBytes": 532672,
+      "sourceWidth": 4080,
+      "sourceHeight": 2296,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\瓜牛便利店.jpg",
+        "pointId": "guaniu-convenience",
+        "pointGcj02": {
+          "lng": 121.50622,
+          "lat": 31.212472
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.50164,
+          "lat": 31.214707
+        },
+        "gcj02": {
+          "lng": 121.50606397853728,
+          "lat": 31.212675848366725
+        },
+        "distanceM": 27.1
+      },
+      "imageAlt": "瓜牛便利店中山南路店招牌和入口",
+      "imageCaption": "瓜牛便利店 · 中山南路917号",
+      "outputSha256": "6ddcad83922fdb60b775c55201ad0133f7a8dbf264312ad3f3ab05cb191e5d87",
+      "outputBytes": 193680,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "action": "新增点位并补图",
+      "source": "红烧牛肉面.webp",
+      "asset": "assets/points/beef-noodles-lamb-soup-yangguangli-20261013.webp",
+      "lng": 121.50049,
+      "lat": 31.212606,
+      "visualEvidence": "照片可读红烧牛肉面招牌；原JPG GPS转换到GCJ-02后距用户阳光里店点位约15.7米，结合牛肉面招牌与位置匹配采用。",
+      "uncertainty": "未能在照片及细部检查中读到羊肉汤或完整店名，也没有可读门牌；名称采用用户提供值，说明仅称门面实景，区域地址保守写阳光里。",
+      "name": "上海黄浦区牛肉面羊肉汤（阳光里店）",
+      "address": "上海市黄浦区阳光里区域（具体门牌待核实）",
+      "category": "shopping",
+      "isNew": true,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\红烧牛肉面.webp",
+      "sourceSha256": "d255712094b298cb268aa3dbfebea909fb83a4914c439cfaf919111d121d2e4c",
+      "sourceBytes": 525952,
+      "sourceWidth": 4096,
+      "sourceHeight": 2304,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\红烧牛肉面.jpg",
+        "pointId": "beef-noodles-lamb-soup-yangguangli",
+        "pointGcj02": {
+          "lng": 121.50049,
+          "lat": 31.212606
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.495959,
+          "lat": 31.2145
+        },
+        "gcj02": {
+          "lng": 121.50040347853596,
+          "lat": 31.21248582561603
+        },
+        "distanceM": 15.7
+      },
+      "imageAlt": "牛肉面店入口及红烧牛肉面招牌",
+      "imageCaption": "牛肉面羊肉汤（阳光里店） · 门面实景",
+      "outputSha256": "553c3f9dd84407302e9cdb377213b007891e364e34ebfef413fc02bc1b919146",
+      "outputBytes": 303128,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "roast-meat-rice-canteen",
+      "action": "新增点位并补图",
+      "source": "烧腊卤味饭堂.webp",
+      "asset": "assets/points/roast-meat-rice-canteen-20261013.webp",
+      "lng": 121.500786,
+      "lat": 31.212633,
+      "visualEvidence": "招牌可读烧腊卤味饭堂；入口右侧绿色门牌可读232及多稼路。",
+      "uncertainty": "原JPG GPS距用户点位约50.9米，且与过水鱼馆源图的GPS相同，照片GPS只作辅助；点位坐标严格采用用户值。",
+      "name": "烧腊卤味饭堂",
+      "address": "上海市黄浦区多稼路232号",
+      "category": "shopping",
+      "isNew": true,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\烧腊卤味饭堂.webp",
+      "sourceSha256": "4f1801a2f41ed171553a5e515545786e47e1e7f730183e536b586bf7a3b2a197",
+      "sourceBytes": 528346,
+      "sourceWidth": 4096,
+      "sourceHeight": 2304,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\烧腊卤味饭堂.jpg",
+        "pointId": "roast-meat-rice-canteen",
+        "pointGcj02": {
+          "lng": 121.500786,
+          "lat": 31.212633
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.496856,
+          "lat": 31.214513999999998
+        },
+        "gcj02": {
+          "lng": 121.50129724616953,
+          "lat": 31.212497139412115
+        },
+        "distanceM": 50.9
+      },
+      "imageAlt": "烧腊卤味饭堂门头和入口",
+      "imageCaption": "烧腊卤味饭堂 · 多稼路232号",
+      "outputSha256": "acb762f9000376b0f8c8b34d7836144eeabf8574e559d379f5d88b0a4dfdb9bc",
+      "outputBytes": 275168,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "zhongtai-securities",
+      "action": "新增点位并补图",
+      "source": "中泰证券大厦.webp",
+      "asset": "assets/points/zhongtai-securities-20261013.webp",
+      "lng": 121.504206,
+      "lat": 31.2122,
+      "visualEvidence": "楼顶与入口处可读中泰证券品牌；用户已明确确认中泰证券大厦照片对应此点位并同意使用。",
+      "userConfirmation": "用户明确确认照片就是该点位，可以使用。",
+      "historicalVerification": "此前原JPG GPS转换后距用户指定点位约468.5米，曾据此暂缓采用；本轮依据用户确认绑定照片，保留既定GCJ-02坐标121.504206、31.2122。GPS偏差仅作历史核验信息。",
+      "uncertainty": "照片门牌不可读，具体门牌仍待核实，不根据照片GPS推算地址。",
+      "name": "中泰证券",
+      "address": "上海市黄浦区南外滩区域（具体门牌待核实）",
+      "category": "bussiness",
+      "isNew": true,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\中泰证券大厦.webp",
+      "sourceSha256": "0b9aa58fe6c105d72acb3edd63bf94b676bbe4daaca8bb4ffaa6dcb447b8bc29",
+      "sourceBytes": 524664,
+      "sourceWidth": 4080,
+      "sourceHeight": 2296,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\中泰证券大厦.jpg",
+        "pointId": "zhongtai-securities",
+        "pointGcj02": {
+          "lng": 121.504206,
+          "lat": 31.2122
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.50044,
+          "lat": 31.218401
+        },
+        "gcj02": {
+          "lng": 121.5048686306284,
+          "lat": 31.21637520960766
+        },
+        "distanceM": 468.5
+      },
+      "imageAlt": "中泰证券大厦外观及楼顶品牌标识",
+      "imageCaption": "中泰证券 · 大厦外观",
+      "outputSha256": "579f2fdc5c8cca01f5188f1b618d5fdb476a5ebfd8edcdb196e781229d36e904",
+      "outputBytes": 227836,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "guoshuiyuguan",
+      "action": "恢复点位并补图",
+      "source": "过水鱼馆.webp",
+      "asset": "assets/points/guoshuiyuguan-20261013.webp",
+      "lng": 121.501158,
+      "lat": 31.212449,
+      "visualEvidence": "门头可读过水鱼馆，绿色门牌可读222及多稼路，与原注释点位地址一致。",
+      "uncertainty": null,
+      "name": "过水鱼馆",
+      "address": "上海市黄浦区多稼路222号",
+      "category": "shopping",
+      "isNew": false,
+      "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\webp照片文件\\过水鱼馆.webp",
+      "sourceSha256": "e212cfbcebcc7ec1fd368e0d8d681f258f99f71e83b1c3593e9f8f88787d7421",
+      "sourceBytes": 531024,
+      "sourceWidth": 4096,
+      "sourceHeight": 2304,
+      "gpsEvidence": {
+        "sourcePath": "E:\\OneDrive\\Desktop\\稼享指南网页版本\\稼享指南网页\\20261013_重命名图片\\过水鱼馆.jpg",
+        "pointId": "guoshuiyuguan",
+        "pointGcj02": {
+          "lng": 121.501158,
+          "lat": 31.212449
+        },
+        "datum": "not recorded; WGS-84 assumed",
+        "horizontalError": "not recorded",
+        "wgs84": {
+          "lng": 121.496856,
+          "lat": 31.214513999999998
+        },
+        "gcj02": {
+          "lng": 121.50129724616953,
+          "lat": 31.212497139412115
+        },
+        "distanceM": 14.3
+      },
+      "imageAlt": "过水鱼馆招牌、入口及多稼路222号门牌",
+      "imageCaption": "过水鱼馆 · 多稼路222号",
+      "outputSha256": "4f58fb28655c6416f118bcd34ff6cc4e323e912f36c2835356f397f628b85072",
+      "outputBytes": 284238,
+      "outputWidth": 1600,
+      "outputHeight": 900,
+      "treatment": "仅缩放压缩，不裁切、不改色；长边1600，WebP quality84。"
+    },
+    {
+      "id": "haochuizi",
+      "action": "注释停用",
+      "source": null,
+      "asset": null,
+      "reason": "按用户本次要求停用好厨子小碗菜，保留原数据为行注释。",
+      "name": "好厨子小碗菜"
+    }
+  ]
+}

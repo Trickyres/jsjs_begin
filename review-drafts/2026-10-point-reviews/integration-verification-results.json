@@ -1,0 +1,307 @@
+{
+  "date": "2026-10-13",
+  "localOnly": true,
+  "deployed": false,
+  "selectedStyle": "轻量短评条",
+  "activePointCount": 57,
+  "photographedPointCount": 54,
+  "reviewedPointCount": 8,
+  "pendingPoint": "超杰沪味面坊（待补点位，不评分）",
+  "reviewChecks": [
+    {
+      "page": "/",
+      "id": "panguoxianhuntun",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "traditional-beef-noodles",
+      "rating": 3,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "alishaokao",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "laochengxiangtangbao",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "xiaolaoban",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "chaoshanyiniuhuoguo",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "roast-meat-rice-canteen",
+      "rating": 3,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/",
+      "id": "tonecoffee",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "panguoxianhuntun",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "traditional-beef-noodles",
+      "rating": 3,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "alishaokao",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "laochengxiangtangbao",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "xiaolaoban",
+      "rating": 4,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "chaoshanyiniuhuoguo",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "roast-meat-rice-canteen",
+      "rating": 3,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "tonecoffee",
+      "rating": 5,
+      "text": "matches",
+      "details": "ok",
+      "photoZoom": "ok"
+    }
+  ],
+  "layoutChecks": [
+    {
+      "page": "/",
+      "width": 320,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 320,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 320,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 320,
+      "id": "tonecoffee",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 375,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 375,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 375,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 375,
+      "id": "tonecoffee",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 430,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 430,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 430,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/",
+      "width": 430,
+      "id": "tonecoffee",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 320,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 320,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 320,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 320,
+      "id": "tonecoffee",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 375,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 375,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 375,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 375,
+      "id": "tonecoffee",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 430,
+      "id": "panguoxianhuntun",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 430,
+      "id": "traditional-beef-noodles",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 430,
+      "id": "roast-meat-rice-canteen",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "width": 430,
+      "id": "tonecoffee",
+      "status": "ok"
+    }
+  ],
+  "navigationChecks": [
+    {
+      "page": "/",
+      "mode": "walk",
+      "coordinates": "121.50125,31.21243",
+      "status": "ok"
+    },
+    {
+      "page": "/index_renew.html",
+      "mode": "walk",
+      "coordinates": "121.50125,31.21243",
+      "status": "ok"
+    }
+  ],
+  "safety": {
+    "escaped": true,
+    "invalid": true,
+    "missingData": true
+  },
+  "errors": [],
+  "failedLocalResponses": []
+}

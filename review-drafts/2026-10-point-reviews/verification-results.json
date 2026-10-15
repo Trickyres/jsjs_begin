@@ -1,0 +1,112 @@
+{
+  "pointChecks": [
+    {
+      "page": "/",
+      "id": "traditional-beef-noodles",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/",
+      "id": "guaniu-convenience",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/",
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/",
+      "id": "roast-meat-rice-canteen",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/",
+      "id": "zhongtai-securities",
+      "photo": "pending-confirmation",
+      "coords": "verified"
+    },
+    {
+      "page": "/",
+      "id": "guoshuiyuguan",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "traditional-beef-noodles",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "guaniu-convenience",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "roast-meat-rice-canteen",
+      "photo": "verified",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "zhongtai-securities",
+      "photo": "pending-confirmation",
+      "coords": "verified"
+    },
+    {
+      "page": "/index_renew.html",
+      "id": "guoshuiyuguan",
+      "photo": "verified",
+      "coords": "verified"
+    }
+  ],
+  "variantChecks": [
+    {
+      "name": "轻量短评条",
+      "shops": 9,
+      "widths": [
+        320,
+        375,
+        736
+      ],
+      "status": "ok"
+    },
+    {
+      "name": "详情内展开",
+      "shops": 9,
+      "widths": [
+        320,
+        375,
+        736
+      ],
+      "status": "ok"
+    },
+    {
+      "name": "评分便签卡",
+      "shops": 9,
+      "widths": [
+        320,
+        375,
+        736
+      ],
+      "status": "ok"
+    }
+  ],
+  "originalScoresPreserved": true,
+  "reviewLengthRange": "30–50字",
+  "localOnly": true,
+  "errors": []
+}

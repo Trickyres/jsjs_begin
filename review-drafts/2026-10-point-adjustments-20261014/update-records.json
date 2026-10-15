@@ -1,0 +1,165 @@
+{
+  "date": "2026-10-14",
+  "localOnly": true,
+  "deployed": false,
+  "status": "本地完成，待用户审核；未提交、未推送、未上线",
+  "before": {
+    "activePoints": 57,
+    "photographedPoints": 54
+  },
+  "after": {
+    "activePoints": 56,
+    "photographedPoints": 54
+  },
+  "coordinatePolicy": "只用markerOffset调整标记的屏幕显示；任何现有导航lng/lat均未修改，豪祥的地址及坐标亦不变。",
+  "historicalRecords": "2026-10-13照片、点位与短评记录保留，未改写历史快照。",
+  "actions": [
+    {
+      "id": "kangyou-siji",
+      "name": "康友四季经络足道（多稼路店）",
+      "action": "注释停用",
+      "description": "地图、分类列表和搜索不再显示；原数据与照片均保留，可恢复。",
+      "address": null,
+      "lng": null,
+      "lat": null,
+      "markerOffset": null,
+      "image": null
+    },
+    {
+      "id": "traditional-beef-noodles",
+      "action": "标记偏右",
+      "description": "在密集餐饮区域适度向右错开，保留你此前给定的导航坐标。",
+      "name": "传统牛肉面",
+      "address": "上海市黄浦区多稼路（具体门牌待核实）",
+      "lng": 121.50125,
+      "lat": 31.21243,
+      "markerOffset": [
+        62,
+        22
+      ],
+      "image": "assets/points/traditional-beef-noodles-20261013.webp"
+    },
+    {
+      "id": "xiaolaoban",
+      "action": "密集标记避让",
+      "description": "与过水鱼馆、汤包馆、阿力烧烤及传统牛肉面分开显示。",
+      "name": "小老板海鲜酒家",
+      "address": "上海市黄浦区多稼路226号",
+      "lng": 121.501115,
+      "lat": 31.212487,
+      "markerOffset": [
+        -8,
+        -58
+      ],
+      "image": "assets/points/xiaolaoban-20261013.webp"
+    },
+    {
+      "id": "guoshuiyuguan",
+      "action": "密集标记避让",
+      "description": "与附近同类标记错开，点位仍启用，照片及介绍保留。",
+      "name": "过水鱼馆",
+      "address": "上海市黄浦区多稼路222号",
+      "lng": 121.501158,
+      "lat": 31.212449,
+      "markerOffset": [
+        -4,
+        -12
+      ],
+      "image": "assets/points/guoshuiyuguan-20261013.webp"
+    },
+    {
+      "id": "laochengxiangtangbao",
+      "action": "密集标记避让",
+      "description": "与阿力烧烤分开，阿力烧烤显示在本店右侧。",
+      "name": "老城厢汤包馆",
+      "address": "上海市黄浦区多稼路220号",
+      "lng": 121.501217,
+      "lat": 31.212437,
+      "markerOffset": [
+        -16,
+        32
+      ],
+      "image": "assets/points/laochengxiangtangbao-20261013.webp"
+    },
+    {
+      "id": "alishaokao",
+      "action": "标记移至汤包馆右侧",
+      "description": "调整显示顺序与间距，原地址、照片、短评和导航坐标保留。",
+      "name": "上海阿力烧烤",
+      "address": "上海市黄浦区多稼路220号一楼",
+      "lng": 121.501184,
+      "lat": 31.212451,
+      "markerOffset": [
+        30,
+        -20
+      ],
+      "image": "assets/points/ali-bbq.webp"
+    },
+    {
+      "id": "tonecoffee",
+      "action": "标记向南微调",
+      "description": "地图朝北状态下图标略向下移动；现有地址和导航坐标不变。",
+      "name": "t-one咖啡",
+      "address": "上海市黄浦区陆家浜路305弄3-1号",
+      "lng": 121.500203,
+      "lat": 31.211531,
+      "markerOffset": [
+        -8,
+        40
+      ],
+      "image": "assets/points/tonecoffee-20261013.webp"
+    },
+    {
+      "id": "haoxiang",
+      "action": "补充照片",
+      "description": "采用豪祥名烟名酒原图，非浩丞照片；按你的要求仅补图，不改任何位置相关信息。",
+      "name": "豪祥名烟名酒",
+      "address": "上海市黄浦区陆家浜路305弄4-8号阳光里",
+      "lng": 121.500724,
+      "lat": 31.212636,
+      "markerOffset": null,
+      "image": "assets/points/haoxiang-tobacco-20261014.webp"
+    },
+    {
+      "id": "beef-noodles-lamb-soup-yangguangli",
+      "action": "简化名称",
+      "beforeName": "上海黄浦区牛肉面羊肉汤（阳光里店）",
+      "description": "名称改为“牛肉面羊肉汤（阳光里店）”，地图标签、介绍和列表同步读取新名称。",
+      "name": "牛肉面羊肉汤（阳光里店）",
+      "address": "上海市黄浦区阳光里区域（具体门牌待核实）",
+      "lng": 121.50049,
+      "lat": 31.212606,
+      "markerOffset": null,
+      "image": "assets/points/beef-noodles-lamb-soup-yangguangli-20261013.webp"
+    }
+  ],
+  "photoRecord": "photo-record.json",
+  "reviewedPhoto": "门头为豪祥名烟名酒；没有使用另一个浩丞名烟名酒门店的照片。",
+  "photoAddressNote": "照片门牌与当前点位地址文字不同；按本轮明确要求仅补图，现有地址及坐标均保留。",
+  "shortReviewsPreserved": 8,
+  "supportingMaintenance": "点位数据导出保留markerOffset；同时兼容x/y为空的真实地图点位，避免导出时报错。",
+  "verification": "verification-results.json",
+  "realMapPreview": "real-map-preview-record.json",
+  "mapGeometry": [
+    {
+      "zoom": 15.5,
+      "overlap": [],
+      "aliRight": true
+    },
+    {
+      "zoom": 17,
+      "overlap": [],
+      "aliRight": true
+    },
+    {
+      "zoom": 18,
+      "overlap": [],
+      "aliRight": true
+    },
+    {
+      "zoom": 19,
+      "overlap": [],
+      "aliRight": true
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "preparedAt": "2026-10-14T07:22:45.453Z",
+  "pointId": "fabric-market",
+  "pointName": "南外滩量身定制中心",
+  "userAuthorization": "用户明确确认南外滩量身定制中心可以使用刚拍的照片；本轮采用20261013照片批中的上海十六铺面料中心.webp。",
+  "source": {
+    "path": "E:/OneDrive/Desktop/稼享指南网页版本/稼享指南网页/20261013_重命名图片/webp照片文件/上海十六铺面料中心.webp",
+    "sha256": "bfe800f9f611c1db3933738526408251614a679d749c921690d71b3126e622df",
+    "width": 4080,
+    "height": 2296,
+    "bytes": 531290,
+    "sha256AfterPreparation": "bfe800f9f611c1db3933738526408251614a679d749c921690d71b3126e622df",
+    "unchanged": true
+  },
+  "output": {
+    "path": "assets/points/south-bund-tailoring-center-20261014.webp",
+    "sha256": "fde83654aee26a8529cd51c4cba21f6cb41b09c221f4565ad8b86db2b31c0ca1",
+    "width": 1600,
+    "height": 900,
+    "bytes": 245068,
+    "format": "webp",
+    "quality": 84,
+    "longEdge": 1600,
+    "operation": "原始完整画面等比缩小并编码为WebP，未裁切；仅有像素尺寸取整，未改画面内容。",
+    "sharpVersion": "0.35.5"
+  },
+  "oldImage": {
+    "path": "assets/points/south-bund-tailoring-center.webp",
+    "sha256": "e30fe00e2981afac21a1f336b816d0ffe64a6423e19c6e43b4460db3d1a086a2",
+    "width": 1080,
+    "height": 719,
+    "bytes": 143864,
+    "sha256AfterPreparation": "e30fe00e2981afac21a1f336b816d0ffe64a6423e19c6e43b4460db3d1a086a2",
+    "preserved": true,
+    "unchanged": true
+  },
+  "identityCheck": {
+    "basis": "查看源图，红色建筑外墙金色店名可读上海南外滩量身定制中心；建筑转角为裁缝主题大型画面。",
+    "readableBuildingName": "上海南外滩量身定制中心",
+    "sourceFilenameCaution": "源文件名上海十六铺面料中心.webp不作为地点身份的唯一依据；采用照片墙面可读名称及本轮用户明确选择。",
+    "result": "对应现有fabric-market／南外滩量身定制中心点位。"
+  },
+  "pointSnapshot": {
+    "address": "上海市黄浦区陆家浜路399号",
+    "lng": 121.499716,
+    "lat": 31.211674,
+    "imageAtInspection": "assets/points/south-bund-tailoring-center-20261014.webp"
+  },
+  "suggestedImageAlt": "南外滩量身定制中心建筑与沿街入口",
+  "suggestedImageCaption": "南外滩量身定制中心 · 门面实景",
+  "pointDataModifiedByThisScript": false,
+  "publicationPerformedByThisScript": false
+}

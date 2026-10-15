@@ -1,0 +1,14 @@
+{
+  "localOnly": true,
+  "deployed": false,
+  "pages": [
+    "index.html",
+    "index_renew.html"
+  ],
+  "asset": "assets/points/south-bund-tailoring-center-20261014.webp",
+  "photoLoaded": true,
+  "photoZoom": "passed",
+  "nameAddressCoordinates": "unchanged",
+  "oldAssetPreserved": true,
+  "errors": []
+}

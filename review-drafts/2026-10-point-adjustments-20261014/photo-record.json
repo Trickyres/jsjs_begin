@@ -1,0 +1,60 @@
+{
+  "preparedAt": "2026-10-14T06:17:45.671Z",
+  "pointId": "haoxiang",
+  "pointName": "豪祥名烟名酒",
+  "userInstruction": "本轮用户要求给豪祥名烟名酒补对应图片，点位位置不变。",
+  "source": {
+    "path": "E:/OneDrive/Desktop/稼享指南网页版本/稼享指南网页/20261013_重命名图片/webp照片文件/豪祥名烟名酒.webp",
+    "sha256": "30de7702bab86f76d667cd10d6bbaba612379abfffc21ad45d9f2a34ff417edf",
+    "width": 4096,
+    "height": 2304,
+    "bytes": 530586,
+    "sha256AfterPreparation": "30de7702bab86f76d667cd10d6bbaba612379abfffc21ad45d9f2a34ff417edf",
+    "unchanged": true
+  },
+  "output": {
+    "path": "assets/points/haoxiang-tobacco-20261014.webp",
+    "sha256": "d517a7f200dc424d4dc0b22a11ad55c0bc5b2fa27bc16182f098181bbc185519",
+    "width": 1600,
+    "height": 900,
+    "bytes": 292482,
+    "format": "webp",
+    "quality": 84,
+    "longEdge": 1600,
+    "operation": "原始完整画面等比缩小并编码为WebP，未裁切、未改画面内容。",
+    "sharpVersion": "0.35.5"
+  },
+  "readableContent": [
+    {
+      "kind": "门头店名",
+      "text": "豪祥名烟名酒",
+      "location": "照片上部中央金色门头"
+    },
+    {
+      "kind": "绿色门牌",
+      "text": "多稼路236号-1",
+      "location": "店门玻璃右上方"
+    }
+  ],
+  "identityCheck": "门头为豪祥名烟名酒；没有使用另一个浩丞名烟名酒门店的照片。",
+  "locationSnapshot": {
+    "address": "上海市黄浦区陆家浜路305弄4-8号阳光里",
+    "lng": 121.500724,
+    "lat": 31.212636,
+    "x": null,
+    "y": null
+  },
+  "addressNote": "照片门牌与当前点位地址文字不同；按本轮明确要求仅补图，现有地址及坐标均保留。",
+  "suggestedImageAlt": "豪祥名烟名酒店铺门头与入口",
+  "suggestedImageCaption": "豪祥名烟名酒 · 门面实景",
+  "sourcePointDataModifiedByThisScript": false,
+  "imagePipelineInfo": {
+    "format": "webp",
+    "width": 1600,
+    "height": 900,
+    "channels": 3,
+    "premultiplied": false,
+    "hasAlpha": false,
+    "size": 292482
+  }
+}

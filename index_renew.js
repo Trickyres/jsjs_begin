@@ -485,8 +485,8 @@ function openGuideCategory(category) {
 }
 
 const GUIDE_GALLERY_IMAGES = [
-  { src: 'assets/guide/guide-page-01.webp', title: '稼享指南 · 正面', alt: '稼享指南正面：欢迎到多稼生活圈地图' },
-  { src: 'assets/guide/guide-page-02.webp', title: '稼享指南 · 反面', alt: '稼享指南反面：社区记忆与指南封面' }
+  { src: 'assets/guide/guide-page-01-20261012.webp', title: '稼享指南 · 正面', alt: '稼享指南正面：社区记忆、公共服务与折页封面' },
+  { src: 'assets/guide/guide-page-02-20261012.webp', title: '稼享指南 · 反面', alt: '稼享指南反面：多稼生活圈地图与点位清单' }
 ];
 
 const guideGalleryState = {
@@ -928,10 +928,10 @@ function setupActivityUpload() {
 
 function setupHomeRegistration() {
   const section = $('.home-registration');
-  const list = section?.querySelector('.activity-registration-list');
+  const list = section?.querySelector('.event-registration__list');
   if (!list) return;
-  const emptyState = list.querySelector('.activity-registration-empty');
-  const picker = section.querySelector('.home-registration-picker');
+  const emptyState = list.querySelector('.event-registration__empty');
+  const picker = section.querySelector('.event-registration__picker');
   const summary = section.querySelector('[data-registration-summary]');
   const items = Array.from(list.querySelectorAll('a[data-registration-id]'));
   const buttons = Array.from(section.querySelectorAll('[data-registration-select]'));
@@ -971,7 +971,11 @@ function setupHomeRegistration() {
       button.disabled = !available;
       button.setAttribute('aria-pressed', String(available && button.dataset.registrationSelect === selectedId));
     });
-    if (picker) picker.hidden = available.length === 0;
+    // 样式由可报名数量决定，单场和多场共用同一份活动链接。
+    section.classList.toggle('event-registration--single', available.length === 1);
+    section.classList.toggle('event-registration--multiple', available.length > 1);
+    section.classList.toggle('event-registration--empty', available.length === 0);
+    if (picker) picker.hidden = available.length <= 1;
     if (emptyState) emptyState.hidden = available.length > 0;
     if (latestClose > -Infinity) {
       const month = new Date(latestClose + 8 * 60 * 60 * 1000).getUTCMonth() + 1;
@@ -996,7 +1000,7 @@ function setupHomeRegistration() {
     refresh();
   }));
   list.addEventListener('click', event => {
-    const item = event.target.closest('a.activity-registration-item');
+    const item = event.target.closest('a[data-registration-id]');
     const closesAt = item && closingTime(item);
     if (item && (!Number.isFinite(closesAt) || closesAt <= Date.now())) {
       event.preventDefault();
@@ -1136,13 +1140,13 @@ const sourcePoint = {
   intro: point.intro,
   phone: point.phone,
   hours: point.hours,
-  x: roundCalibrationNumber(point.x),
-  y: roundCalibrationNumber(point.y),
+  x: isCoordinateValue(point.x) ? roundCalibrationNumber(Number(point.x)) : null,
+  y: isCoordinateValue(point.y) ? roundCalibrationNumber(Number(point.y)) : null,
   hitSize: Number(point.hitSize) || 34
 };
 if (Array.isArray(point.locations)) sourcePoint.locations = point.locations;
 if (point.isNew) sourcePoint.isNew = true;
-for (const key of ['description', 'image', 'imageAlt', 'imageCaption', 'imageCredit', 'imageSource', 'imageLicense', 'imageLicenseUrl']) {
+for (const key of ['description', 'image', 'imageAlt', 'imageCaption', 'imageCredit', 'imageSource', 'imageLicense', 'imageLicenseUrl', 'markerOffset']) {
   if (point[key] != null) sourcePoint[key] = point[key];
 }
 return `      ${JSON.stringify(sourcePoint)}`;
@@ -1550,6 +1554,16 @@ function updateAmapMarkerSelection() {
   });
 }
 
+// 仅调整点标记的屏幕显示位置（右/下为正），不改导航或地址解析坐标。
+function getAmapMarkerOffset(point) {
+  if (state.mapMode === BINJIANG_ROUTE_MODE) return [0, 0];
+  const offset = point?.markerOffset;
+  return Array.isArray(offset) && offset.length === 2
+    && offset.every(value => Number.isFinite(value) && Math.abs(value) <= 96)
+    ? [...offset]
+    : [0, 0];
+}
+
 function renderAmapMarkers() {
   if (!amapRuntime.map || !amapRuntime.api) return;
 
@@ -1564,6 +1578,7 @@ function renderAmapMarkers() {
       position: [point.lng, point.lat],
       content: element,
       anchor: 'bottom-center',
+      offset: new amapRuntime.api.Pixel(...getAmapMarkerOffset(point)),
       title: point.name,
       zIndex: point.id === state.selectedId ? 300 : 100
     });
@@ -1798,6 +1813,32 @@ function selectRealMapPoint(point, panToPoint = false) {
   return renderMapSheet(point);
 }
 
+// 短评直接展示在点位卡片中；不会参与详情折叠或地图点位数据导出。
+function renderPointReview(point) {
+  const data = window.POINT_REVIEWS_DATA;
+  const entries = data?.entries;
+  if (!point || !entries || !Object.prototype.hasOwnProperty.call(entries, point.id)) return '';
+
+  const review = entries[point.id];
+  if (!review || !Number.isInteger(review.rating) || review.rating < 1 || review.rating > 5
+      || typeof review.text !== 'string' || !review.text.trim()) return '';
+
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+
+  return `
+    <aside class="map-point-review" aria-label="${escape(point.name)}的个人探店笔记">
+      <div class="map-point-review__head">
+        <h4 class="map-point-review__title">${escape(data.label || '邻里探店笔记')}</h4>
+        <span class="map-point-review__score" aria-label="个人评分${review.rating}分，满分5分">个人 ${review.rating} / 5</span>
+      </div>
+      <p class="map-point-review__text">${escape(review.text)}</p>
+      <p class="map-point-review__disclaimer">${escape(data.disclaimer || '个人体验，仅供参考，非综合评分')}</p>
+    </aside>
+  `;
+}
+
 // 只负责生成详情内容、绑定详情按钮事件并打开详情卡片。
 function renderMapSheet(point) {
 if (!point) return null;
@@ -1888,6 +1929,7 @@ sheet.innerHTML = `
         <button class="btn btn-primary" id="navBtn"><span aria-hidden="true">➤</span> 一键导航</button>
       </div>
     </div>
+    ${renderPointReview(point)}
   </div>
   <div class="sheet-detail-extra" id="sheetDetailExtra" hidden>
     <span><b>完整地址</b>${point.address || "暂无详细地址"}</span>

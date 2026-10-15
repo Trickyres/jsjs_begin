@@ -26,17 +26,17 @@ let browser;
   const page = await context.newPage();
   const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
-  await page.addInitScript(()=>{window.__registrationNow=Date.parse('2026-10-12T09:00:00+08:00');Date.now=()=>window.__registrationNow;});
+  await page.addInitScript(()=>{window.__registrationNow=Date.parse('2026-10-13T09:00:00+08:00');Date.now=()=>window.__registrationNow;});
   for(const entry of ['/','/index_renew.html']) {
     await page.goto(base+entry,{waitUntil:'domcontentloaded'});
     await page.locator('.home-registration').waitFor();
     for(const event of mapping) {
       await page.locator(`[data-registration-select="${event.id}"]`).click();
-      const links=page.locator('.home-registration-link:visible');
+      const links=page.locator('a.event-registration__card:visible');
       if(await links.count()!==1 || await links.first().getAttribute('href')!==event.url) throw new Error('Wrong visible registration link');
-      if(await links.locator('strong').textContent()!==event.title) throw new Error('Wrong event title');
+      if(await links.locator('.event-registration__title').textContent()!==event.title) throw new Error('Wrong event title');
       const popupPromise=page.waitForEvent('popup');
-      await links.locator('.activity-registration-status').click();
+      await links.locator('.event-registration__status').click();
       const popup=await popupPromise;
       await popup.waitForLoadState('domcontentloaded');
       if(popup.url()!==event.url) throw new Error('Registration does not navigate directly');
@@ -48,33 +48,65 @@ let browser;
   for(const width of [320,375,430]) {
     await page.setViewportSize({width,height:1000});
     layout.push(await page.locator('.home-registration').evaluate((section,width)=>{
-      const title=section.querySelector('a:not([hidden]) strong');
-      return {width,titleFits:title.scrollWidth<=title.clientWidth,dates:[...section.querySelectorAll('.home-registration-day')].map(button=>({text:button.textContent,height:button.getBoundingClientRect().height})),pageOverflow:document.documentElement.scrollWidth>window.innerWidth};
+      const title=section.querySelector('a:not([hidden]) .event-registration__title');
+      return {width,titleFits:title.scrollWidth<=title.clientWidth,dates:[...section.querySelectorAll('.event-registration__day')].map(button=>({text:button.textContent,height:button.getBoundingClientRect().height})),pageOverflow:document.documentElement.scrollWidth>window.innerWidth};
     },width));
   }
   await page.setViewportSize({width:390,height:1100});
-  await page.screenshot({path:path.join(output,'registration-live-home.png'),fullPage:true});
-  await page.locator('.home-registration').screenshot({path:path.join(output,'registration-live-section.png')});
+  await page.screenshot({path:path.join(output,'registration-styles-home.png'),fullPage:true});
+  const multipleMarkup=await page.locator('.home-registration').evaluate(section=>section.outerHTML);
   const expiry=[];
-  for(const [date,expectedDays,expectedId] of [
-    ['2026-10-14T12:00:00+08:00',['16日','27日'],'chongyang'],
-    ['2026-10-16T10:00:00+08:00',['27日'],'osmanthus'],
-    ['2026-10-27T11:00:00+08:00',[],null]
+  let singleMarkup;
+  for(const [date,expectedDays,expectedId,expectedCount,mode] of [
+    ['2026-10-14T12:00:00+08:00',['16日','27日'],'chongyang',2,'multiple'],
+    ['2026-10-16T10:00:00+08:00',[],'osmanthus',1,'single'],
+    ['2026-10-27T11:00:00+08:00',[],null,0,'empty']
   ]) {
     await page.evaluate(date=>{window.__registrationNow=Date.parse(date);window.dispatchEvent(new Event('pageshow'));},date);
-    const days=await page.locator('.home-registration-day:visible').allTextContents();
+    const days=await page.locator('.event-registration__day:visible').allTextContents();
     if(JSON.stringify(days)!==JSON.stringify(expectedDays)) throw new Error('Expired dates remain visible');
-    const active=await page.locator('.home-registration-link:visible').count();
+    const active=await page.locator('a.event-registration__card:visible').count();
     if(active!==(expectedId?1:0)) throw new Error('Expired registration remains available');
-    if(expectedId && await page.locator('.home-registration-link:visible').getAttribute('data-registration-id')!==expectedId) throw new Error('Selection does not advance to next activity');
-    if(await page.locator('a[data-registration-id]:not([href])').count()!==3-expectedDays.length) throw new Error('Expired href remains present');
-    expiry.push({date,days,active});
+    if(expectedId && await page.locator('a.event-registration__card:visible').getAttribute('data-registration-id')!==expectedId) throw new Error('Selection does not advance to next activity');
+    if(await page.locator('a[data-registration-id]:not([href])').count()!==3-expectedCount) throw new Error('Expired href remains present');
+    if(!await page.locator(`.event-registration--${mode}`).count()) throw new Error('Incorrect registration layout mode');
+    if(mode==='single') {
+      if(!await page.locator('a.event-registration__card:visible .event-registration__date').isVisible()) throw new Error('Single date missing');
+      if(await page.locator('a.event-registration__card:visible .event-registration__date').textContent()!=='10月27日') throw new Error('Wrong single date');
+      for(const width of [320,375,430]) {
+        await page.setViewportSize({width,height:1000});
+        const result=await page.locator('a.event-registration__card:visible').evaluate(card=>{
+          const boxes=[...card.children].map(child=>child.getBoundingClientRect());
+          return {fits:boxes.every((box,i)=>i===0 || box.left>=boxes[i-1].right),overflow:document.documentElement.scrollWidth>window.innerWidth};
+        });
+        if(!result.fits || result.overflow) throw new Error('Single layout overlaps at '+width);
+      }
+      await page.setViewportSize({width:390,height:1100});
+      singleMarkup=await page.locator('.home-registration').evaluate(section=>section.outerHTML);
+      const popupPromise=page.waitForEvent('popup');
+      await page.locator('a.event-registration__card:visible .event-registration__status').click();
+      const popup=await popupPromise;await popup.waitForLoadState('domcontentloaded');
+      if(popup.url()!==mapping[2].url) throw new Error('Single registration URL incorrect');
+      await popup.close();
+    }
+    expiry.push({date,days,active,mode});
   }
-  if(!await page.locator('.activity-registration-empty').isVisible()) throw new Error('Missing ended state');
+  if(!await page.locator('.event-registration__empty').isVisible()) throw new Error('Missing ended state');
   await page.goto(base+'/',{waitUntil:'domcontentloaded'});
-  await page.evaluate(()=>{window.__registrationNow=Date.parse('2026-10-14T12:00:00+08:00');});
-  await page.locator('#homeRegistrationPlant').click();
+  await page.evaluate(()=>{window.__registrationNow=Date.parse('2026-10-14T12:00:00+08:00');document.getElementById('homeRegistrationPlant').click();});
   if(context.pages().length!==1) throw new Error('Expired click opens form');
+  // 用真实首页组件的两种状态，仅加载独立CSS，检查脱离全站样式也可复用。
+  const preview=await context.newPage();
+  const css=fs.readFileSync(path.join(root,'activity-registration.css'),'utf8');
+  await preview.setViewportSize({width:430,height:430});
+  await preview.setContent(`<html><head><style>${css}</style><style>body{margin:0;padding:24px;background:#fff8ef;font-family:'Microsoft YaHei',sans-serif}.preview-label{margin:0 0 16px;color:#927d6f;font-size:13px}section+ .preview-label{margin-top:36px}</style></head><body><p class="preview-label">单个活动 · 固定报名样式</p>${singleMarkup}<p class="preview-label">多个活动 · 固定报名样式</p>${multipleMarkup}</body></html>`);
+  await preview.screenshot({path:path.join(output,'registration-styles-preview.png'),fullPage:true});
+  for(const width of [320,375,430]) {
+    await preview.setViewportSize({width,height:590});
+    const overflow=await preview.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth);
+    if(overflow) throw new Error('Standalone CSS causes horizontal overflow');
+  }
+  await preview.close();
   console.log(JSON.stringify({mapping,layout,expiry,errors}));
   if(errors.length || layout.some(item=>!item.titleFits || item.pageOverflow)) throw new Error('Page or layout checks failed');
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();server.close();});

@@ -1,0 +1,51 @@
+/* 点位介绍内的轻量短评条，与首页风格一致；没有点评的点位不占位。 */
+.map-point-review {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 12px 13px;
+  border-radius: 15px;
+  color: #4e3d32;
+  background: #fff4e5;
+}
+
+.map-point-review__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.map-point-review .map-point-review__title {
+  margin: 0;
+  color: #704c35;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.map-point-review__score {
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #b86126;
+  background: #ffead2;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.map-point-review .map-point-review__text {
+  margin: 9px 0 0;
+  color: #4e3d32;
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.map-point-review .map-point-review__disclaimer {
+  margin: 8px 0 0;
+  color: #897366;
+  font-size: 11px;
+  line-height: 1.5;
+}

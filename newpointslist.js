@@ -278,7 +278,7 @@ const POINTS = [
   },
   {
     "id": "qiangsheng",
-    "name": "上海市强生职工医院",
+    "name": "强生医院",
     "address": "上海市黄浦区外马路984号",
     "lng": 121.506814,
     "lat": 31.211809,
@@ -478,7 +478,7 @@ const POINTS = [
 //   { id: "guotai-haitong", name: "国泰海通外滩金融广场", address: "上海市黄浦区中山南路888号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 66.6, y: 40.7, hitSize: 26 },
 //   { id: "guohai-sec", name: "国海证券(上海黄浦区中山南路营业部)", address: "上海市黄浦区中山南路988号2层201室", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 63.3, y: 47, hitSize: 24 },
 //   { id: "time-plastic", name: "上海时光整形外科医院（外滩旗舰院）", address: "上海市黄浦区中山南路935号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 70.3, y: 50.4, hitSize: 22 },
-//   { id: "qiangsheng", name: "上海市强生职工医院", address: "上海市黄浦区外马路984号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 75.8, y: 52.4, hitSize: 22 },
+//   { id: "qiangsheng", name: "强生医院", address: "上海市黄浦区外马路984号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 75.8, y: 52.4, hitSize: 22 },
 //   { id: "health-center", name: "小东门街道社区卫生服务中心", address: "上海市黄浦区陆家浜路525号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "service", x: 19, y: 50.7, hitSize: 26 },
 //   { id: "fabric-market", name: "南外滩量身定制中心", address: "上海市黄浦区陆家浜路399号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 30.2, y: 52.5, hitSize: 28 },
 //   { id: "icbc", name: "中国工商银行(南市支行)", address: "上海市黄浦区陆家浜路275号", lng: null, lat: null, baiduLng: null, baiduLat: null, category: "shopping", x: 38.4, y: 59.4, hitSize: 26 },

@@ -1,0 +1,155 @@
+{
+  "localOnly": true,
+  "deployed": false,
+  "map": "真实高德地图，本地页面截图",
+  "geometry": [
+    {
+      "zoom": 15.5,
+      "overlap": [],
+      "aliRight": true,
+      "boxes": {
+        "xiaolaoban": {
+          "left": 216.40625,
+          "right": 246.40625,
+          "top": 224.71875,
+          "bottom": 262.71875
+        },
+        "guoshuiyuguan": {
+          "left": 222.109375,
+          "right": 252.109375,
+          "top": 272.484375,
+          "bottom": 310.484375
+        },
+        "laochengxiangtangbao": {
+          "left": 212.453125,
+          "right": 242.453125,
+          "top": 317.03125,
+          "bottom": 355.03125
+        },
+        "alishaokao": {
+          "left": 257.140625,
+          "right": 287.140625,
+          "top": 264.390625,
+          "bottom": 302.390625
+        },
+        "traditional-beef-noodles": {
+          "left": 291.765625,
+          "right": 321.765625,
+          "top": 307.359375,
+          "bottom": 345.359375
+        }
+      }
+    },
+    {
+      "zoom": 17,
+      "overlap": [],
+      "aliRight": true,
+      "boxes": {
+        "xiaolaoban": {
+          "left": 186.859375,
+          "right": 216.859375,
+          "top": 251.953125,
+          "bottom": 289.953125
+        },
+        "guoshuiyuguan": {
+          "left": 194.875,
+          "right": 224.875,
+          "top": 302.09375,
+          "bottom": 340.09375
+        },
+        "laochengxiangtangbao": {
+          "left": 188.375,
+          "right": 218.375,
+          "top": 347.40625,
+          "bottom": 385.40625
+        },
+        "alishaokao": {
+          "left": 231.296875,
+          "right": 261.296875,
+          "top": 293.890625,
+          "bottom": 331.890625
+        },
+        "traditional-beef-noodles": {
+          "left": 269.453125,
+          "right": 299.453125,
+          "top": 338.171875,
+          "bottom": 376.171875
+        }
+      }
+    },
+    {
+      "zoom": 18,
+      "overlap": [],
+      "aliRight": true,
+      "boxes": {
+        "xiaolaoban": {
+          "left": 181.734375,
+          "right": 211.734375,
+          "top": 247.921875,
+          "bottom": 285.921875
+        },
+        "guoshuiyuguan": {
+          "left": 193.75,
+          "right": 223.75,
+          "top": 302.203125,
+          "bottom": 340.203125
+        },
+        "laochengxiangtangbao": {
+          "left": 192.75,
+          "right": 222.75,
+          "top": 348.828125,
+          "bottom": 386.828125
+        },
+        "alishaokao": {
+          "left": 232.609375,
+          "right": 262.609375,
+          "top": 293.78125,
+          "bottom": 331.78125
+        },
+        "traditional-beef-noodles": {
+          "left": 276.90625,
+          "right": 306.90625,
+          "top": 340.34375,
+          "bottom": 378.34375
+        }
+      }
+    },
+    {
+      "zoom": 19,
+      "overlap": [],
+      "aliRight": true,
+      "boxes": {
+        "xiaolaoban": {
+          "left": 171.484375,
+          "right": 201.484375,
+          "top": 239.859375,
+          "bottom": 277.859375
+        },
+        "guoshuiyuguan": {
+          "left": 191.515625,
+          "right": 221.515625,
+          "top": 302.421875,
+          "bottom": 340.421875
+        },
+        "laochengxiangtangbao": {
+          "left": 201.515625,
+          "right": 231.515625,
+          "top": 351.65625,
+          "bottom": 389.65625
+        },
+        "alishaokao": {
+          "left": 235.21875,
+          "right": 265.21875,
+          "top": 293.5625,
+          "bottom": 331.5625
+        },
+        "traditional-beef-noodles": {
+          "left": 291.8125,
+          "right": 321.8125,
+          "top": 344.703125,
+          "bottom": 382.703125
+        }
+      }
+    }
+  ]
+}

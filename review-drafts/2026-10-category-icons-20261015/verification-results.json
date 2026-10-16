@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-15",
+  "localOnly": true,
+  "deployed": false,
+  "selectedStyle": "暖彩轻浮雕",
+  "shoppingIcon": "购物车",
+  "checks": [
+    {
+      "entry": "index.html",
+      "categories": [
+        {
+          "category": "service",
+          "listCount": 15,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "shopping",
+          "listCount": 21,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "leisure",
+          "listCount": 7,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "memory",
+          "listCount": 3,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        }
+      ],
+      "allListCategoryIcons": 46,
+      "normalMarkersChecked": 57,
+      "numberedRouteMarkers": "1–4 preserved",
+      "guideChapters": "4/4 passed",
+      "phoneCommittee": "passed",
+      "policeIconAndPhone": "unchanged",
+      "oldEmojiOnActiveSurfaces": "none",
+      "search": "passed"
+    },
+    {
+      "entry": "index_renew.html",
+      "categories": [
+        {
+          "category": "service",
+          "listCount": 15,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "shopping",
+          "listCount": 21,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "leisure",
+          "listCount": 7,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        },
+        {
+          "category": "memory",
+          "listCount": 3,
+          "homeNavigation": "passed",
+          "listSymbols": "passed",
+          "mapDetailsAndNavigation": "passed"
+        }
+      ],
+      "allListCategoryIcons": 46,
+      "normalMarkersChecked": 57,
+      "numberedRouteMarkers": "1–4 preserved",
+      "guideChapters": "4/4 passed",
+      "phoneCommittee": "passed",
+      "policeIconAndPhone": "unchanged",
+      "oldEmojiOnActiveSurfaces": "none",
+      "search": "passed"
+    }
+  ],
+  "preservedData": [
+    "points-data.js",
+    "point-reviews-data.js",
+    "index_ori_version.html",
+    "jiaxiang_guide_h_5_index.html",
+    "jiaxiang_guide_h_5_index_zyf.html",
+    "amap.config.js",
+    "activity-registration.css"
+  ],
+  "widths": [
+    320,
+    375,
+    430,
+    1280
+  ],
+  "mapVerification": "Actual generated marker DOM; external basemap not loaded in offline tests",
+  "errors": [],
+  "failedLocalAssets": []
+}

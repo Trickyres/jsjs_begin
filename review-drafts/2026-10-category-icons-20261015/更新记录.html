@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>四类图标统一更新 · 本地审核</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#faf6ee;color:#3b3027;font-family:system-ui,"Microsoft YaHei",sans-serif;line-height:1.7}main{max-width:1080px;margin:auto;padding:28px 20px 60px}h1{font-size:28px;margin:12px 0}h2{font-size:21px;margin:0 0 14px}.notice{display:inline-block;border:1px solid #eed3a1;border-radius:30px;background:#fff0d5;padding:6px 14px;color:#986026;font-size:13px}.muted{color:#89786a;font-size:13px}.intro{margin:0 0 24px}.card{background:#fffdf8;border:1px solid #ecdfca;border-radius:22px;padding:24px;margin-top:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}figure{margin:0;border-radius:18px;overflow:hidden;background:#f6f0e6}figure img{display:block;width:100%;height:auto}.phone-shot{max-width:390px;margin:auto}.figure-copy,figcaption{padding:12px 15px;font-size:14px}.section-shot{background:#fffdf8}.section-shot img{max-width:390px;margin:auto}.figure-copy p{margin:7px 0}a{color:#bf562e;text-underline-offset:4px}.actions{display:flex;gap:18px;flex-wrap:wrap}.coverage{width:100%;border-collapse:collapse;font-size:14px}.coverage td,.coverage th{text-align:left;padding:10px 8px;border-bottom:1px solid #efdfce}.coverage th{color:#785d46}.result{color:#567742;font-weight:600}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px}details{border-top:1px solid #eadcc9;padding-top:14px}summary{color:#a9522e;cursor:pointer;font-size:16px;font-weight:600}details figure{margin-top:12px}.small-gap{margin-top:18px}.metadata-list{padding-left:20px}.metadata-list li{margin:6px 0}@media(max-width:680px){main{padding:20px 14px 40px}.card{padding:18px}.grid,.gallery{grid-template-columns:1fr}h1{font-size:24px}.coverage{font-size:13px}.coverage td,.coverage th{padding:8px 5px}}
+  </style>
+</head>
+<body>
+<main>
+  <span class="notice">此方案已撤回 · 未发布上线</span>
+  <h1>已撤回：四类入口图标统一更新</h1>
+  <p class="intro muted">当前本地网页已恢复原来的图标，以下截图与检查结果仅为撤回前的历史记录。<a href="恢复原图标.html">查看恢复后的预览与记录</a>。</p>
+  <section class="card">
+    <h2>撤回前的方案截图（非当前网页）</h2>
+    <div class="grid">
+      <figure class="phone-shot"><a href="首页-新图标.png"><img src="首页-新图标.png" alt="本地首页的新四类图标完整展示"></a><figcaption>当前网页截图：保留原有首页布局、四类文字、入口尺寸与点击反馈，仅统一图标和配色质感。</figcaption></figure>
+      <div>
+        <figure class="section-shot"><img src="首页-四类入口.png" alt="便民服务、生活购物、休闲游玩、多稼记忆四个暖彩轻浮雕入口"></figure>
+        <div class="figure-copy">
+          <p><strong>便民服务：</strong>邻里人物 · 暖橙</p>
+          <p><strong>生活购物：</strong>购物车 · 麦金</p>
+          <p><strong>休闲游玩：</strong>树木 · 草绿</p>
+          <p><strong>多稼记忆：</strong>历史建筑 · 砖红</p>
+          <p class="muted">统一使用本地矢量素材，小尺寸与放大时保持清晰，不需要下载额外的在线图标库。</p>
+        </div>
+        <p class="actions"><a href="../../index.html">打开本地首页体验</a><a href="../../index_renew.html">打开 index_renew</a></p>
+        <p class="muted">这两个链接打开实际本地网页，可检查分类进入、搜索、地图点位介绍等交互。</p>
+      </div>
+    </div>
+  </section>
+  <section class="card">
+    <h2>逐项覆盖检查</h2>
+    <table class="coverage">
+      <thead><tr><th>位置</th><th>处理范围</th><th>结果</th></tr></thead>
+      <tbody>
+        <tr><td>首页快捷入口</td><td>四个入口的图标、配色、轻浮雕与按下反馈</td><td class="result">4/4 通过</td></tr>
+        <tr><td>点位列表、全部点位、搜索结果</td><td>便民 15、购物 21、休闲 7、记忆 3，共 46 个点位</td><td class="result">46/46 通过</td></tr>
+        <tr><td>普通地图点位</td><td>检查全部 57 个生成标记；四类采用新图标，商务保持原样</td><td class="result">通过</td></tr>
+        <tr><td>纸质指南电子版目录</td><td>四个章节入口使用相同素材与配色</td><td class="result">4/4 通过</td></tr>
+        <tr><td>电话页</td><td>“多稼居民委员会”的同款人物图标同步更新</td><td class="result">通过</td></tr>
+        <tr><td>分类跳转、搜索、点位详情、导航链接</td><td>两个网页入口分别回归检查</td><td class="result">通过</td></tr>
+        <tr><td>小屏与桌面</td><td>320、375、430、1280 宽度检查</td><td class="result">无横向溢出</td></tr>
+        <tr><td>旧图标与素材加载</td><td>当前页面源文件及使用图标的位置检查</td><td class="result">无旧图标残留；无素材加载失败</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">地图上方分类筛选原本仅显示文字，保持原样。地图图标检查使用实际生成的标记元素，本次离线回归没有加载外部地图底图。</p>
+    <p><a href="verification-results.json">查看完整检查结果</a> · <a href="icon-assets.json">查看四个图标素材记录</a></p>
+  </section>
+  <section class="card">
+    <h2>其他页面中的效果</h2>
+    <div class="grid">
+      <div>
+        <figure class="section-shot"><a href="纸质指南-四个章节.png"><img src="纸质指南-四个章节.png" alt="纸质指南目录四个章节的新图标"></a><figcaption>纸质指南电子版 · 四个章节入口</figcaption></figure>
+        <figure class="section-shot small-gap"><img src="地图点位图标样例.png" alt="实际生成的四类地图标记图标样例"><figcaption>地图标记图标样例，不是地图底图截图；路线 1–4 号数字标记保留。</figcaption></figure>
+      </div>
+      <figure class="phone-shot"><a href="电话页-便民图标.png"><img src="电话页-便民图标.png" alt="电话页多稼居民委员会采用新人物图标，其余电话图标保留"></a><figcaption>电话页 · 人物图标同步，警察、医疗、维修和电话图标保留。</figcaption></figure>
+    </div>
+  </section>
+  <section class="card">
+    <h2>四类列表截图</h2>
+    <div class="gallery">
+      <details><summary>便民服务列表</summary><figure class="phone-shot"><a href="列表-service.png"><img loading="lazy" src="列表-service.png" alt="便民服务点位列表新图标"></a></figure></details>
+      <details><summary>生活购物列表</summary><figure class="phone-shot"><a href="列表-shopping.png"><img loading="lazy" src="列表-shopping.png" alt="生活购物列表使用购物车图标"></a></figure></details>
+      <details><summary>休闲游玩列表</summary><figure class="phone-shot"><a href="列表-leisure.png"><img loading="lazy" src="列表-leisure.png" alt="休闲游玩列表使用新树木图标"></a></figure></details>
+      <details><summary>多稼记忆列表</summary><figure class="phone-shot"><a href="列表-memory.png"><img loading="lazy" src="列表-memory.png" alt="多稼记忆列表使用新历史建筑图标"></a></figure></details>
+    </div>
+  </section>
+  <section class="card">
+    <h2>未改动的内容</h2>
+    <ul class="metadata-list">
+      <li>57 个点位的名称、地址、照片、坐标等数据，以及已有短评保持不变；海音琴行和前一批更新保留。</li>
+      <li>滨江漫步路线的 1–4 号数字标记、路线与点位顺序保持不变。</li>
+      <li>商务分类、电话页其他专用图标、底部导航图标保持不变。</li>
+      <li>活动报名、照片上传、视频与纸质指南图片未修改。</li>
+      <li>历史归档页面保留原样；没有推送远程仓库，也没有触发 Cloudflare 部署。</li>
+    </ul>
+    <p class="muted">图标来自本机 Lucide，已随素材保留授权说明。统一渲染入口与共享样式便于后续维护，避免只改首页而遗漏列表或地图。</p>
+  </section>
+</main>
+</body>
+</html>

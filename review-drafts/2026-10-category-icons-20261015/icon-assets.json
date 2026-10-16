@@ -1,0 +1,40 @@
+{
+  "localOnly": true,
+  "deployed": false,
+  "iconSource": "Bundled Lucide",
+  "style": "暖彩轻浮雕",
+  "assets": [
+    {
+      "key": "service",
+      "name": "UsersRound",
+      "label": "便民服务",
+      "color": "#df6730",
+      "file": "assets/icons/category-service.svg",
+      "sha256": "e3496b6257475896e5acadeea01f0c9451b83bda9596773ec3217e7dd9d6c928"
+    },
+    {
+      "key": "shopping",
+      "name": "ShoppingCart",
+      "label": "生活购物",
+      "color": "#b87b26",
+      "file": "assets/icons/category-shopping.svg",
+      "sha256": "f3285c28b37c74d95cd3f4ec542a8a9200a5a6386a4aba454a5eac82c8e90dce"
+    },
+    {
+      "key": "leisure",
+      "name": "Trees",
+      "label": "休闲游玩",
+      "color": "#688f4e",
+      "file": "assets/icons/category-leisure.svg",
+      "sha256": "524b644f0d88bf68391f7845fc70c75f20400d34147ad72d29a1b150aed71320"
+    },
+    {
+      "key": "memory",
+      "name": "Landmark",
+      "label": "多稼记忆",
+      "color": "#a3634d",
+      "file": "assets/icons/category-memory.svg",
+      "sha256": "315b3b8d16d83538878e0b2cc264d935eb32064c98cb1c1442c0ad4f2f0af18a"
+    }
+  ]
+}

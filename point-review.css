@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 8px;
 }
 
 .map-point-review .map-point-review__title {
@@ -25,15 +25,66 @@
 }
 
 .map-point-review__score {
-  padding: 3px 8px;
-  border-radius: 999px;
-  color: #b86126;
-  background: #ffead2;
-  font-size: 12px;
+  --review-star-size: 18px;
+  /* 内嵌 assets/icons/review-star.svg，兼容 file:// 本地预览。 */
+  --review-star-mask: url("data:image/svg+xml;base64,PCEtLSBMdWNpZGUgc3RhciB2MS44LjAsIElTQyBsaWNlbnNlOyBzZWUgY2F0ZWdvcnktaWNvbnMtTElDRU5TRS50eHQgaW4gdGhpcyBkaXJlY3RvcnkuIC0tPgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiPgogIDxwYXRoIGQ9Ik0xMS41MjUgMi4yOTVhLjUzLjUzIDAgMCAxIC45NSAwbDIuMzEgNC42NzlhMi4xMjMgMi4xMjMgMCAwIDAgMS41OTUgMS4xNmw1LjE2Ni43NTZhLjUzLjUzIDAgMCAxIC4yOTQuOTA0bC0zLjczNiAzLjYzOGEyLjEyMyAyLjEyMyAwIDAgMC0uNjExIDEuODc4bC44ODIgNS4xNGEuNTMuNTMgMCAwIDEtLjc3MS41NmwtNC42MTgtMi40MjhhMi4xMjIgMi4xMjIgMCAwIDAtMS45NzMgMEw2LjM5NiAyMS4wMWEuNTMuNTMgMCAwIDEtLjc3LS41NmwuODgxLTUuMTM5YTIuMTIyIDIuMTIyIDAgMCAwLS42MTEtMS44NzlMMi4xNiA5Ljc5NWEuNTMuNTMgMCAwIDEgLjI5NC0uOTA2bDUuMTY1LS43NTVhMi4xMjIgMi4xMjIgMCAwIDAgMS41OTctMS4xNnoiLz4KPC9zdmc+Cg==");
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  color: #dc6028;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.2;
   white-space: nowrap;
 }
+
+.map-point-review__stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.map-point-review__star {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: var(--review-star-size);
+  height: var(--review-star-size);
+  overflow: hidden;
+  border-radius: 4px;
+  background: #e8dfd2;
+}
+
+.map-point-review__star::before,
+.map-point-review__star-inner::before {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  background: #fffdf8;
+  -webkit-mask: var(--review-star-mask) center / contain no-repeat;
+  mask: var(--review-star-mask) center / contain no-repeat;
+}
+
+.map-point-review__star-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  overflow: hidden;
+  background: #f16b2b;
+}
+
+.map-point-review__star-inner {
+  position: relative;
+  display: block;
+  width: var(--review-star-size);
+  height: var(--review-star-size);
+}
+
+.map-point-review__star-inner::before { background: #fff; }
+
+.map-point-review__value { font-variant-numeric: tabular-nums; }
 
 .map-point-review .map-point-review__text {
   margin: 9px 0 0;

@@ -473,7 +473,7 @@ function openBinjiangMap(shouldAnnounce = false) {
   state.category = 'all';
   state.selectedId = 'huangpu-riverside';
   setView('map');
-  if (shouldAnnounce) showToast('已打开滨江散步路线起点，可继续点击一键导航。');
+  if (shouldAnnounce) showToast('已打开滨江漫步路线起点，可继续点击一键导航。');
 }
 
 function openGuideCategory(category) {
@@ -1820,8 +1820,16 @@ function renderPointReview(point) {
   if (!point || !entries || !Object.prototype.hasOwnProperty.call(entries, point.id)) return '';
 
   const review = entries[point.id];
-  if (!review || !Number.isInteger(review.rating) || review.rating < 1 || review.rating > 5
+  if (!review || !Number.isFinite(review.rating) || review.rating < 1 || review.rating > 5
       || typeof review.text !== 'string' || !review.text.trim()) return '';
+
+  // 显示精确到一位小数；星格的填充与显示数字采用同一个分值。
+  const rating = Math.round(review.rating * 10) / 10;
+  const ratingText = rating.toFixed(1);
+  const stars = Array.from({ length: 5 }, (_, index) => {
+    const fill = Math.round(Math.max(0, Math.min(1, rating - index)) * 100);
+    return `<span class="map-point-review__star"><span class="map-point-review__star-fill" style="width:${fill}%"><span class="map-point-review__star-inner"></span></span></span>`;
+  }).join('');
 
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -1831,7 +1839,7 @@ function renderPointReview(point) {
     <aside class="map-point-review" aria-label="${escape(point.name)}的个人探店笔记">
       <div class="map-point-review__head">
         <h4 class="map-point-review__title">${escape(data.label || '邻里探店笔记')}</h4>
-        <span class="map-point-review__score" aria-label="个人评分${review.rating}分，满分5分">个人 ${review.rating} / 5</span>
+        <span class="map-point-review__score" role="img" aria-label="个人评分${ratingText}分，满分5分"><span class="map-point-review__stars" aria-hidden="true">${stars}</span><span class="map-point-review__value" aria-hidden="true">${ratingText}</span></span>
       </div>
       <p class="map-point-review__text">${escape(review.text)}</p>
       <p class="map-point-review__disclaimer">${escape(data.disclaimer || '个人体验，仅供参考，非综合评分')}</p>

@@ -1,0 +1,3166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>上海城市雕塑调研平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
+
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link rel="stylesheet" href="./leaflet/leaflet.css" />
+    <link rel="stylesheet" href="./leaflet/leaflet.legend.css" />
+    <link rel="stylesheet" href="./lightbox/css/lightbox.min.css" />
+
+
+    <style type="text/css">
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin: 0.2em 0;
+        }
+
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input,
+        textarea {
+            -webkit-user-select: auto;
+            user-select: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 1px;
+            background: none;
+        }
+
+        #map,
+        #nodata-panel {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            bottom: 0;
+            top: 51px;
+            transform: translateZ(1px);
+        }
+
+        #nodata-panel {
+            display: none;
+            z-index: 1000003;
+            background-color: #fff;
+        }
+
+        #nodata-panel img {
+            width: 100%;
+        }
+
+        .leaflet-bottom {
+            bottom: 20px;
+        }
+
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+
+        .leaflet-control-scale {
+            position: fixed;
+            bottom: -4px;
+            right: 15px;
+        }
+
+        .leaflet-legend-title {
+            margin: 3px;
+            font-size: 1.1em;
+            padding-bottom: 0px;
+        }
+
+        /*搜索*/
+        header {
+            width: 100%;
+            overflow: hidden;
+            border-bottom: 1px solid #efefef;
+        }
+
+        /* #search {width: 100%;text-align: center;height: 24;margin-left: 3px;margin-top: 14px;padding: 0 11px;font-size: 14px;line-height: 24px;border: none;}
+     */
+        .search {
+            height: 50px;
+            background-color: #fff;
+        }
+
+        .search p {
+            width: calc(100% - 60px);
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 50px;
+            color: #444242;
+            text-align: center;
+        }
+
+        .auto-item {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .logo {
+            position: absolute;
+            left: 15px;
+            top: 17px;
+            height: 18px;
+            width: auto;
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+        }
+
+        /*筛选*/
+        #shaixuan {
+            position: absolute;
+            z-index: 1000;
+            top: 0px;
+            right: 0px;
+            width: 60px;
+            background-color: #fff;
+            padding: 2px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 46px;
+            height: 46px;
+            cursor: pointer;
+            transform: translateZ(1px);
+            box-shadow: -4px 0 4px 0 #ccc;
+        }
+
+        #shaixuan p {
+            width: 100%;
+            text-align: center;
+            background-image: url(img/shaixuan.png);
+            background-repeat: no-repeat;
+            background-size: 8px 8px;
+            background-position: 91% 20px;
+        }
+
+        #shaixuan img {
+            width: 8px;
+            float: right;
+            margin-right: 10px;
+            margin-top: 17px;
+        }
+
+        #shaixuan-panel {
+            position: absolute;
+            top: 51px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: transparent;
+            z-index: 1000008;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        #shaixuan-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.75;
+            z-index: 1000009;
+        }
+
+        #select-panel {
+            width: 92%;
+            height: 320px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background-color: #fff;
+            padding: 10px 4%;
+            z-index: 1000010;
+            transform: translateZ(1px);
+            display: none;
+        }
+
+        #select-panel .title {
+            font-size: 14px;
+            line-height: 20px;
+            text-align: left;
+            color: #333;
+            margin: 10px 0 0px 0;
+        }
+
+        #select-panel .row {
+            width: 100%;
+            position: relative;
+        }
+
+        #select-panel .row .choice-text {
+            font-size: 16px;
+            width: 100%;
+            border-bottom: 1px solid #ededed;
+            line-height: 35px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        #select-panel .row .choice {
+            position: absolute;
+            top: 5px;
+            right: 0px;
+            font-size: 16px;
+            color: #cbb687;
+        }
+
+        #select-panel .row select {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .selectstyle {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #select-id {
+            border: 0px;
+            height: 32px;
+            font-size: 16px;
+            width: 100%;
+            border-bottom: 1px solid #ededed;
+            line-height: 35px;
+            text-align: left;
+        }
+
+
+        #select-panel .row ul {
+            margin: 5px 0;
+        }
+
+        #select-panel .row ul li {
+            display: inline;
+            background-color: #f0f0f0;
+            border: 1px solid #dcdcdc;
+            line-height: 40px;
+            padding: 7px 15px;
+            border-radius: 15px;
+            margin: 10px;
+            font-size: 13px;
+        }
+
+        #select-panel .row ul li.active {
+            background-color: #f0e7d6;
+            border: 1px solid #bbb591;
+        }
+
+        #select-panel .row .button {
+            width: 45%;
+            margin: 15px 2%;
+            height: 45px;
+            line-height: 45px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 10px;
+            text-align: center;
+            float: left;
+        }
+
+        #reset-btn {
+            color: #000;
+            background-color: #f0e7d6;
+        }
+
+        #ok-btn {
+            color: #fff;
+            background-image: linear-gradient(to right, #bb946d, #c5a077, #cfad81, #d9ba8c, #e3c797);
+        }
+
+        /*详情*/
+        .detail {
+            position: absolute;
+            bottom: 20px;
+            left: 5px;
+            right: 5px;
+            background-color: #fff;
+            z-index: 1001;
+            padding: 5px 10px;
+            transform: translateZ(1px);
+            display: none;
+        }
+
+        .detail h4 {
+            height: 35px;
+            font-weight: 600;
+            color: #222;
+            font-size: 16px;
+            line-height: 35px;
+            margin: 0 0 6px 0;
+            padding-right: 20px;
+        }
+
+        .detail p {
+            font-size: 13px;
+            line-height: 23px;
+            color: #757575;
+            /* width: 100%; */
+            background-repeat: no-repeat;
+            background-size: 15px 15px;
+            background-position: 0 2px;
+        }
+
+        .detail .dis {
+            color: #ff6633;
+            font-weight: bold;
+        }
+
+        .detail p a {
+            color: #3d3d3d;
+            font-style: normal;
+            text-decoration: none;
+        }
+
+        .check {
+            display: inline-flex;
+            margin-top: 10px;
+            line-height: 30px;
+            /* margin-right: 15px; */
+            margin-bottom: 10px;
+            margin-left: 15px;
+            font-size: 13px;
+            color: #757575;
+        }
+
+        .check2 {
+            /* display: inline-flex; */
+            margin-top: 10px;
+            line-height: 30px;
+            /* margin-right: 15px; */
+            margin-bottom: 10px;
+            margin-left: 15px;
+            font-size: 13px;
+            color: #757575;
+        }
+
+        .already {
+            color: #1d0fc9;
+        }
+
+        .detail p img {
+            width: 12px;
+            height: 12px;
+            margin-left: 10px;
+        }
+
+        #detail-note {
+            margin-bottom: 5px;
+        }
+
+        .detail .note {
+            background-color: #efefef;
+            border-radius: 2px;
+            font-weight: bold;
+            padding: 2px 4px;
+            color: #333;
+            margin-right: 5px;
+        }
+
+        .detail .green {
+            background-color: #27c37c !important;
+            color: #fff !important;
+        }
+
+        .detail .tip {
+            color: #333;
+            font-weight: bold;
+        }
+
+        #detail-attr {
+            max-height: 380px;
+            overflow: scroll;
+        }
+
+        a#download,
+        a#confirm,
+        a#edit,
+        a#save,
+        a#navi,
+        a#delete {
+            text-decoration: none;
+            position: absolute;
+            top: 15px;
+            color: #666;
+            font-size: 12px;
+            border-radius: 2px;
+            font-weight: bold;
+            padding: 2px 4px;
+            color: #333
+        }
+
+        a#delete {
+            right: 45px;
+            background-color: #dc4949
+        }
+
+        a#edit {
+            right: 85px;
+            background-color: #ffb531
+        }
+
+        /* a#save {
+            right: 125px;
+            background-color: #f2ad31
+        } */
+
+        a#confirm {
+            right: 125px;
+            background-color: #29b309
+        }
+
+        a#download {
+            right: 165px;
+            background-color: #4bb5fb
+        }
+
+        a#confirm img,
+        a#edit img,
+        a#delete img {
+            width: 35px;
+            height: 35px;
+            display: block;
+        }
+
+        a#close-detail {
+            text-decoration: none;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        a#close-detail img {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        textarea {
+            /* width: 95%;
+            height: 30px; */
+            width: calc(100% - 15px);
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .wtlc {
+            margin-top: 15px;
+            margin-left: 15px;
+            width: calc(95% - 15px)
+        }
+
+
+        /*.image-panel{max-height:205px;overflow:scroll;}*/
+        .image-panel {
+            width: 100% !important
+        }
+
+        .image-box {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 2px;
+            float: left;
+            margin: 5px 15px;
+        }
+
+        .image-content {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .close-image {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .close-image img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-add {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: -20px;
+        }
+
+        .image-box input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+        }
+
+        #sel-dwlx,
+        #sel-dwys {
+            display: none;
+        }
+
+        div#loading {
+            position: absolute;
+            z-index: 1000002;
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            background: #535455;
+            opacity: 0.8;
+            left: 50%;
+            margin-left: -60px;
+            top: 40%;
+            color: #fff;
+            display: none;
+        }
+
+        div#loading img {
+            width: 50px;
+            height: 50px;
+            margin: 15px 35px;
+        }
+
+        div#loading p {
+            font-size: 16px;
+            text-align: center;
+            line-height: 25px;
+        }
+
+        /* 
+    #tomain {
+      position: absolute;
+      z-index: 1001;
+      left: 5px;
+      top: 65px;
+      width: 50px;
+      height:50px;
+      background-color: #f6f6f6;
+      border-radius: 5px;
+      transform: translateZ(1px);
+      border: 1px solid #ffffff;
+      background-image: url('img/main.png');
+      background-size: contain;
+      cursor: pointer;
+    } */
+
+        /* #download {
+      display: none;
+      position: absolute;
+      z-index: 1001;
+      left: 5px;
+      top: 65px;
+      width: 40px;
+      background-color: #f6f6f6;
+      border-radius: 5px;
+      transform: translateZ(1px);
+      border: 1px solid #9b9090;
+    } */
+
+        /*列表*/
+        #icon-panel {
+            position: absolute;
+            z-index: 1001;
+            right: 5px;
+            top: 65px;
+            width: 60px;
+            background-color: #f6f6f6;
+            border-radius: 5px;
+            transform: translateZ(1px);
+        }
+
+        #icon-panel ul {
+            width: 100%
+        }
+
+        #icon-panel ul li {
+            width: 100%;
+        }
+
+        #icon-panel ul li a {
+            text-decoration: none;
+        }
+
+        #icon-panel ul li img {
+            width: 30px;
+            height: 30px;
+            margin: 5px 15px 0 15px;
+        }
+
+        #icon-panel ul li p {
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 5px;
+            color: #228aff;
+            font-weight: bold;
+        }
+
+        #list {
+            position: absolute;
+            z-index: 1000005;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        .shi-box {
+            height: 30px;
+            border-bottom: 1px solid #f5f5f5;
+            line-height: 30px;
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+        }
+
+        .shi-box .shi-left p {
+            font-weight: 700;
+            margin-left: 10px;
+            font-size: 15px;
+            color: #000;
+        }
+
+        .shi-box .shi-left p #finish-number {
+            color: #26c47a;
+        }
+
+        .shi-box .shi-left p #unfinish-number {
+            color: orange;
+        }
+
+        .shi-box .shi-right img {
+            width: 20px;
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+
+        .di {
+            height: 96%;
+            overflow-y: scroll;
+        }
+
+        .di li {
+            display: flex;
+            height: 120px;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+
+        .di li .di-left {
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            flex-direction: column;
+            margin-left: 15px;
+            display: flex;
+            width: 80%;
+        }
+
+        .di li .di-left h4 {
+            line-height: 25px;
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: block;
+            font-size: 16px;
+            color: #222;
+            margin: 0;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+        .di li .di-left p:first-of-type {
+            margin-top: 5px;
+        }
+
+        .di li .di-left p {
+            font-size: 14px;
+            color: #737373;
+            width: 100%;
+            line-height: 26px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .di li .di-left p i {
+            color: #005dff;
+            font-style: normal;
+        }
+
+        .di li .di-left p span {
+            color: #ff6633;
+        }
+
+        .di li .di-left .note {
+            background-color: #e8e8e8;
+            border-radius: 2px;
+            font-weight: bold;
+            padding: 2px 4px;
+            color: #5d5d5d;
+            margin-right: 5px;
+        }
+
+        .di li .di-right {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
+
+        .di li .di-right img {
+            width: 35px;
+            margin-right: 20px;
+        }
+
+        #legend {
+            position: absolute;
+            bottom: 90px;
+            right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 10001;
+            transform: translateZ(1px);
+            width: 90px;
+        }
+
+        /*定位图标*/
+        #locate {
+            position: absolute;
+            z-index: 1001;
+            left: 5px;
+            bottom: 125px;
+            width: 40px;
+            height: 40px;
+            background-color: #f6f6f6;
+            border-radius: 50%;
+            transform: translateZ(1px);
+        }
+
+        #locate img {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        /*导航功能*/
+        #navi-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: transparent;
+            z-index: 1000003;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        #navi-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.75;
+            z-index: 1000004;
+        }
+
+        #navi-div {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            opacity: 1;
+            z-index: 1000005;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        #navi-div ul {
+            width: 100%;
+            border-bottom: 1px solid #eee;
+        }
+
+        #navi-div ul li {
+            width: 49%;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        #navi-div ul li a {
+            text-decoration: none;
+        }
+
+        #navi-div ul li a img {
+            width: 50%;
+            object-fit: cover;
+            margin: 5px 25%;
+        }
+
+        #navi-div p {
+            font-size: 14px;
+            color: #333;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        #navi-div ul li a p {
+            line-height: 20px;
+        }
+
+        /* 修改密码 */
+        #password-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: transparent;
+            z-index: 1003;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        #password-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.75;
+            z-index: 1004;
+        }
+
+        #password-div {
+            position: absolute;
+            top: 200px;
+            left: 5%;
+            right: 5%;
+            width: 85%;
+            background-color: #fff;
+            opacity: 1;
+            z-index: 1005;
+            border-radius: 10px;
+            padding: 10px;
+            padding-top: 30px;
+        }
+
+        #password-submit,
+        #password-cancel {
+            width: 60px;
+            height: 30px;
+            border-radius: 2px;
+            line-height: 30px;
+            float: left;
+            margin: 20px 10px;
+            text-align: center;
+        }
+
+        #password-submit {
+            background-color: #009688;
+            color: #fff;
+            margin-left: 80px;
+            border: 1px solid #009688;
+        }
+
+        #password-cancel {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #666;
+        }
+
+        #password-div label {
+            line-height: 40px;
+        }
+
+        #password-div input {
+            height: 30px;
+            width: 100%;
+        }
+
+        /* 确认 */
+        #confirm-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: transparent;
+            z-index: 1003;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        #confirm-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.75;
+            z-index: 1004;
+        }
+
+        #confirm-div {
+            position: absolute;
+            top: 40%;
+            left: 15%;
+            right: 15%;
+            width: 70%;
+            background-color: #fff;
+            opacity: 1;
+            z-index: 1005;
+            border-radius: 10px;
+            padding: 10px;
+            padding-top: 30px;
+        }
+
+        #confirm-submit,
+        #confirm-cancel {
+            width: 60px;
+            height: 30px;
+            border-radius: 2px;
+            line-height: 30px;
+            float: left;
+            margin: 20px 0px 20px 0px;
+            text-align: center;
+        }
+
+        #confirm-submit {
+            background-color: #009688;
+            color: #fff;
+            margin-left: 50px;
+            border: 1px solid #009688;
+        }
+
+        #confirm-cancel {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #666;
+            float: right;
+            margin-right: 50px;
+        }
+
+        #confirm-div label {
+            line-height: 40px;
+        }
+
+        #confirm-div input {
+            height: 30px;
+            width: 100%;
+        }
+
+        /* 确认 */
+        #confirm-panel2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: transparent;
+            z-index: 1003;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        #confirm-mask2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #000;
+            opacity: 0.75;
+            z-index: 1004;
+        }
+
+        #confirm-div2 {
+            position: absolute;
+            top: 40%;
+            left: 15%;
+            right: 15%;
+            width: 70%;
+            background-color: #fff;
+            opacity: 1;
+            z-index: 1005;
+            border-radius: 10px;
+            padding: 10px;
+            padding-top: 30px;
+        }
+
+        #confirm-nosafe2,
+        #confirm-safe2 {
+            width: 60px;
+            height: 30px;
+            border-radius: 2px;
+            line-height: 30px;
+            float: left;
+            margin: 20px 0px 20px 0px;
+            text-align: center;
+        }
+
+        #confirm-nosafe2 {
+            background-color: #009688;
+            color: #fff;
+            margin-left: 50px;
+            border: 1px solid #009688;
+        }
+
+        #confirm-safe2 {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #666;
+            float: right;
+            margin-right: 50px;
+        }
+
+        #confirm-div2 label {
+            line-height: 40px;
+        }
+
+        #confirm-div2 input {
+            height: 30px;
+            width: 100%;
+        }
+
+        #confirm-cancel2 {
+            float: right;
+            margin-top: -15px;
+        }
+
+        /* toast*/
+        /*           @keyframes show {0% {opacity: 0;}100% {opacity: 1;}}
+        @keyframes hide {0% {opacity: 1;}100% {opacity: 0;}}*/
+        .toast_box {
+            z-index: 1006;
+            position: absolute;
+            top: 50%;
+            height: 60px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: none;
+            transform: translateZ(1px);
+        }
+
+        .toast_box p {
+            position: absolute;
+            z-index: 1007;
+            margin-top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            padding: 10px 20px;
+            /*width: 350px;*/
+            background: #707070;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        .lightboxOverlay,
+        .lightbox {
+            transform: translateZ(1px)
+        }
+
+        * {
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .middle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .menu {
+            /* width: 300px; */
+            width: 95%;
+            padding: 5px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .item {
+            border-top: 1px solid #d1d7db;
+
+            overflow: hidden;
+        }
+
+        .btn {
+            position: relative;
+            display: block;
+            padding: 16px 20px;
+            background: #3498db;
+            color: #fff;
+        }
+
+        .topbtn {
+            background: #f2ad31;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #3498db;
+            left: 20px;
+            bottom: -7px;
+            transform: rotate(45deg);
+        }
+
+        .topbtn::before {
+            background: #f2ad31;
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        .smenu {
+            /* background: #333; */
+            overflow: hidden;
+            transition: max-height .5s;
+            max-height: 0;
+        }
+
+        .smenu p {
+            margin-top: 15px;
+            margin-left: 15px;
+        }
+
+        .hs {
+            text-align: center;
+            width: 90px;
+            border: none;
+            border-bottom: 2px solid #999;
+            padding: 5px;
+            background: transparent;
+        }
+
+        .tophs {
+            border-bottom: 2px solid #ed7b07;
+        }
+
+
+        .hs2 {
+            width: 80%;
+            text-align: center;
+            border: none;
+            border-bottom: 2px solid #999;
+            padding: 5px;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!--    <section class="search">
+        <img class="logo" src="./img/search.svg"/> 
+        <form class="form" @submit.prevent action="javascript: void(0);">
+          <input id="search"  autocomplete="off" type="search"/>
+        </form>   
+      </section> -->
+        <div class="search">
+            <p id="search"></p>
+        </div>
+        <div id="shaixuan">
+            <p>筛选</p>
+        </div>
+    </header>
+    <div id="map"></div>
+    <div id="nodata-panel"><img src="img/nodata.jpg"></div>
+    <div id="locate"><img src="img/locate.png"></img></div>
+
+
+
+    <!-- 筛选选项 -->
+    <div id="shaixuan-panel">
+        <div id="shaixuan-mask"></div>
+        <div id="select-panel">
+            <p class="title">所在区</p>
+            <div class="row">
+                <p id="select-county-text" class="choice-text">全部</p>
+                <p class="choice">选择</p>
+                <select id="select-county">
+                </select>
+            </div>
+            <p class="title">所在街镇</p>
+            <div class="row">
+                <p id="select-town-text" class="choice-text">全部</p>
+                <p class="choice">选择</p>
+                <select id="select-town">
+                </select>
+            </div>
+            <p class="title">空间类型</p>
+            <div class="row">
+                <p id="select-spacetype-text" class="choice-text">全部</p>
+                <p class="choice">选择</p>
+                <select id="select-spacetype">
+                    <option>全部</option>
+                    <option>园林绿地</option>
+                    <option>雕塑公园</option>
+                    <option>广场</option>
+                    <option>一江一河两岸公共开放空间</option>
+                    <option>街道</option>
+                    <!-- 城市主要道路沿线（绿化隔离带、桥下空间、步行街等红线范围内空间） -->
+                    <option>社区</option>
+                    <option>大型综合商办地块的开放空间</option>
+                    <option>公共服务设施提供的公共空间</option>
+                    <option>其他</option>
+                </select>
+            </div>
+            <p class="title">ID</p>
+            <div class="row">
+                <p class="choice">输入</p>
+                <input id="select-id" autocomplete="off" placeholder="输入id">
+            </div>
+            <div class="row">
+                <div id="reset-btn" class="button">重置</div>
+                <div id="ok-btn" class="button">确定</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 列表 -->
+    <!-- <div id="icon-panel">
+    <ul>
+      <li id="list-btn"><img src="img/list.png">
+        <p>列表</p>
+      </li>
+      <li id="password-btn"><img src="img/password.png">
+        <p>修改密码</p>
+      </li>
+      <li id="add-btn"><img src="img/add.png">
+        <p>添加调查点</p>
+      </li>
+    </ul>
+  </div> -->
+    <!-- 列表 -->
+    <div id="icon-panel">
+        <ul>
+            <li id="password-btn"><img src="img/password.png">
+                <p>修改密码</p>
+            </li>
+            <!-- <li id="tomain"><img src="img/main.png">
+                <p>返回主页</p>
+            </li> -->
+            <li id="add-btn"><img src="img/add.png">
+                <p>添加调查点</p>
+            </li>
+            <!-- <li id="locate"><img src="img/locate.png">
+        <p>定位</p>
+      </li> -->
+        </ul>
+    </div>
+
+    <!-- <div id="tomain"></div> -->
+    <!-- <div id="download">成果下载</div> -->
+
+    <div id="list">
+        <div class="shi-box">
+            <div class="shi-left">
+                <p>共<span id="list-number">0</span>个调查点</p>
+            </div>
+            <div class="shi-right">
+                <img id="close-list-btn" src="img/close.png">
+            </div>
+        </div>
+        <ul class="di" id="list-ul">
+        </ul>
+    </div>
+
+    <!-- 详情  所在区名，3所在镇名，4所在村名，5点位类型，6点位要素，7点位备注 -->
+    <div class="detail">
+        <h4 id="detail-title"></h4>
+        <div id="detail-attr">
+            <p id="detail-note"><span class="note"></span></p>
+            <!-- <p id="detail-dwys"></p><select name='' id='sel-dwys'></select> -->
+            <p id="detail-dcname"></p>
+            <p id="detail-dctime"></p>
+            <form id="myForm">
+                <p>1.空间类型（必填）</p>
+                <div class="check"><input type="radio" name="spacetype" value="园林绿地">园林绿地</div>
+                <div class="check"><input type="radio" name="spacetype" value="雕塑公园">雕塑公园</div>
+                <div class="check"><input type="radio" name="spacetype" value="广场">广场</div>
+                <div class="check"><input type="radio" name="spacetype" value="一江一河两岸公共开放空间">一江一河两岸公共开放空间</div>
+                <div class="check"><input type="radio" name="spacetype" value="街道">街道</div>
+                <div class="check"><input type="radio" name="spacetype" value="社区">社区</div>
+                <div class="check"><input type="radio" name="spacetype" value="大型综合商办地块的开放空间">大型综合商办地块的开放空间</div>
+                <div class="check"><input type="radio" name="spacetype" value="公共服务设施提供的公共空间">公共服务设施提供的公共空间</div>
+                <div class="check"><input type="radio" name="spacetype" value="其他">其他</div>
+
+                <p>2.作品材质（必填）</p>
+                <div class="check"><input type="checkbox" name="materia_1" value="铜">铜</div>
+                <div class="check"><input type="checkbox" name="materia_2" value="不锈钢">不锈钢</div>
+                <div class="check"><input type="checkbox" name="materia_3" value="石材">石材</div>
+                <div class="check"><input type="checkbox" name="materia_4" value="耐候钢">耐候钢</div>
+                <div class="check"><input type="checkbox" name="materia_5" value="陶瓷">陶瓷</div>
+                <div class="check"><input type="checkbox" name="materia_6" value="玻璃钢">玻璃钢</div>
+                <div class="check"><input type="checkbox" name="materia_7" value="木">木</div>
+                <div class="check"><input type="checkbox" name="materia_8" value="水泥">水泥</div>
+                <div class="check"><input type="checkbox" name="materia_9" value="综合媒介">综合媒介</div>
+                <div class="check2"><input type="checkbox" name="materia_10" value="其他">其他，<input type="text" class="hs"
+                        name="materiaqt"></div>
+
+                <p>3.制作工艺（必填）</p>
+                <div class="check"><input type="checkbox" name="craft_1" value="铸造">铸造</div>
+                <div class="check"><input type="checkbox" name="craft_2" value="锻造">锻造</div>
+                <div class="check"><input type="checkbox" name="craft_3" value="雕刻">雕刻</div>
+                <div class="check"><input type="checkbox" name="craft_4" value="金属着色">金属着色</div>
+
+
+                <!-- <p>4.分类（必填）</p>
+                <div class="check"><input type="radio" name="type" value="圆雕">圆雕</div>
+                <div class="check"><input type="radio" name="type" value="组雕">组雕</div>
+                <div class="check"><input type="radio" name="type" value="浮雕">浮雕</div> -->
+
+                <p>4.尺寸（必填）</p>
+                <div class="check2">长：<input type="text" class="hs" name="length">（厘米）</div>
+                <div class="check2">宽：<input type="text" class="hs" name="width">（厘米） </div>
+                <div class="check2">高：<input type="text" class="hs" name="height">（厘米）</div>
+
+                <p>5.体量尺寸（必填）</p>
+                <div class="check"><input type="radio" name="size" value="大型">大型</div>
+                <div class="check"><input type="radio" name="size" value="中型">中型</div>
+                <div class="check"><input type="radio" name="size" value="小型">小型</div>
+
+                <p>6.照片（必填，不少于2张，不多于10张）</p>
+                <div class="image-panel" id="image-panel-images"
+                    style="width:auto; display:inline-block !important; display:inline; "></div>
+
+                <p>7.作品名称（选填）</p>
+                <div class="check2"><input type="text" autocomplete="off" class="hs2" name="title"></div>
+
+
+                <p>8.作品作者（选填）</p>
+                <div class="check2"><input type="text" autocomplete="off" class="hs2" name="sculptor"></div>
+
+
+                <p>9.创作年代（选填）</p>
+                <div class="check2"><input type="text" autocomplete="off" class="hs2" name="jsyear"></div>
+
+
+                <!-- <p>11.建设单位（选填）</p>
+                <div class="check2"><input type="text" autocomplete="off" class="hs2" name="jsorg"></div> -->
+
+                <p>10.放置地址（必填）</p>
+                <div class="check2"><input type="text" autocomplete="off" class="hs2" name="address"></div>
+
+                <!-- <p class="nyprop">13.原主题类型</p>
+                <div class="check2 nyprop">
+                    <input type="text" autocomplete="off" class="hs" name="ztlx">
+                </div> -->
+
+                <p class="nyprop">11.作品题材（必填）</p>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_1" value="人物">人物</div>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_2" value="动物">动物</div>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_3" value="植物">植物</div>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_4" value="风物">风物</div>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_5" value="器物">器物</div>
+                <div class="check nyprop"><input type="checkbox" name="ztlx2_6" value="构物">构物</div>
+
+                <p class="nyprop">12.语言形式（必填）</p>
+                <div class="check nyprop"><input type="radio" name="yyxs" value="具象">具象</div>
+                <div class="check nyprop"><input type="radio" name="yyxs" value="抽象">抽象</div>
+                <div class="check nyprop"><input type="radio" name="yyxs" value="意象">意象</div>
+
+
+                <p class="nyprop">13.功能类型（必填）</p>
+                <div class="check nyprop"><input type="checkbox" name="gnlx_1" value="纪念">纪念</div>
+                <div class="check nyprop"><input type="checkbox" name="gnlx_2" value="休闲">休闲</div>
+                <div class="check nyprop"><input type="checkbox" name="gnlx_3" value="装饰">装饰</div>
+
+                <p class="nyprop">14.环境关系（必填）</p>
+                <div class="check nyprop"><input type="radio" name="hjgx" value="协调">协调</div>
+                <div class="check nyprop"><input type="radio" name="hjgx" value="比较协调">比较协调</div>
+                <div class="check nyprop"><input type="radio" name="hjgx" value="一般">一般</div>
+                <div class="check nyprop"><input type="radio" name="hjgx" value="不协调">不协调</div>
+
+                <!-- <p class="nyprop">18.原维护状况</p>
+                <div class="check2 nyprop">
+                    <input type="text" autocomplete="off" class="hs" name="whzk">
+                </div> -->
+
+                <p class="nyprop">15.作品现状（必填）</p>
+                <div class="check nyprop"><input type="radio" name="whzk2" value="完好">完好</div>
+                <div class="check nyprop"><input type="radio" name="whzk2" value="较好">较好</div>
+                <div class="check nyprop"><input type="radio" name="whzk2" value="一般">一般</div>
+                <div class="check nyprop"><input type="radio" name="whzk2" value="残缺">残缺</div>
+
+                <!-- <p class="nyprop">20.原艺术品质</p>
+                <div class="check2  nyprop">
+                    <input type="text" autocomplete="off" class="hs" name="yspz">
+                </div> -->
+
+                <p class="nyprop">16.作品等级（必填）</p>
+                <div class="check nyprop"><input type="radio" name="zpdj" value="经典">经典</div>
+                <div class="check nyprop"><input type="radio" name="zpdj" value="优秀">优秀</div>
+                <div class="check nyprop"><input type="radio" name="zpdj" value="良好">良好</div>
+                <div class="check nyprop"><input type="radio" name="zpdj" value="合格">合格</div>
+                <div class="check nyprop"><input type="radio" name="zpdj" value="不合格">不合格</div>
+
+                <p class="nyprop">17.艺术评议（必填）</p>
+                <div class="check2  nyprop">
+                    <!-- <input type="text" class="hs" name="yspz"> -->
+                    <textarea name="yspy"></textarea>
+                </div>
+
+
+                <p class="nyprop">18.调研建议（必填）</p>
+                <div class="check nyprop"><input type="checkbox" name="dyjy_1" value="保护">保护</div>
+                <div class="check nyprop"><input type="checkbox" name="dyjy_2" value="维修">维修</div>
+                <div class="check nyprop"><input type="checkbox" name="dyjy_3" value="替换">替换</div>
+                <div class="check nyprop"><input type="checkbox" name="dyjy_4" value="移除">移除</div>
+
+                <p>备注</p>
+                <div class="check2"><textarea name="note"></textarea></div>
+            </form>
+        </div>
+        <!-- <a id="download" href="javascript:void(0)">下载</img></a> -->
+        <a id="confirm" href="javascript:void(0)">提交</a>
+        <a id="edit" href="javascript:void(0)">编辑</a>
+        <a id="delete" href="javascript:void(0)">删除</a>
+        <a id="gd"  href="javascript:void(0)" style="    width: 30px;text-align: center;height: 30px;line-height: 30px;text-decoration: none;position: absolute;
+        top: 60px;color: #666;font-size: 15px;border-radius: 2px;font-weight: bold;padding: 2px 4px;color: #000;right: 45px;background-color: #3498db;display: none;">导航</a>
+        <a id="close-detail" href="javascript:void(0)"><img src="img/close.png"></img></a>
+    </div>
+    </div>
+<!-- 
+    <div id="navi-panel">
+        <div id="navi-mask"></div>
+        <div id="navi-div">
+            <ul>
+                <li id="gd"><a href="javascript:void(0)"><img src="img/gdmap.jpg" />
+                        <p>高德地图</p>
+                    </a></li>
+                <li id="bd"><a href="javascript:void(0)"><img src="img/bdmap.jpg" />
+                        <p>百度地图</p>
+                    </a></li>
+            </ul>
+            <p id="navi-cancel">取消</p>
+        </div>
+    </div> -->
+
+    <div class="toast_box">
+        <p id="toast">测试</p>
+    </div>
+
+    <div id="confirm-panel">
+        <div id="confirm-mask"></div>
+        <div id="confirm-div">
+            <div><label id="confirmtext"></label></div>
+            <div id="confirm-submit">确认</div>
+            <div id="confirm-cancel">取消</div>
+        </div>
+    </div>
+
+    <div id="confirm-panel2">
+        <div id="confirm-mask2"></div>
+        <div id="confirm-div2">
+            <div id="confirm-cancel2">关闭</div>
+            <div><label id="confirmtext2"></label></div>
+            <div id="confirm-safe2">不存在</div>
+            <div id="confirm-nosafe2">存在</div>
+        </div>
+    </div>
+
+    <div id="password-panel">
+        <div id="password-mask"></div>
+        <div id="password-div">
+            <label>请输入新的密码：</label>
+            <input id="password-first" placeholder="" autocomplete="off" type="password" /></br>
+            <label>请再次输入密码：</label>
+            <input id="password-second" placeholder="" autocomplete="off" type="password" />
+            <div id="password-submit">提交</div>
+            <div id="password-cancel">取消</div>
+        </div>
+    </div>
+    <div id="loading">
+        <img src="img/loading.gif" />
+        <p>加载中</p>
+    </div>
+    <!-- <img id="tdt-logo" src="img/tdt_logo.png"
+        style="position: absolute;z-index: 1000;left:2px;bottom: 1px;width: 40px;transform: translateZ(1px);"></img> -->
+    <p
+        style="position: absolute;bottom: 1px;left: 44px;font-size: 10px;color:#666;background-color:#f4f4f4;z-index: 1000;transform: translateZ(1px);">
+       审图号：沪S(2025)060号</p>
+</body>
+<script type="text/javascript" src="leaflet/leaflet.js"></script>
+<script type="text/javascript" src="leaflet/leaflet.legend.js"></script>
+<script type="text/javascript" src="leaflet/esri-leaflet.js"></script>
+<script type="text/javascript" src="leaflet/proj4.js"></script>
+<script type="text/javascript" src="leaflet/proj4leaflet.js"></script>
+<script type="text/javascript" src="js/turf.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+
+<!--   <script type="text/javascript" src="js/message.js"></script> -->
+<!-- <script type="text/javascript" src="js/popup.js"></script> -->
+<script type="text/javascript" src="js/coord.js"></script>
+<script type="text/javascript" src="lightbox/js/lightbox-plus-jquery.min.js"></script>
+<script type="text/javascript" src="js/jQuery.md5.js"></script>
+<script type="text/javascript">
+
+    document.addEventListener("plusready", function () { }, false);
+
+
+    Array.prototype.remove = function (val) {
+        var index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
+    };
+
+    //var workname="测试";
+    var confirmflag = 0;
+
+    var workname = window.sessionStorage.getItem("dsdcusername");
+    var workcounty = window.sessionStorage.getItem("dsdccounty");
+    var workpower = window.sessionStorage.getItem("dsdcpower");
+    if (workname && workname != "null") {
+        if (workpower == "管理员") {
+            $("#add-btn").hide();
+        }
+    } else {
+        window.location.href = "login.html"
+    }
+
+
+    var legend;
+    var MAP;
+    var boundPolygon, cydLayerGroup, cymLayerGroup, fenceMarker, dcsqpoly, quPolygon;
+    var dynamicLayer, token;
+    var imageArrMap = {
+        "images": []
+    };
+    var newLatlng = {};
+    var MapObj = {
+        tdtLayer: null,
+        imageLayer: null,
+        init: function () {
+            var self = this;
+            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBsaWNhdGlvbl9pZCI6NTQsImFwcGxpY2F0aW9uX25hbWUiOiLmtYvnu5jpmaLmtYvor5XlupTnlKgiLCJleHAiOjE3NjEzNjMxNDJ9.y7xn4ydvF2W3wCwRH7iimyyG8tXGB1fxQuGQzdsuSyg";
+            var bases = L.esri.tiledMapLayer({
+                url:
+                    'https://service-api.onemap.sh.gov.cn/data-service-manage-service/MapProxyApi/*token/shmap_normal_web/MapServer?key=' + key,
+                continuousWorld: true, maxNativeZoom: 18, maxZoom: 21
+            });
+            var image = L.esri.tiledMapLayer({
+                url:
+                    'https://service-api.onemap.sh.gov.cn/data-service-manage-service/MapProxyApi/*token/shmap_air_2024_web/MapServer?key=' + key,
+                continuousWorld: true, maxNativeZoom: 18, maxZoom: 21
+            });
+            var image_zj = L.esri.tiledMapLayer({
+                url:
+                    'https://service-api.onemap.sh.gov.cn/data-service-manage-service/MapProxyApi/*token/shmap_air_zj_web/MapServer?key=' + key,
+                continuousWorld: true, maxNativeZoom: 18, maxZoom: 21
+            });
+            this.basesLayer = L.layerGroup([bases]);
+            this.imageLayer = L.layerGroup([image_zj, image]);
+
+            MAP = L.map('map', {
+                minZoom: 9,
+                crs: L.CRS.EPSG3857,
+                layers: [this.basesLayer],
+                center: [31.240, 121.474],
+                zoom: 10,
+                zoomControl: true,
+                preferCanvas: true,
+                bounceAtZoomLimits: false
+            })
+            MAP.zoomControl.setPosition('bottomleft');
+            var baseMaps = { 矢量图: this.basesLayer, 影像图: this.imageLayer }
+            L.control.layers(baseMaps).setPosition('bottomright').addTo(MAP);
+            L.control.scale({ imperial: false }).addTo(MAP);
+
+            let identifiedFeature;
+
+            var cdom = [], tdom = [];
+            if (workcounty == "全部") {
+                cdom.push("<option>全部</option>");
+                for (var key in County_Town) { cdom.push("<option>" + key + "</option>"); }
+                tdom.push("<option>全部</option>");
+            }
+            else {
+                cdom.push("<option>" + workcounty + "</option>");
+                tdom.push("<option>全部</option>");
+                $.get(Host + "get.fun.php?action=getDcqList&county=" + workcounty, function (data) {
+                    if (data != null) {
+                        data.forEach(function (item) { tdom.push("<option>" + item.town + "</option>"); });
+                        $("#select-town-text").text("全部");
+                    } else {
+                        $("#select-town-text").text("全部");
+                    }
+                    $("#select-town").empty().append(tdom.join(""));
+                }, 'json');
+
+            }
+
+            $("#select-county").empty().append(cdom.join(""));
+            $("#select-county-text").text(workcounty);
+            $("#select-town").empty().append(tdom.join(""));
+            $("#select-town-text").text("全部");
+
+            var quhua = $("#select-county-text").text() + "\t" + $("#select-town-text").text();
+            $("#search").html("<span>" + quhua + "</span>");
+            $("#loading").show();
+
+            self.addBound(workcounty, "全部");
+
+            $.get(Host + "get.fun.php?action=getDcckByCondition&county=" + workcounty, function (data) {
+                self.addPoly(data);
+            }, 'json');
+            $.get(Host + "get.fun.php?action=getDcdByCondition1&county=" + workcounty + "&town=全部&spacetype=全部&status=全部&id=", function (data) {
+                self.addPoint(data);
+            }, 'json')
+
+
+        },
+        HandlePolygon: function (type, geometry) {
+            var coords = [];
+            if (type == "MultiPolygon") {
+                for (var i = 0; i < geometry.length; i++) {
+                    var rings = geometry[i];
+                    var arings = [];
+                    rings[0].forEach(function (item) {
+                        arings.push([item[1], item[0]]);
+                    });
+                    coords.push(arings);
+                }
+            } else {
+                geometry[0].forEach(function (item) {
+                    coords.push([item[1], item[0]]);
+                })
+            }
+            return coords;
+        },
+        addBound: function (county, town,isupdate) {
+            var self = this;
+            if (boundPolygon) MAP.removeLayer(boundPolygon);
+
+            $.get(Host + "get.fun.php?action=getDcqByCondition&county=" + county + "&town=" + town, function (data) {
+                var polygons = {
+                    "type": "FeatureCollection", "features": []
+                };
+                var features = [];
+                data.forEach(function (item) {
+                    var feature = {
+                        "type": "Feature", "geometry": { "type": item.geotype, "coordinates": JSON.parse(item.geometry) },
+                        "properties": {
+                            "id": item.id, "county": item.county, "town": item.town
+                        }
+                    };
+
+                    features.push(feature);
+                })
+                polygons.features = features;
+                boundPolygon = new L.geoJSON(polygons, {
+                    style: function (geoJsonFeature) {
+                        return {
+                            color: '#00f', weight: 1.5, fillOpacity: 0, dashArray: '5'
+                        }
+                    }
+                })
+
+                MAP.addLayer(boundPolygon);
+                if(!isupdate)
+                {
+                    MAP.fitBounds(boundPolygon.getBounds());
+                }
+                
+
+                boundPolygon.on("click", function (e) {
+                    if (addflag == 1) {
+                        addcyd(e);
+                    }
+
+                });
+            }, 'json');
+
+        },
+        addPoly: function (data) {
+            //$("#loading").hide();
+            $("#map").show();
+            $("#nodata-panel").hide();
+            if (cymLayerGroup) cymLayerGroup.clearLayers();
+            var lines = {
+                "type": "FeatureCollection", "features": [
+                ]
+            };
+            var features = [];
+            data.forEach(function (item) {
+                var feature = {
+                    "type": "Feature", "geometry": { "type": item.geotype, "coordinates": JSON.parse(item.geometry) },
+                    "properties": { "county": item.county, "layer": item.layer }
+                };
+                features.push(feature);
+            });
+            lines.features = features;
+            function getColor(d) {
+                return d == '1-大型城市公园' ? '#4CE600' :
+                    d == '2-城市雕塑主题公园' ? '#734C00' :
+                        d == '3-城市公共广场' ? '#E69800' :
+                            d == '4-一江一河两岸公共开放空间' ? '#00C5FF' :
+                                d == '5-城市主要道路沿线' ? '#9C9C9C' :
+                                    d == '6-主要街头绿地、口袋公园' ? '#267300' :
+                                        d == '7-大型综合商办地块与文化设施提供的公共开放空间' ? '#8400A8' :
+                                            d == '8-重点大学校园、科研院所、大型医院、宾馆等公共区域' ? '#FF00C5' :
+                                                d == '9-其他' ? '#FF0000' :
+                                                    'red';
+            }
+
+            function style(feature) {
+                // console.log(getColor(feature.properties.layer));
+                return {
+                    color: getColor(feature.properties.layer),
+                    weight: 1.3
+                };
+            }
+            cymLayerGroup = new L.geoJSON(lines, {
+                style: style
+            })
+
+            MAP.addLayer(cymLayerGroup);
+
+            var marker = L.circleMarker(L.latLng(29.702368038541767, 120.47607421874999), {
+                radius: 6,
+                fillColor: "#ff0000",
+                color: "blue",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.6,
+            });
+
+            legend = L.control.Legend({
+                position: "topleft",
+                collapsed: true,
+                symbolWidth: 17,
+                symbolHeight: 17,
+                opacity: 1,
+                title: "图例",
+                column: 2,
+                legends: [{
+                    label: "大型城市公园",
+                    type: "polyline",
+                    color: "#4CE600",
+                    fillColor: "#4CE600",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "城市雕塑主题公园",
+                    type: "polyline",
+                    color: "#734C00",
+                    fillColor: "#734C00",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "城市公共广场",
+                    type: "polyline",
+                    color: "#E69800",
+                    fillColor: "#E69800",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "一江一河两岸公共开放空间",
+                    type: "polyline",
+                    color: "#00C5FF",
+                    fillColor: "#00C5FF",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "城市主要道路沿线",
+                    type: "polyline",
+                    color: "#9C9C9C",
+                    fillColor: "#9C9C9C",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "主要街头绿地、口袋公园",
+                    type: "polyline",
+                    color: "#267300",
+                    fillColor: "#267300",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "大型综合商办地块与文化设施提供的公共开放空间",
+                    type: "polyline",
+                    color: "#8400A8",
+                    fillColor: "#8400A8",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "重点大学校园、科研院所、大型医院、宾馆等公共区域",
+                    type: "polyline",
+                    color: "#FF00C5",
+                    fillColor: "#FF00C5",
+                    weight: 1.2,
+                    // layers: polyline
+                },
+                {
+                    label: "其他",
+                    type: "polyline",
+                    color: "#FF0000",
+                    fillColor: "#FF0000",
+                    weight: 1.2,
+                    // layers: polyline
+                }, {
+                    label: "街镇边界",
+                    type: "polyline",
+                    color: "#00f",
+                    fillColor: "#00f",
+                    dashArray: [5, 5],
+                    weight: 1.5
+                }]
+            })
+                .addTo(MAP);
+
+        },
+        addPoint: function (data) {
+            $("#loading").hide();
+            if (!data || data.length == 0) {
+                $("#map").show();
+                $("#nodata-panel").hide();
+                if (cydLayerGroup) cydLayerGroup.clearLayers();
+                // this.addBound($("#select-county-text").text(), "全部");
+                //  toast("暂无所筛选调查点",200);
+                //$("#nodata-panel").show();
+            } else {
+                $("#map").show(); $("#nodata-panel").hide();
+                if (cydLayerGroup) cydLayerGroup.clearLayers();
+                var cyds = [];
+                data.forEach(function (item) {
+                    // console.log("tt"+item.id)
+                    var png = item.status == "已调查" ? "finish" : "unfinish";
+                    var cyd = L.marker([item.lat, item.lng], {
+                        // icon: L.divIcon({
+                        //     html: '<div><img src="./img/point.png" alt="Icon" style="width: 15px; height: 15px;float:left;"><span class="label">' + item.id + '</span></div>',
+                        //                 className: 'custom-marker-label'
+                        //             }),
+                        //             zIndexOffset: 10,
+                        icon: L.icon({
+                             iconUrl: './img/' + png + '.png', iconSize: [26, 31], iconAnchor: [13, 31] 
+                            }),
+                             draggable: false, attribution: { id: item.id, olat: item.lat, olng: item.lng, status: item.status }
+                    })
+                    cyd.on("click", function (e) {
+                        if (addflag == 0) {
+                            var id = e.target.options.attribution.id;
+                            showDetail(id);
+                        }
+                    });
+                    // cyd.on("dragend", function (e) { newLatlng = e.target.getLatLng(); });
+                    cyds.push(cyd);
+                });
+                cydLayerGroup = L.layerGroup(cyds).addTo(MAP);
+                // this.addBound($("#select-county-text").text(), "全部");
+            }
+            addList(data);
+        },
+        addFence: function (lng, lat) {
+            var radius = 100 * Math.sqrt(0.0000261) / 500;
+            var ring = [];
+            for (var i = 0; i < 101; i++) {
+                var angle = 2 * i * Math.PI / 100;
+                var x = parseFloat(parseFloat(lng) + radius * Math.cos(angle)).toFixed(8);
+                var y = parseFloat(parseFloat(lat) + radius * Math.sin(angle)).toFixed(8);
+                ring.push([y, x]);
+            }
+            if (fenceMarker) MAP.removeLayer(fenceMarker);
+            fenceMarker = new L.polygon(ring, { color: 'blue', weight: 0, fillOpacity: 0.1, fillColor: 'blue' }).addTo(MAP);
+        },
+        updatePoint: function (id) {
+            var self = this;
+            var cyds = cydLayerGroup.getLayers();
+            cyds.forEach(function (cyd) {
+                if (cyd.options.attribution.id == id) {
+                    cyd.setIcon(L.icon({ iconUrl: './img/finish.png', iconSize: [26, 31], iconAnchor: [13, 31] }));
+                    cyd.dragging.disable();
+                    //self.addFence(cyd.getLatLng().lng,cyd.getLatLng().lat);
+                }
+            });
+        },
+        resetPoint: function (id) {
+            var cyds = cydLayerGroup.getLayers();
+            cyds.forEach(function (cyd) {
+                if (cyd.options.attribution.id == id) {
+                    cyd.setLatLng([cyd.options.attribution.olat, cyd.options.attribution.olng]);
+                    cyd.dragging.disable();
+                }
+            });
+        },
+        getMap: function () {
+            return MAP
+        }
+    }
+
+    MapObj.init();
+
+
+    $selectPanel = $("#select-panel"); $shaixuanPanel = $("#shaixuan-panel");
+    $("#shaixuan").click(function (e) {
+        if ($selectPanel.css("display") == "none") {
+            $shaixuanPanel.show(); $selectPanel.slideDown(); $("#shaixuan p").text("收起");
+        } else {
+            $selectPanel.slideUp("fast", "linear", function () { $shaixuanPanel.hide(); }); $("#shaixuan p").text("筛选");
+        }
+        e.stopPropagation();
+    });
+
+    $("#shaixuan-mask").on("click", function () { $selectPanel.slideUp("fast", "linear", function () { $shaixuanPanel.hide(); }); $("#shaixuan p").text("筛选"); });
+    $("#select-county").on("change", function () {
+        var county = $(this).find("option:selected").text();
+        $("#select-county-text").text(county);
+
+        var tdom = [];
+
+        //dom.push("<option>全部</option>");
+        if (county != "全部") {
+            tdom.push("<option>全部</option>");
+            $.get(Host + "get.fun.php?action=getDcqList&county=" + county, function (data) {
+                if (data != null) {
+                    data.forEach(function (item) { tdom.push("<option>" + item.town + "</option>"); });
+                    $("#select-town-text").text("全部");
+                } else {
+                    $("#select-town-text").text("全部");
+                }
+                $("#select-town").empty().append(tdom.join(""));
+            }, 'json');
+        }
+        $("#select-town").empty().append(tdom.join(""));
+        $("#select-town-text").text("全部");
+    })
+    $("#select-town").on("change", function () {
+        var town = $(this).find("option:selected").text();
+        $("#select-town-text").text(town);
+    })
+    $("#select-spacetype").on("change", function () {
+        var spacetype = $(this).find("option:selected").text();
+        $("#select-spacetype-text").text(spacetype);
+    })
+
+
+    $("#reset-btn").click(function () { reset(); });
+    $("#ok-btn").click(function () { shaixuan(false); $selectPanel.slideUp("fast", "linear", function () { $shaixuanPanel.hide(); }); $("#shaixuan p").text("筛选"); });
+
+    function reset() {
+
+        var cdom = [], tdom = [];
+        if (workpower == "管理员") {
+            cdom.push("<option>全部</option>");
+            for (var key in County_Town) { cdom.push("<option>" + key + "</option>"); }
+            tdom.push("<option>全部</option>");
+        }
+        else {
+            cdom.push("<option>" + workcounty + "</option>");
+            tdom.push("<option>全部</option>");
+            $.get(Host + "get.fun.php?action=getDcqList&county=" + workcounty, function (data) {
+                if (data != null) {
+                    data.forEach(function (item) { tdom.push("<option>" + item.town + "</option>"); });
+                    $("#select-town-text").text("全部");
+                } else {
+                    $("#select-town-text").text("全部");
+                }
+                $("#select-town").empty().append(tdom.join(""));
+            }, 'json');
+
+        }
+
+
+        var quhua = $("#select-county-text").text() + "\t" + $("#select-town-text").text() + "\t";
+        $("#search").html("<span>" + quhua + "</span>");
+
+        $("#select-id").val("");
+        $(".detail").hide();
+    }
+
+    $("input#search").on("keypress", function (e) {
+        var key = $(this).val();
+        if (e.keyCode == '13') {
+            e.preventDefault();
+            document.activeElement.blur();
+            shaixuan(false);
+        }
+    });
+
+
+    function shaixuan(isupdate) {
+        var quhua = $("#select-county-text").text() + "\t" + $("#select-town-text").text() + "\t";
+        $("#search").html("<span>" + quhua + "</span>");
+
+        // if ($("#select-town-text").text() != '全部') {
+
+        //     var featuretown = $("#select-town-text").text();
+        //     filterGeoJSONLayer('town',featuretown);
+        //     // 查找特定要素并缩放至其边界
+        //     boundPolygon.eachLayer(function (layer) {
+        //         if (layer.feature.properties.town === featuretown) { 
+        //             MAP.fitBounds(layer.getBounds());
+        //         }
+        //     });
+
+        // } else if ($("#select-county-text").text() != '全部') {
+
+
+        //     // 获取GeoJSON要素的边界
+        //     var bounds = [];
+        //     boundPolygon.eachLayer(function (layer) {
+        //         if (layer.feature.properties.county === $("#select-county-text").text()) {
+        //             bounds.push(layer.getBounds());
+        //         }
+        //     });
+
+        //     // 计算所有边界的并集
+        //     var overallBounds = bounds.reduce(function (prev, curr) {
+        //         return prev.extend(curr);
+        //     }, L.latLngBounds(bounds[0]));
+
+        //     // 使用fitBounds缩放至这些边界
+        //     MAP.fitBounds(overallBounds);
+        //     filterGeoJSONLayer('county',$("#select-county-text").text());
+
+        // } else {
+
+        //     MAP.fitBounds(boundPolygon.getBounds());
+        // }
+
+        var params = {
+            action: "getDcdByCondition1",
+            county: $("#select-county-text").text(),
+            town: $("#select-town-text").text(),
+            spacetype: $("#select-spacetype-text").text(),
+            id: $("#select-id").val(),
+            status: "全部"
+        }
+
+        $("#loading").show();
+        $(".detail").hide();
+        $selectPanel.slideUp();
+        $.ajax({
+            type: "GET", url: Host + "get.fun.php",
+            data: params, dataType: "json",
+            success: function (data) { MapObj.addPoint(data); },
+            error: function (error) { alert("当前繁忙，请稍候再试"); $("#loading").hide(); }
+        });
+
+        MapObj.addBound($("#select-county-text").text(), $("#select-town-text").text(),isupdate);
+
+    }
+
+    function filterGeoJSONLayer(filterProperty, filterValue) {
+        // 获取geojson数据
+        var geoJSONFeatures = boundPolygon.getLayers();
+
+        // 遍历所有特征并隐藏不符合条件的特征
+        geoJSONFeatures.forEach(function (feature) {
+            // 获取特征的属性
+            var featureProperties = feature.feature.properties;
+
+            // 检查属性是否匹配，并设置可见性
+            if (featureProperties[filterProperty] === filterValue) {
+                feature.setStyle({
+                    color: '#00f', weight: 1.5, fillOpacity: 0, dashArray: '5'
+                });
+            } else {
+                feature.setStyle({
+                    color: '#00f', weight: 0, fillOpacity: 0, dashArray: '5'
+                });
+            }
+        });
+    }
+
+
+
+    $("#list-btn").click(function () { $("#list").show(); });
+    $("#close-list-btn").click(function () { $("#list").hide(); });
+    function addList(data) {
+        var dom = [], finish = 0;
+        if (data && data.length != 0) {
+            data.forEach(function (item) {
+                dom.push("<li id='" + item.id + "'><div class='di-left'>");
+                dom.push("<h4><span style='color:blue;margin-right:10px;'>" + item.address + "</span></h4>");
+                dom.push("<p><span class='note'>" + item.type + "</span></p>");
+                dom.push("<p>调查人：" + (item.dcname || "") + "</p>");
+                dom.push("<p>调查时间：" + (item.dctime || "") + "</p>");
+                dom.push("</div><div class='di-right'><img src='img/ditu.png'></div></li>");
+                if (item.status == "已调查") finish += 1;
+            });
+            $("#list-number").text(data.length);
+        } else {
+            $("#list-number").text("0");
+        }
+        $("#list ul").empty().append(dom.join(''));
+
+        // $("#finish-number").text(finish);
+        // $("#unfinish-number").text(data.length-finish);
+
+        $("#list ul li").on("click", function () {
+            var id = $(this).attr('id');
+            $.get(Host + "get.fun.php?action=getDcdByID&id=" + id, function (data) {
+                // newLatlng.lng=data.lng;
+                // newLatlng.lat=data.lat;
+                showDetail(id);
+            }, 'json');
+            //showDetail(id);
+            $("#list").hide();
+        });
+    }
+    var addflag = 0;
+    $("#add-btn").on("click", function () {
+        // 监听 mouseup 事件
+        // MAP.on('mouseup', addcyd0);
+        // if ($("#select-county-text").text() == '全部' || $("#select-town-text").text() == '全部' || $("#select-district-text").text() == '全部') {
+        //     alert("请选择当前调查社区");
+        // } else {
+        addflag = 1;
+        // }
+
+    })
+    var tmplayer;
+
+
+    function addcyd(e) {
+
+        if (workpower == '外业员') {
+            $(".nyprop").hide();
+        } else {
+            $(".nyprop").show();
+        }
+        let latlng = e.latlng;
+        newLatlng = e.latlng;
+        var tpcyds = [];
+        if (tmplayer) tmplayer.clearLayers();
+        var png = "unfinish";
+        var tpcyd = L.marker([e.latlng.lat, e.latlng.lng], {
+            icon: L.icon({ iconUrl: './img/' + png + '.png', iconSize: [26, 31], iconAnchor: [13, 31] }), draggable: false, attribution: { id: "0", olat: e.latlng.lat, olng: e.latlng.lng }
+        })
+
+        tpcyds.push(tpcyd);
+        tmplayer = L.layerGroup(tpcyds).addTo(MAP);
+
+        MAP.setView([e.latlng.lat - 0.0003, e.latlng.lng], 17);
+
+        var cydtown = e.layer.feature.properties.town;
+        var cydcounty = e.layer.feature.properties.county;
+
+
+        $("#detail-title").html("<span style='color:blue;margin-right:10px;'>新增调查点</span>");
+        $("#detail-note").html("<span class='note'>" + cydcounty + "</span><span class='note'>" + cydtown + "</span>");
+        $("#detail-dwlx").html("隐患类型：<span class='tip'></span>");
+        // $("#detail-dwys").html("点位要素：<span class='tip'></span>");
+        $("#detail-dcname").html("调查人：<span class='tip'></span>");
+        $("#detail-dctime").html("调查时间：<span class='tip'></span>");
+        $("#detail-dwlx").attr("data-sel", ""); $("#detail-dwys").attr("data-sel", "");
+        $("#confirm").attr("data-id", 0);
+        $("#confirm").attr("data-town", cydtown);
+        $("#confirm").attr("data-county", cydcounty);
+        $("#delete").attr("data-id", 0);
+        $("#note").attr("disabled", false);
+        $("textarea").attr("disabled", false);
+        $("textarea").val("");
+        //设置checkbo可选,并初始化设为空
+        // optionCheckList.forEach(function(option){
+        //   var optionBox=document.getElementById(option);
+        // //   optionBox.disabled=false;
+        //   optionBox.checked=false;
+        // });
+
+        $(':checkbox').prop('disabled', false);
+        $(':radio').prop('disabled', false);
+        $(':checkbox').prop('checked', false);
+        $(':radio').prop('checked', false);
+        $("input[type=text]").prop('disabled', false);
+        $("input[type=text]").val("");
+
+
+        for (var i = 0; i < 1; i++) {
+            renderImages("","", 0, i);
+        }
+        $(".close-image").show();
+
+        for (let imageAdd of imageAddBoxIdList) {
+            $("#" + imageAdd).show();
+        }
+        $(".close-image").on("click", function () {
+            var closeImg = $(this).attr("data-img");
+            var i = $(this).attr("image-type");
+            imageArrMap[imageArrListnew[i]].remove(closeImg);
+            $(this).parent().remove();
+        });
+
+        $(".smenu").css("max-height", "0px");
+
+        // 渲染照片
+        //renderImages(data.images,data.id);
+        $(".detail").show(); totop(); $("#close-detail").attr("data-id", 0); $("#edit").hide(); $("#download").hide(); $("#delete").hide();
+
+
+
+    }
+
+    // 获取所有的radio按钮
+    const radios = document.querySelectorAll("input[name='type']");
+
+    // 为每个radio按钮添加change事件监听
+    radios.forEach(radio => {
+        radio.addEventListener('change', function (event) {
+            if (event.target.checked) {
+                // 如果当前radio按钮被选中，执行操作
+                console.log(`选中的radio值为: ${event.target.value}`);
+                if (event.target.value == '浮雕') {
+                    $("input[name='height']").val('0');
+                    $("input[name='height']").prop('disabled', true);
+                } else {
+                    $("input[name='height']").val('');
+                    $("input[name='height']").prop('disabled', false);
+                }
+            }
+        });
+    });
+
+    function totop() {
+        console.log("roll");
+        // 将其初始化为可滚动状态
+        $('#detail-attr').css('overflow', 'auto');
+
+        $('#detail-attr').scrollTop(0);
+        // 当页面加载完成后，自动滚动到顶部
+
+        // $('#detail-attr').animate({
+        //     scrollTop: 0
+        // }, 100); // 500表示滚动速度，单位为毫秒
+    }
+
+
+    function showDetail(id, flag) {
+
+        if (workpower == '外业员') {
+            $(".nyprop").hide();
+        } else {
+            $(".nyprop").show();
+        }
+        $(':checkbox').prop('checked', false);
+        $(':radio').prop('checked', false);
+        $("input[type=text]").val('');
+
+        cydLayerGroup.eachLayer(function (layer) {
+            //console.log(layer)
+            var png = layer.options.attribution.status == "已调查" ? "finish" : "unfinish";
+            let icon = L.icon({ iconUrl: './img/' + png + '.png', iconSize: [26, 31], iconAnchor: [13, 31] });
+            // let icon = L.divIcon({
+            //                 html: '<div><img src="./img/point.png" alt="Icon" style="width: 15px; height: 15px;float:left;"><span class="label">' + layer.options.attribution.id + '</span></div>',
+            //                             className: 'custom-marker-label'
+            //                         });
+            let newIcon = L.icon({
+                iconUrl: './img/select.png', iconSize: [39, 45], iconAnchor: [20, 45]
+            })
+            // let newIcon = L.divIcon({
+            //                 html: '<div><img src="./img/point_sel.png" alt="Icon" style="width: 15px; height: 15px;float:left;"><span class="label">' + layer.options.attribution.id + '</span></div>',
+            //                             className: 'custom-marker-label'
+            //                         });
+
+            layer.setIcon(icon) //旧图标
+            if (layer.options.attribution.id === id) {  //通过title找到当前点击的图标
+                layer.setIcon(newIcon) //替换为新图标
+            }
+        })
+
+        $.get(Host + "get.fun.php?action=getDcdByID&id=" + id, function (data) {
+            $("#detail-title").html("<span style='color:blue;margin-right:10px;font-size:13px'>" + data.id + "</span>");
+            // $("#detail-note").html("<span class='note'>" + data.county + "</span><span class='note'>" + data.town + "</span><span class='note'>" + data.sqname + "</span>");
+            $("#detail-note").html("<span class='note'>" + data.county + "</span><span class='note'>" + data.town + "</span>");
+            $("#detail-dcname").html("调查人：<span class='tip'>" + (data.dcname || "") + "</span>");
+            $("#detail-dctime").html("调查时间：<span class='tip'>" + (data.dctime || "") + "</span>");
+            $("#confirm").attr("data-id", id); $("#edit").attr("data-id", id); $("#edit").attr("data-type", data.type); $("#delete").attr("data-id", id);
+            $("#confirm").attr("data-town", data.town);
+            $("#confirm").attr("data-county", data.county);
+            $("textarea").attr("disabled", true);
+            //基本信息
+            $("input[name='spacetype'][value=" + data.spacetype + "]").prop("checked", true);
+            // $("input[name='type'][value=" + data.type + "]").prop("checked", true);
+            $("input[name='size'][value=" + data.size + "]").prop("checked", true);
+            $("input[name='yyxs'][value=" + data.yyxs + "]").prop("checked", true);
+            $("input[name='hjgx'][value=" + data.hjgx + "]").prop("checked", true);
+            $("input[name='whzk2'][value=" + data.whzk2 + "]").prop("checked", true);
+            $("input[name='zpdj'][value=" + data.zpdj + "]").prop("checked", true);
+            $('input[name="length"]').val(data.length);
+            $('input[name="width"]').val(data.width);
+            $('input[name="height"]').val(data.height);
+            $('input[name="title"]').val(data.title);
+            $('input[name="sculptor"]').val(data.sculptor);
+            $('input[name="jsyear"]').val(data.jsyear);
+            // $('input[name="jsorg"]').val(data.jsorg);
+            $('textarea[name="note"]').val(data.note);
+            // $('input[name="yspz"]').val(data.yspz);
+            // $('input[name="whzk"]').val(data.whzk);
+            // $('input[name="ztlx"]').val(data.ztlx);
+            $('input[name="address"]').val(data.address);
+            $('textarea[name="yspy"]').val(data.yspy);
+
+            var materia_inputs = $('input[name*="materia_"]');
+            materia_inputs.each(function () {
+                // console.log($(this).val());
+                if (data.materia && data.materia.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+            $('input[name="materiaqt"]').val(data.materiaqt);
+
+            var craft_inputs = $('input[name*="craft_"]');
+            craft_inputs.each(function () {
+                // console.log($(this).val());
+                if (data.craft && data.craft.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            var ztlx2_inputs = $('input[name*="ztlx2_"]');
+            ztlx2_inputs.each(function () {
+                // console.log($(this).val());
+                if (data.ztlx2 && data.ztlx2.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            var gnlx_inputs = $('input[name*="gnlx_"]');
+            gnlx_inputs.each(function () {
+                // console.log($(this).val());
+                if (data.gnlx && data.gnlx.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            var dyjy_inputs = $('input[name*="dyjy_"]');
+            dyjy_inputs.each(function () {
+                // console.log($(this).val());
+                if (data.dyjy && data.dyjy.includes($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            var wgs84Coord = smicoord.al(parseFloat(data.lat), parseFloat(data.lng));
+            var gcjCoord = transformFromWGSToGCJ(wgs84Coord[0], wgs84Coord[1]);
+            var bdCoord = transformFromGCJToBaidu(gcjCoord.latitude, gcjCoord.longitude);
+            $("#gd").attr("data-lng", gcjCoord.longitude).attr("data-lat", gcjCoord.latitude);
+            $("#bd").attr("data-lng", bdCoord.longitude).attr("data-lat", bdCoord.latitude);
+            $("#gd").attr("data-dest", data.id);
+
+
+            // 渲染照片
+            renderImages(data.county,data.images, data.id, 0);
+
+            $(':checkbox').prop('disabled', true);
+            $(':radio').prop('disabled', true);
+            $("input[type=text]").prop('disabled', true);
+
+            $(".smenu").css("max-height", "0px");
+
+            $(".detail").show();
+            totop();
+            $("#close-detail").attr("data-id", id); $("#edit").show(); $("#delete").show(); $("#download").show();
+
+            if (workpower == '管理员') {
+                $("#confirm").hide();
+                $("#edit").hide();
+                $("#delete").hide();
+            }
+
+            newLatlng.lng = data.lng;
+            newLatlng.lat = data.lat;
+            var clevel = MAP.getZoom();
+            // layer.setZIndex(7);
+            MAP.setView([data.lat - 0.002, data.lng], 17);
+
+            //MapObj.addFence(data.lng,data.lat);
+        }, 'json');
+    }
+
+    //   $('.detail').click(function() {
+    //     $('.detail').css('overflow', 'auto');
+    //         $(this).animate({
+    //             scrollTop: 0
+    //         }, 500); // 500表示滚动速度，单位为毫秒
+    //     });
+
+
+    function renderImages(county,images, id, i) {
+        //TODO
+        // if(i==31)
+        // {
+        //     var a=2;
+        //     console.log("1");
+        // }
+        imageArrMap[imageArrListnew[i]] = images ? images.split(';') : [];
+        var dom = [];
+        imageArrMap[imageArrListnew[i]].forEach(function (img) {
+            dom.push("<div class='image-box'>");
+            dom.push("<a class='example-image-link' href='" + Host + "pictures/origin/"+ img + "' data-lightbox='example-1'><img class='image-content' src='" + Host +  "pictures/thumb/"+ img + "'></img></a>");
+            dom.push("<a class='close-image' href='javascript:void(0)'  image-type='" + i + "' data-img='" + img + "'><img src='img/close2.png'></img></a></div>");
+        });
+        dom.push("<div class='image-box' id='" + imageAddBoxIdList[i] + "'>");
+        dom.push("<img class='image-add' src='img/camera.png'></img>");
+        dom.push("<a id='pic' style='display:none'></a><input id='" + uploadBtnIdList[i] + "' type='file' accept='image/*' onchange='upload(" + String(i) + ")' data-id='" + id + "'></div>");
+        $("#" + imagePalneIdList[i]).empty().append(dom.join(""));
+        $(".close-image").hide();
+        $("#" + imageAddBoxIdList[i]).hide();
+    }
+
+    function upload(i) {
+        $("#loading").show();
+        // var ydbm=$("#upload-btn").attr("data-ydbm");
+        var fileObj = document.getElementById(uploadBtnIdList[i]).files[0];
+
+        var formFile = new FormData();
+        formFile.append("county", $("#confirm").attr("data-county"));
+        formFile.append("town", $("#confirm").attr("data-town"));
+        formFile.append("file", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", Host + "upload.photo.php", true);
+        xhr.onload = function () {
+            $("#loading").hide();
+            var res = JSON.parse(xhr.responseText);
+            var dom = [];
+            dom.push("<div class='image-box'>");
+            dom.push("<a class='example-image-link' href='" + Host + "pictures/origin/" + res.mes + "' data-lightbox='example-1'><img class='image-content' src='" + Host + "pictures/thumb/" + res.mes + "'></img></a>");
+            dom.push("<a class='close-image' href='javascript:void(0)' image-type='" + i + "' data-img='" + res.mes + "'><img src='img/close2.png'></img></a></div>");
+            $("#" + imageAddBoxIdList[i]).before(dom.join(""));
+            imageArrMap[imageArrListnew[i]].push(res.mes);
+            $(".close-image").on("click", function () {
+                var closeImg = $(this).attr("data-img");
+                imageArrMap[imageArrListnew[i]].remove(closeImg);
+                $(this).parent().remove();
+            });
+
+            const file = fileObj;
+            if (file) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    console.log(reader.result);  //或者 e.target.result都是一样的，都是base64码
+                    // var triggerDownload = $("#pic").attr("href", reader.result).attr("download", res.mes);
+                    // triggerDownload[0].click();
+                    //   var tmpLink = document.createElement('a');
+                    //             tmpLink.download = res.mes; // set the name of the download file 
+                    //             tmpLink.href = reader.result;
+                }
+
+                // console.log(reader.readAsDataURL(file));
+            }
+
+        };
+        xhr.send(formFile);
+    }
+
+
+
+
+
+
+
+    $("#close-detail").click(function () {
+        $(".detail").hide();
+        // 取消 mouseup 事件
+        // MAP.off('mouseup', addcyd0);
+        // totop();
+
+        $(':checkbox').prop('checked', false);
+
+        addflag = 0;
+        var id = $(this).attr("data-id");
+        if (tmplayer) tmplayer.clearLayers();
+        $("#note").val("");
+
+        MapObj.resetPoint(id);
+        cydLayerGroup.eachLayer(function (layer) {
+            //console.log(layer)
+            var png = layer.options.attribution.status == "已调查" ? "finish" : "unfinish";
+            let icon = L.icon({ iconUrl: './img/' + png + '.png', iconSize: [26, 31], iconAnchor: [13, 31] });
+            // let icon = L.divIcon({
+            //                 html: '<div><img src="./img/point.png" alt="Icon" style="width: 15px; height: 15px;float:left;"><span class="label">' + layer.options.attribution.id + '</span></div>',
+            //                             className: 'custom-marker-label'
+            //                         });
+            layer.setIcon(icon) //旧图标
+        }
+        )
+    });
+
+
+    $("#confirm").click(function () {
+        console.log("提交" + $(this).attr("data-id"));
+        // 取消 mouseup 事件
+        // MAP.off('mouseup', addcyd0);
+        addflag = 0;
+        confirmflag = 1;
+        $("#confirmtext").text("确认提交该调查点？");
+        $("#confirm-panel").show();
+
+        // if(confirm("确认提交该调查点？"))
+        // {
+        //   post($(this).attr("data-id"));
+        // }else{
+        //   console.log('已取消')
+        // }
+
+        // confirm('确认提交该调查点？').then(() => {
+        //      post($(this).attr("data-id"));
+        //  }).catch(() => {
+        //      console.log('已取消')
+        //  })
+    });
+
+    $("#save").click(function () {
+        console.log("提交" + $("#confirm").attr("data-id"));
+        // 取消 mouseup 事件,
+        // MAP.off('mouseup', addcyd0);
+        addflag = 0;
+        confirmflag = 3;
+        $("#confirmtext").text("确认保存该调查点？");
+        $("#confirm-panel").show();
+    });
+
+    $("#delete").click(function () {
+        console.log("提交" + $(this).attr("data-id"));
+        // 取消 mouseup 事件
+        // MAP.off('mouseup', addcyd0);
+        addflag = 0;
+        confirmflag = 2;
+        $("#confirmtext").text("确认删除该调查点？");
+        $("#confirm-panel").show();
+        // if(confirm("确认删除该调查点？"))
+        // {
+        //   deletedcd($(this).attr("data-id"));
+        // }else{
+        //   console.log('已取消')
+        // }
+    });
+
+
+    $("#edit").click(function () {
+        var id = $(this).attr("data-id");
+        var type = $(this).attr("data-type");
+        var cyds = cydLayerGroup.getLayers();
+        // cyds.forEach(function (cyd) {
+        //     if (cyd.options.attribution.id == id) {
+        //         cyd.dragging.enable();
+        //     }
+        // });
+        $("#note").attr("disabled", false);
+
+        $(':checkbox').prop('disabled', false);
+        $(':radio').prop('disabled', false);
+        $("input[type=text]").prop('disabled', false);
+
+        if (type == '浮雕') {
+            $("input[name='height']").prop('disabled', true);
+        }
+        $("#sel-dwlx").val(""); $("#sel-dwys").val("");
+        $("#sel-dwlx").show(); $("#sel-dwys").show();
+        $(".close-image").show();
+
+        for (imageAddBox of imageAddBoxIdList) {
+            $("#" + imageAddBox).show();
+        }
+        $(".close-image").on("click", function () {
+            var closeImg = $(this).attr("data-img");
+            var i = $(this).attr("image-type");
+            imageArrMap[imageArrListnew[i]].remove(closeImg);
+            $(this).parent().remove();
+        });
+        $("textarea").attr("disabled", false);
+        toast("开启编辑", 200)
+        // toast("开启编辑");
+    })
+
+
+    function deletedcd(id) {
+        $.ajax({
+            url: Host + "get.fun.php?action=deleteDcdByID&id=" + id,
+            type: "get",
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.status == "success") {
+                    toast("删除成功", 200);
+                    if (tmplayer) tmplayer.clearLayers();
+                    $("#confirm-panel").hide();
+                    shaixuan(true);
+                    $(".detail").hide();
+                    refreshList();
+                }
+                else {
+                    toast("服务器忙...", 200);
+                }
+            },
+            error: function () {
+                toast("服务器忙...", 200);
+            }
+        });
+    }
+
+
+    //提交dcd
+    function post(id, flag) {
+
+        var params = {
+            id: id,
+            table: "dcd",
+            county: $("#confirm").attr("data-county"),
+            town: $("#confirm").attr("data-town"),
+            status: workpower == '外业员' ? "调查中" : "已调查",
+            lng: newLatlng.lng,
+            lat: newLatlng.lat,
+            images: imageArrMap[imageArrListnew[0]].join(";"),
+            // spacetype: $("input[name='spacetype']:checked").val(),
+            // materiaqt: $("input[name='materiaqt']").val(),
+            // type: $("input[name='type']:checked").val(),
+            // length: $("input[name='length']").val(),
+            // width: $("input[name='width']").val(),
+            // height: $("input[name='height']").val(),
+            // title: $("input[name='title']").val(),
+            // sculptor: $("input[name='sculptor']").val(),
+            // jsyear: $("input[name='jsyear']").val(),
+            // jsorg: $("input[name='jsorg']").val(),
+            // yspz: $("textarea[name='yspz']").val(),
+            // whzk: $("textarea[name='whzk']").val(),
+            // ztlx: $("textarea[name='ztlx']").val(),
+            // note: $("textarea[name='note']").val(),
+        }
+        var form = document.forms[0]; // 获取第一个表单元素
+        for (var i = 0; i < form.elements.length; i++) {
+            var fieldName = form.elements[i].name; // 获取字段名称
+            var fieldValue = form.elements[i].value; // 获取字段值
+            var fieldType = form.elements[i].type;
+            if (fieldName != "") {
+                if (fieldType == "radio" || fieldType == "checkbox") {
+                    if (form.elements[i].checked) {
+                        params[fieldName] = fieldValue;
+                    }
+                } else {
+                    params[fieldName] = fieldValue;
+                }
+            }
+        }
+        // delete params["token"];
+
+        // for (var i = 0; i < form.elements.length; i++) {
+        //     var fieldName = form.elements[i].name; // 获取字段名称
+        //     var fieldValue = form.elements[i].value; // 获取字段值
+        //     var fieldType = form.elements[i].type;
+        //     if (fieldName != "") {
+        //         if (fieldType == "checkbox") {
+        //             if (form.elements[i].checked) {
+        //                 params[fieldName] = fieldValue;
+        //             }
+        //         }
+        //         //  else {
+        //         //     params[fieldName] = fieldValue;
+        //         // }
+        //     }
+        // }
+
+        if (workpower == '外业员') {
+            params['dcname'] = workname;
+        } else if (workpower == '内业员') {
+            if (params['id'] == '0') {
+                params['dcname'] = workname;
+                params['wsname'] = workname;
+            } else {
+                params['wsname'] = workname;
+            }
+        }
+
+
+        console.log(params);
+        // var checked = checkparams(params);
+        var checked = true;
+        if (checked) {
+            $.ajax({
+                url: Host + "post.fun.php",
+                type: "post",
+                data: params,
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.status == "success") {
+                        toast("确认成功", 200);
+                        if (tmplayer) tmplayer.clearLayers();
+                        $("#confirm-panel").hide();
+                        if (id != 0) {
+                            //MapObj.updatePoint(id);
+                            shaixuan(true);
+                        } else {
+                            shaixuan(true);
+                        }
+                        $(".detail").hide();
+                        refreshList();
+                    }
+                    else {
+                        toast("服务器忙...", 200);
+                    }
+                },
+                error: function () {
+                    toast("服务器忙...", 200);
+                }
+            });
+        } else {
+            $("#confirm-panel").hide();
+        }
+
+    }
+
+    function checkparams(params) {
+        if ( params.length == "" || params.width == "" || params.height == "" || params.images == "" || !params.address ||  !params.yspy) {
+            alert("1-18中必填项未填写完整！");
+            return false;
+
+        } else if (!isNumeric(params.length) || !isNumeric(params.width) || !isNumeric(params.height)) {
+            alert("长、宽、高请填写大于等于0的数字！");
+            return false;
+        } else if (params.images.split(';').length < 2) {
+            alert("照片不少于两张！");
+            return false;
+        } else if (params.images.split(';').length > 10) {
+            alert("照片不多于十张！");
+            return false;
+        } else if (params.hasOwnProperty("materia_5") && params.materiaqt == '') {
+            alert("材质勾选其他需填写！");
+            return false;
+
+        }
+
+        if(Object.keys(params).filter(key => key.includes("materia_")).length==0 || Object.keys(params).filter(key => key.includes("craft_")).length==0  || Object.keys(params).filter(key => key.includes("ztlx2_")).length==0  || Object.keys(params).filter(key => key.includes("dyjy_")).length==0 )
+        {
+            alert("1-18中必填项未填写完整！");
+            return false;
+        }
+
+        if(!params.hasOwnProperty("spacetype") || !params.hasOwnProperty("size") ||!params.hasOwnProperty("yyxs") ||!params.hasOwnProperty("hjgx") ||!params.hasOwnProperty("whzk2")||!params.hasOwnProperty("zpdj"))
+        {
+            alert("1-18中必填项未填写完整！");
+            return false;
+        }
+        //  else {
+        //     if (workpower == '外业员') {
+        //         return true;
+        //     } else {
+        //         // if (!params.yspz || !params.whzk || !params.ztlx) {
+        //         //     alert("10-12必填项未填写完整！");
+        //         if ((!params.ztlx2_1 && !params.ztlx2_2 && !params.ztlx2_3 && !params.ztlx2_4 && !params.ztlx2_5 && !params.ztlx2_6) || !params.yyxs || (!params.gnlx_1 && !params.gnlx_2 && !params.gnlx_3 ) || !params.hjgx || !params.whzk2 || !params.zpdj ||  !params.yspy || (!params.dyjy_1 && !params.dyjy_2 && !params.dyjy_3 && !params.dyjy_4)) {
+        //             alert("13-23中必填项未填写完整！");
+        //         } else {
+        //             return true;
+        //         }
+        //     }
+
+        // }
+        return true;
+
+    }
+
+    function isNumeric(str) {
+        // return /^\d+$/.test(str); //这个只能判断正整数
+
+        // var num = /^[0-9]+.?[0-9]*$/;  //判断正整数 /^[1-9]+[0-9]*]*$/   
+
+        // if (!num.test(str)) {
+        //     return false;
+        // }
+        // return true;
+
+        return !isNaN(parseFloat(str)) && isFinite(str);
+
+    }
+
+    function refreshList() {
+        var params = {
+            action: "getCydByCondition",
+            key: $("#search").val(),
+            county: $("#select-county-text").text(),
+            town: $("#select-town-text").text(),
+            status: $("#select-status-text").text(),
+            ydlx: $("#select-ydlx-text").text()
+        }
+        $.ajax({
+            type: "GET", url: Host + "get.fun.php",
+            data: params,
+            dataType: "json",
+            success: function (data) { addList(data); },
+            error: function (error) { }
+        });
+    }
+
+    // 修改密码
+    $("#password-btn").click(function () {
+        $("#password-panel").show();
+    });
+    $("#password-cancel").click(function () {
+        $("#password-panel").hide();
+    });
+    // $("#password-submit").click(function () {
+    //     var first = $("#password-first").val();
+    //     var second = $("#password-second").val();
+    //     if (first == "") alert("密码不能为空");
+    //     else if (second != first) alert("两次密码输入不一致")
+    //     else {
+    //         $.ajax({
+    //             type: "GET", url: Host + "get.fun.php",
+    //             data: { action: "updatePassword", username: workname, password: first }, dataType: "text",
+    //             success: function (data) {
+    //                 if (data > 0) { alert("修改成功"); $("#password-panel").hide(); }
+    //                 else { alert("服务器忙..."); }
+    //             },
+    //             error: function (error) { }
+    //         });
+    //     }
+    // });
+    $("#password-submit").click(function () {
+        var first = $("#password-first").val();
+        var second = $("#password-second").val();
+        if (first == "") alert("密码不能为空");
+        else if (second != first) alert("两次密码输入不一致");
+        else if (checkPwdComplex(first)) {
+            $.ajax({
+                type: "GET", url: Host + "get.fun.php",
+                data: { action: "updatePasswordnew", username: workname, password: $.md5(first) }, dataType: "json",
+                success: function (res) {
+                    if (res.code == 200) {
+                        $("#password-panel").hide();
+                        toast("密码修改成功");
+                    }
+                    else { alert(res.msg); }
+                },
+                error: function (error) { }
+            });
+        } else {
+            alert("密码复杂度不够，需长度大于8位，包含大小写字母、特殊字符、数字");
+        }
+    });
+
+// 密码复杂度校验规则
+    function checkPwdComplex(pwd) {
+        // 1. 长度 >=8
+        if (pwd.length < 8) {
+            // $('#pwdTip').text('密码长度不能小于8位');
+            return false;
+        }
+
+        // 2. 必须包含数字
+        if (!/\d/.test(pwd)) {
+            // $('#pwdTip').text('密码必须包含数字');
+            return false;
+        }
+
+        // 3. 必须包含小写字母
+        if (!/[a-z]/.test(pwd)) {
+            // $('#pwdTip').text('密码必须包含小写字母');
+            return false;
+        }
+
+        // 4. 必须包含大写字母
+        if (!/[A-Z]/.test(pwd)) {
+            // $('#pwdTip').text('密码必须包含大写字母');
+            return false;
+        }
+
+        // 5. 可选：必须包含特殊字符
+        if (!/[^a-zA-Z0-9]/.test(pwd)) {
+            // $('#pwdTip').text('密码必须包含特殊字符');
+            return false;
+        }
+
+        // $('#pwdTip').text('密码强度合格');
+        return true;
+    }
+
+    function toast(text, time) {
+        let toast = document.getElementById('toast');
+        let toast_box = document.getElementsByClassName('toast_box')[0];
+        toast.innerHTML = text;
+        toast_box.style.display = 'inline-block';
+        setTimeout(function () {
+            setTimeout(function () {
+                toast_box.style.display = 'none';
+            }, 1000)
+        }, time)
+    }
+
+
+    // 确认
+    $("#confirm-cancel").click(function () {
+        $("#confirm-panel").hide();
+    });
+    $("#confirm-submit").click(function () {
+        if (confirmflag == 1)//提交
+        {
+            post($("#confirm").attr("data-id"), 1);
+            confirmflag = 0;
+        } else if (confirmflag == 2)//删除
+        {
+            deletedcd($("#delete").attr("data-id"));
+            confirmflag = 0;
+        } else if (confirmflag == 3) {
+            post($("#confirm").attr("data-id"), 3);
+            confirmflag = 0;
+        }
+    });
+
+
+
+
+    var options = { enableHighAccuracy: true, maximumAge: 1000 }
+
+    //  if(navigator.geolocation){
+
+    // var timer = setInterval(function(){
+    //      navigator.geolocation.getCurrentPosition(onSuccess1,onError,options);                   
+    //                     },1000);
+    //  }else{
+    //     alert("请打开手机定位功能");
+    //  }
+
+    function onSuccess1(position) {
+        var tdt = smicoord.bC(position.coords.longitude, position.coords.latitude);
+        var lng = tdt[0];
+        var lat = tdt[1];
+        location_lnglat = { "lng": lng, "lat": lat };
+
+        var icon = L.icon({
+            iconUrl: 'img/location.png',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+            popupAnchor: [0, -10]
+        });
+        if (location_marker) MAP.removeLayer(location_marker);
+        location_marker = L.marker([lat, lng], { icon: icon }).addTo(MAP);
+        //MAP.setView(location_lnglat,7);
+    }
+
+    var location_lnglat, location_marker;
+    function onSuccess(position) {
+        var tdt = smicoord.bC(position.coords.longitude, position.coords.latitude);
+        var lng = tdt[0];
+        var lat = tdt[1];
+        location_lnglat = { "lng": lng, "lat": lat };
+
+        var icon = L.icon({
+            iconUrl: 'img/location.png',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+            popupAnchor: [0, -10]
+        });
+        if (location_marker) MAP.removeLayer(location_marker);
+        location_marker = L.marker([lat, lng], { icon: icon }).addTo(MAP);
+        MAP.setView(location_lnglat, 17);
+    }
+
+    function onError(error) {
+        alert("请打开手机定位功能");
+    }
+
+    $("#locate").click(function () {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+            var timer = setInterval(function () {
+                navigator.geolocation.getCurrentPosition(onSuccess1, onError, options);
+            }, 1000);
+        } else {
+            alert("请打开手机定位功能");
+        }
+    });
+
+    if(workname=="临港")
+    {
+        $("#gd").show();
+    }
+    $("#gd").click(function () {
+navigator.geolocation.getCurrentPosition(onSuccessgd, onError, options);
+
+});
+
+function onSuccessgd(position) {
+var lng = $("#gd").attr("data-lng");
+var lat = $("#gd").attr("data-lat");
+var dest = $("#gd").attr("data-dest");
+
+// var tdt = smicoord.bC(121.4649523727622, 31.22136091596454);
+var tdt = smicoord.bC(position.coords.longitude, position.coords.latitude);
+
+var wgs84Coord = smicoord.al(parseFloat(tdt[1]), parseFloat(tdt[0]));
+var gcjCoord = transformFromWGSToGCJ(wgs84Coord[0], wgs84Coord[1]);
+var lng0 = gcjCoord.longitude;
+var lat0 = gcjCoord.latitude;
+
+location.href = "https://m.amap.com/navigation/carmap/saddr=" + lng0 + "," + lat0 + ",出发点&daddr=" + lng + "," + lat + "," + dest + "&src=mypage";
+}
+
+    // $("#navi").click(function () { $("#navi-panel").show(); });
+    // $("#navi-mask").click(function () { $("#navi-panel").hide(); });
+    // $("#navi-cancel").click(function () { $("#navi-panel").hide(); });
+    // function plusReady() {
+    //     $("#gd").click(function () {
+    //         var lng = $(this).attr("data-lng");
+    //         var lat = $(this).attr("data-lat");
+    //         if (plus.runtime.isApplicationExist({ pname: 'com.autonavi.minimap' })) {
+    //             var url = 'androidamap://route?sourceApplication=com.knssshy.sj&dlat=' + lat + '&dlon=' + lng + '&dev=0&t=0';
+    //             plus.runtime.openURL(url, function (e) {
+    //                 plus.nativeUI.confirm("检查到您未安装\"高德地图\".");
+    //             });
+    //         } else {
+    //             alert('你没有安装高德地图')
+    //         }
+    //     });
+
+    //     $("#bd").click(function () {
+    //         var lng = $(this).attr("data-lng");
+    //         var lat = $(this).attr("data-lat");
+    //         if (plus.runtime.isApplicationExist({ pname: 'com.baidu.BaiduMap' })) {
+    //             var url = 'bdapp://map/direction?destination=' + lat + ',' + lng + '&coord_type=bd09ll&mode=driving&src=com.knssshy.sj';
+    //             plus.runtime.openURL(url, function (e) {
+    //                 plus.nativeUI.confirm("检查到您未安装\"百度地图\".");
+    //             });
+    //         } else {
+    //             alert('你没有安装高德和高德地图')
+    //         }
+    //     });
+
+    //     var location_lnglat, location_marker;
+    //     function onSuccess(position) {
+    //         var tdt = smicoord.bC(position.coords.longitude, position.coords.latitude);
+    //         var lng = tdt[0];
+    //         var lat = tdt[1];
+    //         location_lnglat = { "lng": lng, "lat": lat };
+
+    //         var icon = L.icon({
+    //             iconUrl: 'img/location.png',
+    //             iconSize: [20, 20],
+    //             iconAnchor: [10, 10],
+    //             popupAnchor: [0, -10]
+    //         });
+    //         if (location_marker) MAP.removeLayer(location_marker);
+    //         location_marker = L.marker([lat, lng], { icon: icon }).addTo(MAP);
+    //         MAP.setView(location_lnglat, 7);
+    //     }
+    //     $("#locate").click(function () {
+    //         plus.geolocation.getCurrentPosition(function (p) {
+    //             onSuccess(p);
+    //         }, function (e) {
+    //             alert("暂无法定位");
+    //         });
+    //     });
+    // }
+
+    $(".item a").click(function () {
+        var liele = $(this).parent();
+        var smenu = liele.find('.smenu');
+        if (smenu.css('max-height') == '0px') {
+            smenu.css("max-height", "300em");
+        } else {
+            smenu.css("max-height", "0px");
+        }
+
+    })
+
+    function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone"];
+        // "iPad", "iPod"
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+</script>
+
+</html>

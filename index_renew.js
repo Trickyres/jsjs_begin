@@ -717,12 +717,14 @@ function setupActivityPage() {
     || !albumGrid || !albumEmpty || !lightbox || !lightboxImage || !lightboxTitle) return;
 
   const albums = window.ACTIVITY_ALBUMS || {};
+  const videoPlayer = window.createGuideVideoPlayer?.($('.activity-video-dialog', videoLightbox));
   let videoOpener = null;
   let albumOpener = null;
   let photoOpener = null;
   let failedVideoSrc = '';
 
   const resetActivityVideo = () => {
+    videoPlayer?.close();
     video.pause();
     video.removeAttribute('src');
     video.load();
@@ -739,8 +741,8 @@ function setupActivityPage() {
   const reportMissingVideo = src => {
     if (failedVideoSrc === src) return;
     failedVideoSrc = src;
-    closeActivityVideo(false);
-    showToast(`视频文件尚未放入：${src}`);
+    if (videoPlayer) videoPlayer.showError();
+    else showToast('视频暂时无法播放，请稍后重试。');
     setTimeout(() => { failedVideoSrc = ''; }, 1200);
   };
 
@@ -753,6 +755,7 @@ function setupActivityPage() {
     }
 
     videoOpener = button;
+    videoPlayer?.open();
     videoTitle.textContent = nextTitle;
     if (button.dataset.activityPoster) video.poster = button.dataset.activityPoster;
     else video.removeAttribute('poster');

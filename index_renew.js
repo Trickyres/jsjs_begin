@@ -764,7 +764,11 @@ function setupActivityPage() {
     document.body.classList.add('activity-video-open');
     $('.activity-video-dialog-close', videoLightbox)?.focus();
     const playRequest = video.play();
-    if (playRequest) playRequest.catch(() => showToast('如未自动播放，请点击播放器中的播放按钮。'));
+    if (playRequest) playRequest.catch(error => {
+      if (videoLightbox.hidden || video.getAttribute('src') !== src) return;
+      if (videoPlayer?.showPlayHint) videoPlayer.showPlayHint(error);
+      else if (error.name !== 'AbortError') showToast('请点击视频自带的播放按钮开始播放。');
+    });
   };
 
   $$('[data-activity-video]').forEach(button => {

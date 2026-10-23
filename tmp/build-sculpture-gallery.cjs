@@ -1,0 +1,17 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const root = 'F:\\Project\\jsjs_begin\\雕塑点位图片';
+const manifest = JSON.parse(fs.readFileSync(path.join(root, '全部点位_下载清单.json'), 'utf8').replace(/^\uFEFF/, ''));
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const style = `body{font:16px/1.6 system-ui,sans-serif;margin:0;background:#f4f7f5;color:#24352c}main{max-width:1400px;margin:auto;padding:28px}h1{font-size:28px;margin:0 0 8px}p{margin:0 0 16px;color:#52685a}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}figure,.card{margin:0;padding:16px;background:white;border:1px solid #dce6df;border-radius:12px}img{width:100%;height:280px;object-fit:contain;background:#f7f8f7}figcaption{overflow-wrap:anywhere;margin-top:10px;font-size:13px}a{color:#176b44}.card h2{font-size:18px;margin:8px 0}.card p{font-size:14px;margin:4px 0}input{font:inherit;padding:12px 16px;border:1px solid #b9cabf;border-radius:8px;width:min(600px,90%);margin-bottom:20px}header{margin-bottom:20px}.count{font-weight:600}`;
+const page = (title, body, script='') => `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${style}</style><main>${body}</main>${script}</html>`;
+const sorted = [...manifest.points].sort((a,b)=>Number(a.point_id)-Number(b.point_id));
+for (const point of sorted) {
+  const title = point.name || '未命名';
+  const body = `<header><a href="全部点位预览.html">← 返回全部点位</a><h1>${esc(point.point_id)}号 · ${esc(title)}</h1><p>放置地址：${esc(point.address || '未填写地址')}<br>第6项“照片”全部${point.photos.length}张，按网页顺序保存原图。</p></header><div class="grid">${point.photos.map(photo=>`<figure><a href="${encodeURIComponent(photo.file)}"><img loading="lazy" src="${encodeURIComponent(photo.file)}" alt="${esc(photo.file)}"></a><figcaption><a download href="${encodeURIComponent(photo.file)}">${esc(photo.file)}</a></figcaption></figure>`).join('')}</div>`;
+  fs.writeFileSync(path.join(root, `${point.point_id}_预览.html`), page(`${point.point_id}号点位图片预览`, body));
+}
+const body = `<header><h1>上海城市雕塑 · 黄浦区绿色点位图片</h1><p>共${manifest.point_count}个点位、${manifest.expected_photo_count}张原图。文件命名：编号_序号_地址_作品名称。名称空缺时标为“未命名”。</p><input type="search" id="query" placeholder="按编号、作品名称或地址查找" aria-label="查找点位"><p class="count" id="count">显示全部${sorted.length}个点位</p></header><div class="grid">${sorted.map(p=>`<article class="card" data-search="${esc(p.point_id+' '+p.name+' '+p.address)}"><a href="${p.point_id}_预览.html"><img loading="lazy" src="${encodeURIComponent(p.photos[0].file)}" alt="${esc(p.point_id+'号 '+(p.name||'未命名'))}"></a><h2>${esc(p.point_id)}号 · ${esc(p.name||'未命名')}</h2><p>${esc(p.address||'未填写地址')}</p><p>${p.photos.length}张原图 · <a href="${p.point_id}_预览.html">查看全部图片</a></p></article>`).join('')}</div>`;
+const script = `<script>const query=document.querySelector('#query'),cards=[...document.querySelectorAll('.card')];query.addEventListener('input',()=>{let count=0;const term=query.value.trim().toLowerCase();for(const card of cards){const visible=card.dataset.search.toLowerCase().includes(term);card.hidden=!visible;if(visible)count++;}document.querySelector('#count').textContent='显示'+count+'个点位';});</script>`;
+fs.writeFileSync(path.join(root, '全部点位预览.html'), page('全部点位图片预览', body, script));
+console.log(JSON.stringify({pointGalleries:sorted.length,index:'全部点位预览.html'}));

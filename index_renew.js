@@ -717,14 +717,12 @@ function setupActivityPage() {
     || !albumGrid || !albumEmpty || !lightbox || !lightboxImage || !lightboxTitle) return;
 
   const albums = window.ACTIVITY_ALBUMS || {};
-  const videoPlayer = window.createGuideVideoPlayer?.($('.activity-video-dialog', videoLightbox));
   let videoOpener = null;
   let albumOpener = null;
   let photoOpener = null;
   let failedVideoSrc = '';
 
   const resetActivityVideo = () => {
-    videoPlayer?.close();
     video.pause();
     video.removeAttribute('src');
     video.load();
@@ -741,8 +739,8 @@ function setupActivityPage() {
   const reportMissingVideo = src => {
     if (failedVideoSrc === src) return;
     failedVideoSrc = src;
-    if (videoPlayer) videoPlayer.showError();
-    else showToast('视频暂时无法播放，请稍后重试。');
+    closeActivityVideo(false);
+    showToast(`视频文件尚未放入：${src}`);
     setTimeout(() => { failedVideoSrc = ''; }, 1200);
   };
 
@@ -755,7 +753,6 @@ function setupActivityPage() {
     }
 
     videoOpener = button;
-    videoPlayer?.open();
     videoTitle.textContent = nextTitle;
     if (button.dataset.activityPoster) video.poster = button.dataset.activityPoster;
     else video.removeAttribute('poster');
@@ -764,11 +761,7 @@ function setupActivityPage() {
     document.body.classList.add('activity-video-open');
     $('.activity-video-dialog-close', videoLightbox)?.focus();
     const playRequest = video.play();
-    if (playRequest) playRequest.catch(error => {
-      if (videoLightbox.hidden || video.getAttribute('src') !== src) return;
-      if (videoPlayer?.showPlayHint) videoPlayer.showPlayHint(error);
-      else if (error.name !== 'AbortError') showToast('请点击视频自带的播放按钮开始播放。');
-    });
+    if (playRequest) playRequest.catch(() => showToast('如未自动播放，请点击播放器中的播放按钮。'));
   };
 
   $$('[data-activity-video]').forEach(button => {

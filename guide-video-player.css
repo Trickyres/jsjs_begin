@@ -1,50 +1,17 @@
-/* Video-only chrome; never fade, filter or cover the entire picture. */
-.has-guide-video-player.activity-video-dialog { border:0; border-radius:12px; background:#101010; }
-.guide-video-player { position:relative; isolation:isolate; width:100%; color:#fff; background:#101010; overflow:hidden; }
-.guide-video-player video { display:block; width:100%; height:auto; max-height:min(76vh,680px); object-fit:contain; }
-.guide-video-player .activity-video-dialog-head { position:absolute; z-index:2; inset:0 0 auto; gap:4px; padding:8px 14px 24px; background:linear-gradient(#0009,#0000); pointer-events:none; }
-.guide-video-player .activity-video-dialog-head small { display:none; }
-.guide-video-player .activity-video-dialog-head h2 { color:#fff; font-size:16px; font-weight:500; text-shadow:0 1px 3px #0007; }
-.guide-video-player .activity-video-dialog-close { order:-1; pointer-events:auto; width:44px; height:44px; border:0; border-radius:4px; background:transparent; }
-.guide-video-player .activity-video-dialog-head>div { flex:1; min-width:0; }
-.guide-video-player button { -webkit-tap-highlight-color:transparent; cursor:pointer; color:#fff; }
-.guide-video-player svg { width:22px; height:22px; pointer-events:none; }
-.guide-video-controls { position:absolute; z-index:2; inset:auto 0 0; padding:18px 14px 4px; background:linear-gradient(#0000,#0008 40%,#000c); pointer-events:none; }
-.guide-video-time { display:flex; gap:5px; font:12px/1.4 Arial,sans-serif; font-variant-numeric:tabular-nums; color:#ffffffbf; margin:0 2px -3px; }
-.guide-video-time [data-player-time] { color:#fff; }
-.guide-video-track { position:relative; display:flex; align-items:center; height:28px; pointer-events:auto; touch-action:none; }
-.guide-video-track-line { position:absolute; inset:auto 0; height:3px; border-radius:2px; background:#ffffff42; pointer-events:none; }
-.guide-video-track-line>span { position:absolute; top:0; left:0; height:3px; width:0; border-radius:2px; }
-[data-player-buffer] { background:#ffffff60; }
-[data-player-progress-fill] { background:#fb7299; }
-[data-player-progress-fill]::after { content:""; position:absolute; right:-5px; top:-3.5px; width:10px; height:10px; border-radius:50%; background:#fb7299; }
-.guide-video-track input { position:relative; opacity:0; width:100%; height:28px; margin:0; padding:0; cursor:pointer; }
-.guide-video-track:focus-within { outline:2px solid #fff; outline-offset:2px; }
-.guide-video-row { display:flex; align-items:center; margin-top:-5px; pointer-events:auto; }
-.guide-video-button { position:relative; display:grid; place-items:center; flex:none; width:44px; height:44px; margin:0; padding:0; border:0; border-radius:4px; background:transparent; font:500 13px/1.4 Arial,"Microsoft YaHei",sans-serif; }
-.guide-video-button:hover { color:#fb7299; }
-.guide-video-play svg { width:25px; height:25px; }
-.guide-video-jump svg { width:25px; height:25px; }
-.guide-video-spacer { flex:1; }
-.guide-video-speed { width:48px; }
-.guide-video-speed-menu { position:absolute; right:94px; bottom:52px; width:96px; padding:5px; border-radius:7px; background:#202124; box-shadow:0 8px 24px #0005; }
-.guide-video-speed-menu button { display:block; width:100%; min-height:38px; border:0; border-radius:4px; background:transparent; font-size:12px; }
-.guide-video-speed-menu button:hover { background:#ffffff18; }
-.guide-video-speed-menu button[aria-pressed="true"] { color:#fb7299; }
-.guide-video-player [hidden] { display:none !important; }
-.guide-video-status { position:absolute; z-index:3; left:50%; top:50%; transform:translate(-50%,-50%); max-width:85%; padding:7px 11px; border-radius:6px; background:#202124c9; color:#fff; font-size:12px; pointer-events:none; }
-.guide-video-retry { position:absolute; z-index:3; top:calc(50% + 25px); left:50%; transform:translateX(-50%); min-width:70px; min-height:44px; background:#202124; border:1px solid #ffffff60; border-radius:5px; }
-.guide-video-player.controls-hidden .activity-video-dialog-head,.guide-video-player.controls-hidden .guide-video-controls { visibility:hidden; opacity:0; pointer-events:none; }
-.guide-video-player:fullscreen { display:grid; place-items:center; width:100%; height:100%; border-radius:0; }
-.guide-video-player:fullscreen video { width:100%; height:100%; max-height:none; }
-.guide-video-player.is-expanded { position:fixed; z-index:10000; inset:0; display:grid; place-items:center; width:100%; height:100dvh; background:#000; }
-.guide-video-player.is-expanded video { width:100%; height:100%; max-height:none; }
-.guide-video-player button:focus-visible { outline:2px solid #fff; outline-offset:-2px; }
-@media(max-width:600px) {
-  .has-guide-video-player.activity-video-dialog { border-radius:10px; }
-  .guide-video-player .activity-video-dialog-head { padding:3px 8px 18px; }
-  .guide-video-player .activity-video-dialog-head h2 { font-size:14px; }
-  .guide-video-controls { padding:14px 8px 0; }
-  .guide-video-time { font-size:11px; }
-  .guide-video-speed-menu { left:8px; right:8px; bottom:50px; width:auto; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); }
-}
+/* Native media UI takes priority over decorative playback chrome. */
+.native-guide-video-player.activity-video-dialog { border-radius:12px; max-height:calc(100dvh - 20px); overflow:auto; }
+.native-guide-video-player .activity-video-dialog-head { gap:8px; padding:8px 12px; }
+.native-guide-video-player .activity-video-dialog-head>div { flex:1; min-width:0; }
+.native-guide-video-player .activity-video-dialog-head small { display:none; }
+.native-guide-video-player .activity-video-dialog-head h2 { font-size:14px; font-weight:500; }
+.native-guide-video-player .activity-video-dialog-close { width:44px; height:44px; border:0; background:transparent; }
+.native-guide-video-player .guide-native-fullscreen { flex:none; min-width:54px; min-height:44px; padding:0 8px; border:1px solid #ffffff55; border-radius:6px; background:transparent; color:#fff; font:inherit; font-size:13px; cursor:pointer; }
+.native-guide-video-player video { display:block; width:100%; height:auto; min-height:0; min-width:0; max-width:100%; max-height:var(--guide-native-video-height,calc(100dvh - 104px)); aspect-ratio:auto; object-fit:contain; background:#000; }
+/* Fullscreen targets the video, not an intrinsic-size grid wrapper. */
+.native-guide-video-player video:fullscreen { display:block; width:100%; height:100%; min-width:0; min-height:0; max-width:none; max-height:none; aspect-ratio:auto; object-fit:contain; margin:0; }
+.native-guide-video-player video:-webkit-full-screen { display:block; width:100%; height:100%; min-width:0; min-height:0; max-width:none; max-height:none; aspect-ratio:auto; object-fit:contain; margin:0; }
+.guide-native-feedback { padding:10px 14px 14px; color:#fff; background:#241f1c; font-size:12px; line-height:1.6; }
+.guide-native-feedback[hidden] { display:none; }
+.guide-native-feedback p { margin:0 0 6px; }
+.guide-native-feedback button,.guide-native-feedback a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; margin-right:12px; padding:0 10px; border:1px solid #ffffff60; border-radius:6px; background:transparent; color:#fff; font:inherit; text-decoration:none; cursor:pointer; }
+.guide-native-feedback [hidden] { display:none !important; }
